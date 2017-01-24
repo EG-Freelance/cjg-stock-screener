@@ -16,9 +16,8 @@ group :production do
   gem 'rails_12factor'
 end
 
-# Mechanize and nokogiri for scraping
-gem 'mechanize'
-gem 'nokogiri'
+# devise for user authentication
+gem 'devise'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'

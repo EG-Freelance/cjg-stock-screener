@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170124172523) do
+ActiveRecord::Schema.define(version: 20170124202258) do
 
   create_table "pages", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -33,8 +33,10 @@ ActiveRecord::Schema.define(version: 20170124172523) do
     t.decimal  "tot_gain"
     t.decimal  "tot_gain_p"
     t.decimal  "market_val"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.decimal  "op_strike"
+    t.string   "op_expiration"
   end
 
   create_table "screen_items", force: :cascade do |t|

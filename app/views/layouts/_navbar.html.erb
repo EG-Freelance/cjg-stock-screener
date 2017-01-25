@@ -1,0 +1,44 @@
+<nav class="navbar navbar-default navbar-fixed-top" style="margin-bottom:25px">
+  <div class="container">
+		<div class='navbar-links'>   
+			<!-- Left side of the navbar -->
+			<div class="navbar-header navbar-left">
+				<a href="<%= root_url %>" class="navbar-brand">CJG Stock Screener</a>
+			</div>
+      <ul class="nav navbar-nav navbar-right">
+        <% if user_signed_in? %>
+          <li><%= link_to "HOME", root_path %></li>
+          <li><%= link_to "ANALYSIS", analysis_path %></li>
+          <li><%= link_to "LOG OUT", destroy_user_session_path, method: :delete, style: "color: #aa7777;" %></li>
+        <% else %>
+          <%= simple_form_for(:user, :url => session_path(:user), class: 'navbar-form navbar-right loginBar' ) do |f| %>
+
+            <div class='navbar-login'>
+              <li class='top-buffer-15'>
+                <div class='row'>
+                  <div class='col-md-6'>
+                    <%= f.text_field :email, placeholder: 'Username', class: 'textfield input', style: 'width:90%' %>
+                  </div>
+                  <div class='col-md-6'>
+                    <%= f.password_field :password, placeholder: 'Password', class: 'textfield input', style: 'width:90%' %>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class='row' style='width:600px'>
+                  <div class='col-md-5'>
+                    <%= f.check_box :remember_me, class: 'match-input' %>
+                    <%= "Remember me" %>
+                  </div>
+                  <div class='col-md-6 pull-right'>
+                    <%= f.submit 'Sign in >', class: 'btn btn-link pull-left match-input' %>
+                  </div>
+                </div>
+              </li>
+            </div>
+          <% end %>
+        <% end %>   
+      </ul> <!-- class="nav navbar-nav navbar-right" -->
+    </div>
+  </div>
+</nav>

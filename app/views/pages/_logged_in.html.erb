@@ -1,0 +1,45 @@
+<div class="row">
+	<div class="col-md-6">
+		<%= form_tag import_pi_path, multipart: true do %>
+		  <div>
+		    <h2>Import Portfolio Data</h2>
+		    <p>Select file "ETrade Equities [date]"</p>
+		    <div class='input-field'>
+		      <div class="file-field input-field">
+		        <div>
+		          <span><b><i>Portfolio File</i></b></span>
+		          <%= file_field_tag :file %>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		  <div style="padding-top:10px">
+		    <button type="submit" name="commit" value="Import" id='home-submit-page'>
+		      Import
+		    </button>
+		  </div>
+		<% end %>
+	</div>
+	
+	<div class="col-md-6">
+		<%= form_tag import_si_path, multipart: true do %>
+		  <div>
+		    <h2>Import Screen Data</h2>
+		    <p>Select file "Screen Consolidator.xlsx"</p>
+		    <div class='input-field'>
+		      <div class="file-field input-field">
+		        <div>
+		          <span><b><i>Screen Data File</i></b></span>
+		          <%= file_field_tag :file %>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		  <div style="padding-top:10px">
+		    <button type="submit" name="commit" value="Import" id='home-submit-page'>
+		      Import
+		    </button>
+		  </div>
+		<% end %>
+	</div>
+</div>

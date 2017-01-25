@@ -1,58 +1,45 @@
 class ScreenItem < ActiveRecord::Base
+	include MathStuff
+	
 	belongs_to :stock, :dependent => :destroy
 	
 	def self.import(file)
     # import microsoft excel file
     spreadsheet = open_spreadsheet(file)
     
-    # header is in 11th row
-    header = spreadsheet.row(11)
+    # header is in first row
+    header = spreadsheet.row(1)
     
-    # data start in 13th row
-    (13..spreadsheet.last_row).each do |i|
+    # set common timestamp for all entries
+    set_created_at = DateTime.now
+    
+    # use array to set adj_invest_to_assets to limit DB calls
+    si_array = []
+    
+    # data start in 2nd row
+    (2..spreadsheet.last_row).each do |i|
       
       # pairing up header column with data
       row = Hash[[header, spreadsheet.row(i)].transpose]
       
-      # position_data: 0. full text; 1. symbol; 2. option expiration; 3. option strike; 4. call/put
-      position_data = row[" Symbol"].match(/^(\S+)(?:\s([A-Z][a-z]{2}\s\d{2}\s\'\d{2})\s\$([\d\.]+)\s((?:Call|Put)))?/)
-      
-      # classify as stock or option
-      if position_data[2].nil? && position_data[3].nil? && position_data[4].nil?
-        pos_type = "stock"
-        op_type = nil
-        op_strike = nil
-        op_expiration = nil
-      else
-        pos_type = "option"
-        op_type = position_data[4]
-        op_strike = position_data[3]
-        op_expiration = position_data[2]
-      end
-      
-      # save remaining data
-      sym = position_data[1]
-      pi_description = row["Description"]
-      exchange = row["Exchange"]
-      market_cap_data = row["Market Cap"].match(/([\d\,\.]+)((?:M|B))/)
-      market_cap = market_cap_data[1].to_f * (market_cap_data[2] == "B" ? 1000000000 : 1000000)
-      pi_description = row["Description"]
-      position = row["Long or Short"].downcase
-      date_acq_data = row["Date Acquired"].match(/(Last\s)?(\d{1,2})\/(\d{1,2})\/(\d{2,4})/)
-      if date_acq_data[1].nil?
-        date_acq = DateTime.new(date_acq_data[4].to_i, date_acq_data[2].to_i, date_acq_data[3].to_i)
-      else
-        date_acq = DateTime.new(("20"+date_acq_data[4]).to_i, date_acq_data[2].to_i, date_acq_data[3].to_i)
-      end
-      quantity = row["Quantity"].abs
-      paid = row["Price Paid"]
-      last = row["Last Trade"]
-      change = row["Change %"]
-      day_gain_p = row["Day's Gain %"]
-      day_gain = row["Day's Gain $"]
-      tot_gain_p = row["Total Gain %"].to_f
-      tot_gain = row["Total Gain $"].to_f
-      market_val = row["Market Value"].to_f
+      # position_data: 0. full text; 1. exchange; 2. symbol
+      position_data = row["Symbol"].match(/(.+)\:(.+)/)
+      sym = position_data[2]
+      exchange = position_data[1]
+      market_cap = row["Market capitalization"]
+      si_description = row["Company Name"]
+
+      # SI params
+      net_stock_issues = row["NetStockIssues"].to_d
+      rel_accruals = row["RelAccruals"].to_d
+      net_op_assets_scaled = row["NetOpAssets Scaled"].to_d
+      assets_growth = row["Assets Growth"].to_d
+      invest_to_assets = row["InvestToAssets"] == "n/a" ? nil : row["InvestToAssets"].to_d  
+      adj_invest_to_assets = invest_to_assets
+      l_52_wk_price = row["Price-52 week price percent change"].to_d
+      profit_prem = row["Gross Profit Premium"].to_d
+      roa_q = row["ROA Quarterly"].to_d
+      dist_total_2 = row["DistTotal2"].to_i
       
       # create/update security
       stock = Stock.where(
@@ -60,33 +47,31 @@ class ScreenItem < ActiveRecord::Base
         symbol: sym
       ).first_or_create
       stock.update(
-        pi_description: pi_description, 
+        si_description: si_description, 
         market_cap: market_cap
       )
       
       # create/update portfolio entry
-      pi = PortfolioItem.where(
-        stock_id: stock.id, 
-        position: position, 
-        pos_type: pos_type, 
-        op_type: op_type, 
-        op_strike: op_strike, 
-        op_expiration: 
-        op_expiration
+      si = ScreenItem.where(
+      	stock_id: stock.id,
+      	net_stock_issues: net_stock_issues,
+	      rel_accruals: rel_accruals,
+	      net_op_assets_scaled: net_op_assets_scaled,
+	      assets_growth: assets_growth,
+	      invest_to_assets: invest_to_assets,
+	      adj_invest_to_assets: adj_invest_to_assets,
+	      l_52_wk_price: l_52_wk_price,
+	      profit_prem: profit_prem,
+	      roa_q: roa_q,
+	      dist_total_2: dist_total_2,
+        set_created_at: set_created_at
       ).first_or_create
-      pi.update(
-        date_acq: date_acq, 
-        quantity: quantity, 
-        paid: paid, 
-        last: last, 
-        change: change, 
-        day_gain: day_gain, 
-        day_gain_p: day_gain_p, 
-        tot_gain: tot_gain, 
-        tot_gain_p: tot_gain_p, 
-        market_val: market_val
-      )
+      si_array << si
     end
+    # set adj_invest_to_assets
+    invest_to_assets_array = si_array.map { |si| si.invest_to_assets }.compact
+    med_ita = MathStuff.median(invest_to_assets_array)
+    si_array.each { |si| si.update(adj_invest_to_assets: med_ita) if si.invest_to_assets.nil? }
   end
 	
   def self.open_spreadsheet(file)

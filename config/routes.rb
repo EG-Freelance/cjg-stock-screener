@@ -1,6 +1,15 @@
-Rails.application.routes.draw do
-  resources :pages
+Rails.application.routes.draw do 
+  root 'pages#index'
   devise_for :users
+ 
+  resources :pages
+  
+  authenticated :user do
+    post 'pages/import_pi' => 'pages#import_pi', :as => 'import_pi'
+    post 'pages/import_si' => 'pages#import_si', :as => 'import_si'
+    get 'analysis' => 'pages#analysis', :as => 'analysis'
+  end
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

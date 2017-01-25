@@ -1,0 +1,52 @@
+<table class="table-striped">
+	<thead>
+		<tr>
+			<th>Symbol</th>
+			<th>Exchange</th>
+			<th>Company Name</th>
+			<th>Current Portfolio</th>
+			<th>Recommended Action</th>
+			<th>Action</th>
+			<th>Totals</th>
+			<th>Total Score Percentile</th>
+			<th>Dist > 7 or > 8</th>
+			<th>Market Cap</th>
+			<th>Net Stock Issues Score</th>
+			<th>RelAccruals Score</th>
+			<th>NetOpAssetsScaled Score</th>
+			<th>Assets Growth Score</th>
+			<th>InvestToAssets Score</th>
+			<th>52 Week Price Score</th>
+			<th>Profit Premium Score</th>
+			<th>ROA Quarterly Score</th>
+			<th>DistTotal2 Score</th>
+		</tr>
+	</thead>
+	<tbody>
+    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2-->
+
+		<% @sis.each do |si| %>
+			<tr>
+				<td><%= si[0] %></td> <!-- Symbol -->
+				<td><%= si[1] %></td> <!-- Exchange -->
+				<td><%= si[2] %></td> <!-- Company Name -->
+				<td><%= si[3] %></td>	<!-- In Portfolio -->
+				<td><%= si[4] %></td> <!-- Rec Action -->
+				<td><%= si[5] %></td> <!-- Action -->
+				<td><%= si[6] %></td> <!-- Totals -->
+				<td><%= number_to_percentage(1 - si[7]) %></td> <!-- Total Score Percentile -->
+				<td><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
+				<td style="text-align:right; padding-right:2px"><%= number_to_human(si[9], precision: 4, format: "%n%u", units: { billion: "B", million: "M" }) %></td> <!-- Market Cap -->
+				<td><%= si[10] %></td> <!-- Net Stock Issues Score -->
+				<td><%= si[11] %></td> <!-- RelAccruals Score -->
+				<td><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
+				<td><%= si[13] %></td> <!-- Assets Growth Score -->
+				<td><%= si[14] %></td> <!-- InvestToAssets Score -->
+				<td><%= si[15] %></td> <!-- 52 Week Price Score -->
+				<td><%= si[16] %></td> <!-- Profit Premium Score -->
+				<td><%= si[17] %></td> <!-- ROA Quarterly Score -->
+				<td><%= si[18] %></td> <!-- DistTotal2 Score -->
+			</tr>
+		<% end %>
+	</tbody>
+</table>

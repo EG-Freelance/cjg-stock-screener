@@ -8,8 +8,11 @@ class PortfolioItem < ActiveRecord::Base
     # header is in 11th row
     header = spreadsheet.row(11)
     
-    # data start in 13th row
-    (13..spreadsheet.last_row).each do |i|
+    # set common timestamp for all entries
+    set_created_at = DateTime.now
+    
+    # data start in 13th row and end 3 before the last row (last row is a cash summary)
+    (13..(spreadsheet.last_row-3)).each do |i|
       
       # pairing up header column with data
       row = Hash[[header, spreadsheet.row(i)].transpose]
@@ -38,18 +41,19 @@ class PortfolioItem < ActiveRecord::Base
       market_cap = market_cap_data[1].to_f * (market_cap_data[2] == "B" ? 1000000000 : 1000000)
       pi_description = row["Description"]
       position = row["Long or Short"].downcase
-      date_acq_data = row["Date Acquired"].match(/(Last\s)?(\d{1,2})\/(\d{1,2})\/(\d{2,4})/)
+      date_acq_string = row["Date Acquired"].class == String ? row["Date Acquired"] : row["Date Acquired"].strftime("%m/%d/%y")
+      date_acq_data = date_acq_string.match(/(Last\s)?(\d{1,2})\/(\d{1,2})\/(\d{2,4})/)
       if date_acq_data[1].nil?
         date_acq = DateTime.new(date_acq_data[4].to_i, date_acq_data[2].to_i, date_acq_data[3].to_i)
       else
         date_acq = DateTime.new(("20"+date_acq_data[4]).to_i, date_acq_data[2].to_i, date_acq_data[3].to_i)
       end
       quantity = row["Quantity"].abs
-      paid = row["Price Paid"]
-      last = row["Last Trade"]
-      change = row["Change %"]
-      day_gain_p = row["Day's Gain %"]
-      day_gain = row["Day's Gain $"]
+      paid = row["Price Paid"].to_f
+      last = row["Last Trade"].to_f
+      change = row["Change %"].to_f
+      day_gain_p = row["Day's Gain %"].to_f
+      day_gain = row["Day's Gain $"].to_f
       tot_gain_p = row["Total Gain %"].to_f
       tot_gain = row["Total Gain $"].to_f
       market_val = row["Market Value"].to_f
@@ -84,9 +88,12 @@ class PortfolioItem < ActiveRecord::Base
         day_gain_p: day_gain_p, 
         tot_gain: tot_gain, 
         tot_gain_p: tot_gain_p, 
-        market_val: market_val
+        market_val: market_val,
+        set_created_at: set_created_at
       )
     end
+    # Consider destroying PortfolioItems that are no longer active; for now, can just separate (for archive purposes)
+    # Portfolio.where.not(set_created_at: set_created_at).destroy_all
   end
 	
   def self.open_spreadsheet(file)

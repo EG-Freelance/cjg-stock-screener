@@ -171,7 +171,7 @@ class PagesController < ApplicationController
       redirect_to root_url, alert: "Please select a compatible file to import."
     else
       PortfolioItem.import(params[:file])
-      redirect_to root_url, notice: "Portfolio imported."
+      redirect_to root_url, notice: "Portfolio data being processed; this will take a minute or two."
     end
   end
 
@@ -180,7 +180,7 @@ class PagesController < ApplicationController
       redirect_to root_url, alert: "Please select a compatible file to import."
     else
       ScreenItem.import(params[:file])
-      redirect_to root_url, notice: "Screen information imported."
+      redirect_to root_url, notice: "Screen data being processed; this will take a minute or two."
     end
   end
   

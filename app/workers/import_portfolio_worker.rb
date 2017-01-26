@@ -4,7 +4,7 @@ class ImportPortfolioWorker
   include ApplicationHelper
   sidekiq_options queue: 'high'
   
-  def perform(file)
+  def perform(data_set_id)
     set = DataSet.find(data_set_id)
   	
   	last_row = set.row_data.map { |rd| rd.row_number }.max

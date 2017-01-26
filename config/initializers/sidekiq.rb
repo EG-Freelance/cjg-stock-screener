@@ -1,11 +1,11 @@
 # if Rails.env.production?
 
 #   Sidekiq.configure_client do |config|
-#     config.redis = { url: ENV['REDIS_URL'], size: 2 }
+#     config.redis = { url: ENV['REDISCLOUD_URL'], size: 2 }
 #   end
 
 #   Sidekiq.configure_server do |config|
-#     config.redis = { url: ENV['REDIS_URL'], size: 20 }
+#     config.redis = { url: ENV['REDISCLOUD_URL'], size: 20 }
 
 #     Rails.application.config.after_initialize do
 #       Rails.logger.info("DB Connection Pool size for Sidekiq Server before disconnect is: #{ActiveRecord::Base.connection.pool.instance_variable_get('@size')}")
@@ -25,10 +25,10 @@
 
 # end  
 
-ENV["REDIS_URL"] ||= "redis://localhost:6379"
+ENV["REDISCLOUD_URL"] ||= "redis://localhost:6379"
 
 Sidekiq.configure_server do |config|
-  config.redis = { url: ENV["REDIS_URL"] }
+  config.redis = { url: ENV["REDISCLOUD_URL"] }
 
   database_url = ENV['DATABASE_URL']
   if database_url
@@ -40,5 +40,5 @@ end
 
 
 Sidekiq.configure_client do |config|
-  config.redis = { url: ENV["REDIS_URL"] }
+  config.redis = { url: ENV["REDISCLOUD_URL"] }
 end

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do 
-  if Rails.env == "Production"
+  if Rails.env == "production"
     require 'sidekiq/web'
     mount Sidekiq::Web => '/sidekiq'
   end

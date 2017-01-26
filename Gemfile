@@ -26,8 +26,11 @@ gem 'roo-xls'
 # use simple_form for forms
 gem 'simple_form'
 
-# sidekiq for monitoring redis jobs
+# sidekiq and redis for processing and monitoring background jobs
+gem 'redis'
 gem 'sidekiq'
+gem 'sidekiq-failures'
+
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'

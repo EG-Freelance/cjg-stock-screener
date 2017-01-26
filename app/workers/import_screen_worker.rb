@@ -7,6 +7,7 @@ class ImportScreenWorker
   def perform(spreadsheet)
   	# import microsoft excel file
     # spreadsheet = open_spreadsheet(file)
+    spreadsheet = JSON.parse(spreadsheet)
     
     # header is in first row
     header = spreadsheet.row(1)

@@ -4,9 +4,9 @@ class ImportScreenWorker
   include ApplicationHelper
   sidekiq_options queue: 'high'
   
-  def perform(file)
+  def perform(spreadsheet)
   	# import microsoft excel file
-    spreadsheet = open_spreadsheet(file)
+    # spreadsheet = open_spreadsheet(file)
     
     # header is in first row
     header = spreadsheet.row(1)

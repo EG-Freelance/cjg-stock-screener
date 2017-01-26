@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125180004) do
+ActiveRecord::Schema.define(version: 20170126172610) do
+
+  create_table "data_sets", force: :cascade do |t|
+  end
 
   create_table "pages", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -38,6 +41,13 @@ ActiveRecord::Schema.define(version: 20170125180004) do
     t.decimal  "op_strike"
     t.string   "op_expiration"
     t.date     "set_created_at"
+  end
+
+  create_table "row_data", force: :cascade do |t|
+    t.integer "data_set_id"
+    t.string  "data"
+    t.integer "row_number"
+    t.string  "data_type"
   end
 
   create_table "screen_items", force: :cascade do |t|

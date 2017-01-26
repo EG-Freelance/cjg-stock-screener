@@ -4,13 +4,15 @@ class ImportScreenWorker
   include ApplicationHelper
   sidekiq_options queue: 'high'
   
-  def perform(spreadsheet)
-  	# import microsoft excel file
-    # spreadsheet = open_spreadsheet(file)
-    spreadsheet = JSON.parse(spreadsheet)
+  def perform(set_id)
+  	set = DataSet.find(set_id)
+  	
+  	last_row = set.row_data.map { |rd| rd.row_number }.max
+  	
+    spreadsheet = set.row_data.sort_by { |rd| rd.row_number }.map { |rd| eval(rd.data) }
     
     # header is in first row
-    header = spreadsheet.row(1)
+    header = spreadsheet[1]
     
     # set common timestamp for all entries
     set_created_at = DateTime.now
@@ -19,10 +21,10 @@ class ImportScreenWorker
     si_array = []
     
     # data start in 2nd row
-    (2..spreadsheet.last_row).each do |i|
+    (2..last_row).each do |i|
       
       # pairing up header column with data
-      row = Hash[[header, spreadsheet.row(i)].transpose]
+      row = Hash[[header, spreadsheet[i].transpose]
       
       # position_data: 0. full text; 1. exchange; 2. symbol
       position_data = row["Symbol"].match(/(.+)\:(.+)/)

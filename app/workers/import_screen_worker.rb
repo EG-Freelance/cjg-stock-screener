@@ -2,7 +2,7 @@
 class ImportScreenWorker
   include Sidekiq::Worker
   include ApplicationHelper
-  sidekiq_options queue: 'default'
+  sidekiq_options queue: 'high'
   
   def perform(file)
   	# import microsoft excel file

@@ -4,19 +4,19 @@ class ScreenItem < ActiveRecord::Base
 	belongs_to :stock, :dependent => :destroy
 	
 	def self.import(file)
-	  set = DataSet.create()
+	  data_set = DataSet.create()
 	  
 	  # import microsoft excel file
     spreadsheet = open_spreadsheet(file)
     
     # header is in first row
     header = spreadsheet.row(1)
-    RowDatum.create(set_id: set.id, data: header.to_s, row_number: 1, type: "screen")
+    RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "screen")
     (2..spreadsheet.last_row).each do |i|
-      RowDatum.create(set_id: set.id, data: spreadsheet.row(i).to_s, row_number: i, type: "screen")
+      RowDatum.create(data_set_id: data_set.id, data: spreadsheet.row(i).to_s, row_number: i, data_type: "screen")
     end
     
-    ImportScreenWorker.perform_async(set.id)
+    ImportScreenWorker.perform_async(data_set.id)
   end
 	
   def self.open_spreadsheet(file)

@@ -4,15 +4,15 @@ class ImportScreenWorker
   include ApplicationHelper
   sidekiq_options queue: 'high'
   
-  def perform(set_id)
-  	set = DataSet.find(set_id)
+  def perform(data_set_id)
+  	set = DataSet.find(data_set_id)
   	
   	last_row = set.row_data.map { |rd| rd.row_number }.max
   	
     spreadsheet = set.row_data.sort_by { |rd| rd.row_number }.map { |rd| eval(rd.data) }
     
     # header is in first row
-    header = spreadsheet[1]
+    header = spreadsheet[0]
     
     # set common timestamp for all entries
     set_created_at = DateTime.now
@@ -20,11 +20,11 @@ class ImportScreenWorker
     # use array to set adj_invest_to_assets to limit DB calls
     si_array = []
     
-    # data start in 2nd row
-    (2..last_row).each do |i|
+    # data start in 2nd row (with 0-index array)
+    (1..(last_row - 1)).each do |i|
       
       # pairing up header column with data
-      row = Hash[[header, spreadsheet[i].transpose]
+      row = Hash[[header, spreadsheet[i]].transpose]
       
       # position_data: 0. full text; 1. exchange; 2. symbol
       position_data = row["Symbol"].match(/(.+)\:(.+)/)

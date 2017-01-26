@@ -100,5 +100,7 @@ class ImportPortfolioWorker
     end
     # Consider destroying PortfolioItems that are no longer active; for now, can just separate (for archive purposes)
     # Portfolio.where.not(set_created_at: set_created_at).destroy_all
+    RowDatum.destroy_all
+    DataSet.destroy_all
   end
 end

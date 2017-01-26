@@ -12,8 +12,9 @@ class PortfolioItem < ActiveRecord::Base
     RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "portfolio")
 	  # data start on 13th row and end 3 before last row (last row is cash summary)
     (13..(spreadsheet.last_row - 3)).each do |i|
-      spreadsheet.row(i)[4] = spreadsheet.row(i)[4].to_s.gsub(/(\d{4})\-(\d{2})\-(\d{2})/, '\2/\3/\1')
-      RowDatum.create(data_set_id: data_set.id, data: spreadsheet.row(i).to_s, row_number: i-11, data_type: "portfolio")
+      data = spreadsheet.row(i)
+      data[4] = data[4].to_s.gsub(/(\d{4})\-(\d{2})\-(\d{2})/, '\2/\3/\1')
+      RowDatum.create(data_set_id: data_set.id, data: data.to_s, row_number: i - 11, data_type: "portfolio")
     end
      
     ImportPortfolioWorker.perform_async(data_set.id)

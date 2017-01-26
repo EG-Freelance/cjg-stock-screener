@@ -5,20 +5,23 @@ class ImportPortfolioWorker
   sidekiq_options queue: 'high'
   
   def perform(file)
-    # import microsoft excel file
-    spreadsheet = open_spreadsheet(file)
+    set = DataSet.find(data_set_id)
+  	
+  	last_row = set.row_data.map { |rd| rd.row_number }.max
+  	
+    spreadsheet = set.row_data.sort_by { |rd| rd.row_number }.map { |rd| eval(rd.data) }
     
-    # header is in 11th row
-    header = spreadsheet.row(11)
+    # header is in first row
+    header = spreadsheet[0]
     
     # set common timestamp for all entries
     set_created_at = DateTime.now
     
-    # data start in 13th row and end 3 before the last row (last row is a cash summary)
-    (13..(spreadsheet.last_row-3)).each do |i|
+    # loop through all items
+    (1..(last_row - 1)).each do |i|
       
       # pairing up header column with data
-      row = Hash[[header, spreadsheet.row(i)].transpose]
+      row = Hash[[header, spreadsheet[i]].transpose]
       
       # position_data: 0. full text; 1. symbol; 2. option expiration; 3. option strike; 4. call/put
       position_data = row[" Symbol"].match(/^(\S+)(?:\s([A-Z][a-z]{2}\s\d{2}\s\'\d{2})\s\$([\d\.]+)\s((?:Call|Put)))?/)

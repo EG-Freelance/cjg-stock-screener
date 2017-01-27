@@ -1,52 +1,121 @@
-<table class="table-striped">
-	<thead>
-		<tr>
-			<th>Symbol</th>
-			<th>Exchange</th>
-			<th>Company Name</th>
-			<th>Current Portfolio</th>
-			<th>Recommended Action</th>
-			<th>Action</th>
-			<th>Totals</th>
-			<th>Total Score Percentile</th>
-			<th>Dist > 7 or > 8</th>
-			<th>Market Cap</th>
-			<th>Net Stock Issues Score</th>
-			<th>RelAccruals Score</th>
-			<th>NetOpAssetsScaled Score</th>
-			<th>Assets Growth Score</th>
-			<th>InvestToAssets Score</th>
-			<th>52 Week Price Score</th>
-			<th>Profit Premium Score</th>
-			<th>ROA Quarterly Score</th>
-			<th>DistTotal2 Score</th>
-		</tr>
-	</thead>
-	<tbody>
-    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2-->
+<ul class="nav nav-pills">
+  <li id="small-cap-btn" role="presentation" class="active"><a href="#small-cap" aria-controls="small-cap" data-toggle="tab">Small Cap</a></li>
+  <li id="large-cap-btn" role="presentation"><a href="#large-cap" aria-controls="large-cap" data-toggle="tab">Large Cap</a></li>
+</ul>
 
-		<% @sis.each do |si| %>
-			<tr>
-				<td><%= si[0] %></td> <!-- Symbol -->
-				<td><%= si[1] %></td> <!-- Exchange -->
-				<td><%= si[2] %></td> <!-- Company Name -->
-				<td><%= si[3] %></td>	<!-- In Portfolio -->
-				<td><%= si[4] %></td> <!-- Rec Action -->
-				<td><%= si[5] %></td> <!-- Action -->
-				<td><%= si[6] %></td> <!-- Totals -->
-				<td><%= number_to_percentage(1 - si[7]) %></td> <!-- Total Score Percentile -->
-				<td><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
-				<td style="text-align:right; padding-right:2px"><%= number_to_human(si[9], precision: 4, format: "%n%u", units: { billion: "B", million: "M" }) %></td> <!-- Market Cap -->
-				<td><%= si[10] %></td> <!-- Net Stock Issues Score -->
-				<td><%= si[11] %></td> <!-- RelAccruals Score -->
-				<td><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
-				<td><%= si[13] %></td> <!-- Assets Growth Score -->
-				<td><%= si[14] %></td> <!-- InvestToAssets Score -->
-				<td><%= si[15] %></td> <!-- 52 Week Price Score -->
-				<td><%= si[16] %></td> <!-- Profit Premium Score -->
-				<td><%= si[17] %></td> <!-- ROA Quarterly Score -->
-				<td><%= si[18] %></td> <!-- DistTotal2 Score -->
-			</tr>
-		<% end %>
-	</tbody>
-</table>
+<!-- Tab panes -->
+<div class="tab-content">
+  
+  <!-- Small cap tab -->
+  <div role="tabpanel" class="tab-pane active" id="small-cap">
+  	<table class="table-striped">
+			<thead>
+				<tr>
+					<th style='width:65px'>Sym</th>
+					<th style="text-align:center; width:75px">Exchange</th>
+					<th style="text-align:center">Company Name</th>
+					<th style="text-align:center">Current<br>Portfolio</th>
+					<th style="width:150px; text-align:center">Recommended<br>Action</th>
+					<th class="hidden">Action</th>
+					<th class="hidden">Totals</th>
+					<th style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
+					<th style="text-align:center">Dist > 7<br>or > 8</th>
+					<th style="text-align:center; width:110px">Market Cap</th>
+					<th class="hidden">Net Stock Issues Score</th>
+					<th class="hidden">RelAccruals Score</th>
+					<th class="hidden">NetOpAssetsScaled Score</th>
+					<th class="hidden">Assets Growth Score</th>
+					<th class="hidden">InvestToAssets Score</th>
+					<th class="hidden">52 Week Price Score</th>
+					<th class="hidden">Profit Premium Score</th>
+					<th class="hidden">ROA Quarterly Score</th>
+					<th class="hidden">DistTotal2 Score</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2-->
+		
+				<% @si_sm.each do |si| %>
+					<tr>
+						<td><%= si[0] %></td> <!-- Symbol -->
+						<td><%= si[1] %></td> <!-- Exchange -->
+						<td><%= si[2] %></td> <!-- Company Name -->
+						<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
+						<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
+						<td class="hidden"><%= si[5] %></td> <!-- Action -->
+						<td class="hidden"><%= si[6] %></td> <!-- Totals -->
+						<td style="text-align:center"><%= number_to_percentage(si[7]) %></td> <!-- Total Score Percentile -->
+						<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
+						<td style="text-align:right; padding-right:2px"><%= number_to_human(si[9], precision: 4, format: "%n%u", units: { billion: "B", million: "M" }) %></td> <!-- Market Cap -->
+						<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
+						<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
+						<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
+						<td class="hidden"><%= si[13] %></td> <!-- Assets Growth Score -->
+						<td class="hidden"><%= si[14] %></td> <!-- InvestToAssets Score -->
+						<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
+						<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
+						<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
+						<td class="hidden"><%= si[18] %></td> <!-- DistTotal2 Score -->
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+  </div>
+  
+  <!-- Large cap tab -->
+  <div role="tabpanel" class="tab-pane" id="large-cap">
+  	<table class="table-striped">
+			<thead>
+				<tr>
+					<th style='width:65px'>Sym</th>
+					<th style="text-align:center; width:75px">Exchange</th>
+					<th style="text-align:center">Company Name</th>
+					<th style="text-align:center">Current<br>Portfolio</th>
+					<th style="width:150px; text-align:center">Recommended<br>Action</th>
+					<th class="hidden">Action</th>
+					<th class="hidden">Totals</th>
+					<th style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
+					<th style="text-align:center">Dist > 7<br>or > 8</th>
+					<th style="text-align:center; width:110px">Market Cap</th>
+					<th class="hidden">Net Stock Issues Score</th>
+					<th class="hidden">RelAccruals Score</th>
+					<th class="hidden">NetOpAssetsScaled Score</th>
+					<th class="hidden">Assets Growth Score</th>
+					<th class="hidden">InvestToAssets Score</th>
+					<th class="hidden">52 Week Price Score</th>
+					<th class="hidden">Profit Premium Score</th>
+					<th class="hidden">ROA Quarterly Score</th>
+					<th class="hidden">DistTotal2 Score</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2-->
+		
+				<% @si_lg.each do |si| %>
+					<tr>
+						<td><%= si[0] %></td> <!-- Symbol -->
+						<td><%= si[1] %></td> <!-- Exchange -->
+						<td><%= si[2] %></td> <!-- Company Name -->
+						<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
+						<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
+						<td class="hidden"><%= si[5] %></td> <!-- Action -->
+						<td class="hidden"><%= si[6] %></td> <!-- Totals -->
+						<td style="text-align:center"><%= number_to_percentage(si[7]) %></td> <!-- Total Score Percentile -->
+						<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
+						<td style="text-align:right; padding-right:2px"><%= number_to_human(si[9], precision: 4, format: "%n%u", units: { billion: "B", million: "M" }) %></td> <!-- Market Cap -->
+						<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
+						<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
+						<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
+						<td class="hidden"><%= si[13] %></td> <!-- Assets Growth Score -->
+						<td class="hidden"><%= si[14] %></td> <!-- InvestToAssets Score -->
+						<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
+						<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
+						<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
+						<td class="hidden"><%= si[18] %></td> <!-- DistTotal2 Score -->
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+    
+  </div>
+</div>

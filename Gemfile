@@ -16,6 +16,9 @@ group :production do
   gem 'rails_12factor'
 end
 
+# use watir and phantomjs to drive the headless browser
+gem 'watir', "~> 6.0"
+
 # devise for user authentication
 gem 'devise'
 

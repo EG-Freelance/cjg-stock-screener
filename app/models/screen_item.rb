@@ -18,6 +18,19 @@ class ScreenItem < ActiveRecord::Base
     
     ImportScreenWorker.perform_async(data_set.id)
   end
+  
+  def self.auto_import(auto_data)
+    data_set = DataSet.create()
+    
+    header = auto_data[0]
+    RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "screen")
+    csv_data_rows[1..-1].each_with_index do |row, i|
+      RowDatum.create(data_set_id: data_set.id, data: row.to_s, row_number: i + 2, data_type: "screen")
+    end
+    
+    ImportScreenWorker.perform_async(data_set.id)
+  end
+    
 	
   def self.open_spreadsheet(file)
     case File.extname(file.original_filename)

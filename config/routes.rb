@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   authenticated :user do
     post 'pages/import_pi' => 'pages#import_pi', :as => 'import_pi'
     post 'pages/import_si' => 'pages#import_si', :as => 'import_si'
+    post 'pages/auto_import_si' => 'pages#auto_import_si', :as => 'auto_import_si'
     get 'analysis' => 'pages#analysis', :as => 'analysis'
   end
   

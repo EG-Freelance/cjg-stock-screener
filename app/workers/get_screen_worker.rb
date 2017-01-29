@@ -9,7 +9,7 @@ class GetScreenWorker
 	  # phantomjs --webdriver=8001
 	  
 	  # set up selenium webdriver with phantomjs
-	  driver = Selenium::WebDriver.for :remote, url: 'http://localhost:8001'
+	  driver = Selenium::WebDriver.for :phantomjs
 	  driver.navigate.to 'https://stock.screener.co'
 	  
 	  # declare a wait process to find elements that require time to process

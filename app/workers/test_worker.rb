@@ -7,7 +7,7 @@ class TestWorker
   def perform
 	  # Attempt to get worker to access 
 	  
-	  driver = Selenium::WebDriver.for :remote, url: 'http://localhost:8001'
+	  driver = Selenium::WebDriver.for :phantomjs
 	  driver.navigate.to 'https://stock.screener.co'
   end
 end

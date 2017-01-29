@@ -1,5 +1,5 @@
-# Worker for importing portfolio
-class ImportPortfolioWorker
+# Test phantomjs setup
+class TestWorker
   include Sidekiq::Worker
   include ApplicationHelper
   sidekiq_options queue: 'high'

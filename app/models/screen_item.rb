@@ -1,12 +1,26 @@
 class ScreenItem < ActiveRecord::Base
-	include MathStuff
-	
-	belongs_to :stock, :dependent => :destroy
-	
-	def self.import(file)
-	  data_set = DataSet.create()
-	  
-	  # import microsoft excel file
+  include MathStuff
+  
+  belongs_to :stock, :dependent => :destroy
+  
+  
+  def self.get_data(results)
+    data_set = DataSet.create()
+    
+    header = results[0]
+    RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "screen")
+    results[1..-1].each_with_index do |row, i|
+      RowDatum.create(data_set_id: data_set.id, data: row.to_s, row_number: i + 2, data_type: "screen")
+    end
+    
+    ImportScreenMechanizeWorker.perform_async(data_set.id)
+
+  end
+  
+  def self.import(file)
+    data_set = DataSet.create()
+    
+    # import microsoft excel file
     spreadsheet = open_spreadsheet(file)
     
     # header is in first row
@@ -24,14 +38,14 @@ class ScreenItem < ActiveRecord::Base
     
     header = auto_data[0]
     RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "screen")
-    csv_data_rows[1..-1].each_with_index do |row, i|
+    auto_data[1..-1].each_with_index do |row, i|
       RowDatum.create(data_set_id: data_set.id, data: row.to_s, row_number: i + 2, data_type: "screen")
     end
     
     ImportScreenWorker.perform_async(data_set.id)
   end
     
-	
+  
   def self.open_spreadsheet(file)
     case File.extname(file.original_filename)
       when ".csv" then Roo::Csv.new(file.path)

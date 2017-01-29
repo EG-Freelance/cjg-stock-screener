@@ -1,5 +1,5 @@
 # Worker for getting screen CSV
-class GetScreenWorker
+class GetScreenPhantomWorker
   include Sidekiq::Worker
   sidekiq_options queue: 'high'
   
@@ -129,6 +129,6 @@ class GetScreenWorker
     
     csv_info_rows.delete_if { |r| r[0] == " " }
     
-    ImportScreenItem.auto_import(csv_info_rows)
+    ScreenItem.auto_import(csv_info_rows)
   end
 end

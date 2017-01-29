@@ -376,7 +376,7 @@ class PagesController < ApplicationController
   end
   
   def auto_import_si
-    GetScreenWorker.perform_async
+    GetScreenMechanizeWorker.perform_async
     redirect_to root_url, notice: "Screen data being gathered and processed; this may take 10-20 minutes."
   end
   

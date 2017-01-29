@@ -16,6 +16,8 @@ group :production do
   gem 'rails_12factor'
 end
 
+gem 'mechanize'
+
 # use watir and phantomjs to drive the headless browser
 gem 'watir', "~> 6.0"
 

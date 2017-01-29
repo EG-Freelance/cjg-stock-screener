@@ -5,10 +5,8 @@ class GetScreenWorker
   
   
   def perform
-	  # phantomjs needs to be running in the background on port 8001
-	  # phantomjs --webdriver=8001
-	  
 	  # set up selenium webdriver with phantomjs
+	  puts "starting phantomjs headless browser..."
 	  driver = Selenium::WebDriver.for :phantomjs
 	  driver.navigate.to 'https://stock.screener.co'
 	  
@@ -16,10 +14,12 @@ class GetScreenWorker
 	  wait = Selenium::WebDriver::Wait.new(:timeout => 10)
 	  
 	  # set window size to make sure that all elements load
+	  puts "resizing window to avoid hidden fields..."
 	  target_size = Selenium::WebDriver::Dimension.new(1920, 1080)
 	  driver.manage.window.size = target_size
 	  
 	  # set login info
+	  puts "logging in..."
 	  username = ENV['SSLOGIN']
 	  password = ENV['SSPWD']
 	  
@@ -31,24 +31,28 @@ class GetScreenWorker
 	  wait.until { driver.find_element(:class, 'gwt-PushButton') }.click
 	  
 	  # open advanced screens
+	  puts "opening advanced screens..."
 	  el = wait.until { driver.find_element(:id, 'gwt-uid-18') }
 	  el.click
 	  el = wait.until { driver.find_element(:id, 'gwt-uid-19') }
 	  el.click
 	  
 	  # select the New1 list item
+	  puts "selecting New1 list..."
 	  el = wait.until { driver.find_elements(:class, 'AKQ5O4-c-e') }.find { |e| e.text == "New1" }
 	  el = wait.until { driver.find_elements(:class, 'AKQ5O4-c-b') }.find { |e| e.text == "New1" } if el.nil?
 	  
 	  el.click
 	  
 	  # select Mispricing8
+	  puts "selecting Mispricing8..."
 	  el = wait.until { driver.find_elements(:class, "AKQ5O4-c-b") }.find { |e| e.text == "Mispricing8\nDomestic - Price GTE 5 - Net Stock Issues - RelAccruals - NetOpAssets Scaled - Assets Growth - InvestToAssets - Momentum - Gross Profit Premium - ROA Quarterly - Mkt Cap" }
 	  el = wait.until { driver.find_elements(:class, "AKQ5O4-c-e") }.find { |e| e.text == "Mispricing8\nDomestic - Price GTE 5 - Net Stock Issues - RelAccruals - NetOpAssets Scaled - Assets Growth - InvestToAssets - Momentum - Gross Profit Premium - ROA Quarterly - Mkt Cap" } if el.nil?
 	  
 	  el.click
 	  
 	  # load the screen
+	  puts "loading screen..."
 	  el = wait.until { driver.find_elements(:class, 'gwt-PushButton') }.find { |e| e.text == "Load Screen" }
 	  el.click
 	  sleep(1)
@@ -70,7 +74,7 @@ class GetScreenWorker
 	  	end
 	  end
 	  
-	  puts 'adding columns...'
+	  puts 'adding necessary columns...'
 	  add_cols = ["ROA Quarterly", "DistTotal2"]
 	  add_cols.each do |a|
 	  	puts a
@@ -95,6 +99,7 @@ class GetScreenWorker
 	  td = tds.last
 	  
 	  # compile data for CSV
+	  puts "creating array for data..."
 	  csv_data_rows = []
 	  csv_header = tds.map { |e| e.text.gsub(" \u25B2", "") }
 	  

@@ -11,7 +11,7 @@ class PagesController < ApplicationController
     # portfolio items
     pi_set_date_array = PortfolioItem.all.map { |pi| pi.set_created_at }.uniq.sort
     @pi_period = params['pi_period'] ||= pi_set_date_array.last
-    pi_pool = PortfolioItem.where(set_created_at: pi_period)
+    pi_pool = PortfolioItem.where(set_created_at: @pi_period)
     
     # array of portfolio symbols
     portfolio_securities = pi_pool.map { |pi| pi.stock.symbol }
@@ -19,7 +19,7 @@ class PagesController < ApplicationController
     # screen item variables and arrays
     si_set_date_array = ScreenItem.all.map { |si| si.set_created_at }.uniq.sort
     @si_period = params['si_period'] ||= si_set_date_array.last
-    si_pool = ScreenItem.where(set_created_at: si_period)
+    si_pool = ScreenItem.where(set_created_at: @si_period)
     
     # set cap_separator
     separator = MathStuff.median(si_pool.map { |si| si.stock.market_cap })

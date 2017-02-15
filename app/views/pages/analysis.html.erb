@@ -15,6 +15,8 @@
 					<th style='width:65px'>Sym</th>
 					<th style="text-align:center; width:75px">Exchange</th>
 					<th style="text-align:center">Company Name</th>
+					<th style="text-align:center">Prev Earn</th>
+					<th style="text-align:center">Next Earn</th>
 					<th style="text-align:center">Current<br>Portfolio</th>
 					<th style="width:150px; text-align:center">Recommended<br>Action</th>
 					<th class="hidden">Action</th>
@@ -34,13 +36,15 @@
 				</tr>
 			</thead>
 			<tbody>
-		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2-->
+		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn-->
 		
 				<% @si_sm.each do |si| %>
 					<tr>
 						<td><%= si[0] %></td> <!-- Symbol -->
 						<td><%= si[1] %></td> <!-- Exchange -->
 						<td><%= si[2] %></td> <!-- Company Name -->
+						<td><%= si[19].nil? ? "N/A" : Date.today - si[19] %></td> <!-- Prev Earn -->
+						<td><%= si[20].nil? ? "N/A" : si[20] - Date.today %></td> <!-- Next Earn -->
 						<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 						<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 						<td class="hidden"><%= si[5] %></td> <!-- Action -->
@@ -71,6 +75,8 @@
 					<th style='width:65px'>Sym</th>
 					<th style="text-align:center; width:75px">Exchange</th>
 					<th style="text-align:center">Company Name</th>
+					<th style="text-align:center">Prev Earn</th>
+					<th style="text-align:center">Next Earn</th>
 					<th style="text-align:center">Current<br>Portfolio</th>
 					<th style="width:150px; text-align:center">Recommended<br>Action</th>
 					<th class="hidden">Action</th>
@@ -90,13 +96,15 @@
 				</tr>
 			</thead>
 			<tbody>
-		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2-->
+		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn-->
 		
 				<% @si_lg.each do |si| %>
 					<tr>
 						<td><%= si[0] %></td> <!-- Symbol -->
 						<td><%= si[1] %></td> <!-- Exchange -->
 						<td><%= si[2] %></td> <!-- Company Name -->
+						<td><%= si[19].nil? ? "N/A" : Date.today - si[19] %></td> <!-- Prev Earn -->
+						<td><%= si[20].nil? ? "N/A" : si[20] - Date.today %></td> <!-- Next Earn -->
 						<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 						<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 						<td class="hidden"><%= si[5] %></td> <!-- Action -->

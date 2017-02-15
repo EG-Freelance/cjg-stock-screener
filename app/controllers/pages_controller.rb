@@ -85,7 +85,7 @@ class PagesController < ApplicationController
       
       total_score = [nsi_rank, ra_rank, noas_rank, ag_rank, aita_rank, l52wp_rank, pp_rank, rq_rank, dt2_rank].sum
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings
       @si_lg << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -105,7 +105,9 @@ class PagesController < ApplicationController
         l52wp_rank,
         pp_rank,
         rq_rank,
-        dt2_rank
+        dt2_rank,
+        si.stock.earnings_dates.count > 1 ? si.stock.earnings_dates.first.date : nil,
+        si.stock.earnings_dates.count > 0 ? si.stock.earnings_dates.last.date : nil
       ]
     end
     # calculate programmatic action (si[4]), total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup
@@ -223,7 +225,7 @@ class PagesController < ApplicationController
       
       total_score = [nsi_rank, ra_rank, noas_rank, ag_rank, aita_rank, l52wp_rank, pp_rank, rq_rank, dt2_rank].sum
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings
       @si_sm << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -243,7 +245,9 @@ class PagesController < ApplicationController
         l52wp_rank,
         pp_rank,
         rq_rank,
-        dt2_rank
+        dt2_rank,
+        si.stock.earnings_dates.count > 1 ? si.stock.earnings_dates.first.date : nil,
+        si.stock.earnings_dates.count > 0 ? si.stock.earnings_dates.last.date : nil
       ]
     end
     # calculate total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup

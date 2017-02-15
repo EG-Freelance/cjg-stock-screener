@@ -11,9 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170126172610) do
+ActiveRecord::Schema.define(version: 20170215175503) do
 
   create_table "data_sets", force: :cascade do |t|
+  end
+
+  create_table "earnings_dates", force: :cascade do |t|
+    t.integer  "stock_id"
+    t.string   "time"
+    t.date     "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "pages", force: :cascade do |t|

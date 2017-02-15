@@ -76,5 +76,8 @@ class ImportScreenWorker
     invest_to_assets_array = si_array.map { |si| si.invest_to_assets }.compact
     med_ita = MathStuff.median(invest_to_assets_array)
     si_array.each { |si| si.update(adj_invest_to_assets: med_ita) if si.invest_to_assets.nil? }
+    
+    # remove all previous screen items (trying to stay below 10k DB entries)
+    ScreenItem.where('set_created_at < ?', set_created_at).destroy_all
   end
 end

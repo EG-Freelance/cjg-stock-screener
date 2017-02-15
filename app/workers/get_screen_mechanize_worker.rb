@@ -37,37 +37,7 @@ class GetScreenMechanizeWorker
       
       # each entry in a company row is separated by a single pipe | (we're creating a nested array here)
       results += response_array.map { |r| r.split("|") }
-    
-      # # iterate over response array to load data into a master hash
-      # # row format: "NYSE:APA|Apache Corporation|1.0037302338|-1.051849078803112549|0.271643551615670575|0.33675293108379|-0.60936159565342|0.5290640000|23554970000.00000000000000|0.23946502494427|0.00090158547605|-7.517630943486801" 
-      # response_array.each do |row|
-      #   # initialize individual record hash (first item in each row is the ticker, e.g. NYSE:APA)
-      #   this_record = {}
-      #   row.each_with_index do |r, index|
-      #     # switch to load data correctly
-      #     case index
-      #     when 0
-      #       this_record["ticker"] = r
-      #     when 1
-      #       this_record["company_name"] = r
-      #     when 2
-      #     when 3
-      #     when 4
-      #     when 5
-      #     when 6
-      #     when 7
-      #     when 8
-      #     when 9
-      #     when 10
-      #     when 11
-      #     end
-      #   end
-      #   # break if this ticker is already present
-        
-      #   # assign this record to the associated ticker
-      #   result_hash[row[0]] = this_record
-      # end
-      
+ 
       counter += 1
     end
     ScreenItem.auto_import(results)

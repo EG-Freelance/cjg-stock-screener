@@ -1,5 +1,5 @@
 class PortfolioItem < ActiveRecord::Base
-	belongs_to :stock, :dependent => :destroy
+	belongs_to :stock
 	
 	def self.import(file)
 	  data_set = DataSet.create()

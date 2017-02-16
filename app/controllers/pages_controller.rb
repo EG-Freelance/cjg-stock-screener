@@ -8,8 +8,8 @@ class PagesController < ApplicationController
   end
   
   def analysis  
-    portfolio_items = PortfolioItem.all.includes(:stock)
-    screen_items = ScreenItem.all.includes(:stock)
+    portfolio_items = PortfolioItem.all.includes(:stock, :stock => :earnings_dates)
+    screen_items = ScreenItem.all.includes(:stock, :stock => :earnings_dates)
     
     # portfolio items
     pi_set_date_array = portfolio_items.map { |pi| pi.set_created_at }.uniq.sort

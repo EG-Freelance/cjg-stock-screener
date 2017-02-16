@@ -1,7 +1,7 @@
 class ScreenItem < ActiveRecord::Base
   include MathStuff
   
-  belongs_to :stock, :dependent => :destroy
+  belongs_to :stock
   
   
   def self.get_data(results)

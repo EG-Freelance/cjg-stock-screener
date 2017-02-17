@@ -113,7 +113,7 @@ class PagesController < ApplicationController
         rq_rank,
         dt2_rank,
         prev_ed.empty? ? "N/A" : "#{(Date.today - prev_ed.last.date).to_i} days ago",
-        next_ed.empty? ? "N/A" : (next_ed.las.date - Date.today).to_i == 0 ? "Today" : "In #{(next_ed.first.date - Date.today).to_i} days"
+        next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? "Today" : "In #{(next_ed.first.date - Date.today).to_i} days"
       ]
     end
     # calculate programmatic action (si[4]), total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup

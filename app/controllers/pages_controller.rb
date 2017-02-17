@@ -85,6 +85,9 @@ class PagesController < ApplicationController
       # set dist_total_2_rank
       dt2_rank_raw = dist_total_2_array.index(si.dist_total_2) + 1
       dt2_rank = (dt2_rank_raw / (count_lg / 10.0)).ceil
+      # set next and prev earnings dates
+      prev_ed = si.stock.earnings_dates.where('date < ?', Date.today)
+      next_ed = si.stock.earnings_dates.where('date >= ?', Date.today)
       
       total_score = [nsi_rank, ra_rank, noas_rank, ag_rank, aita_rank, l52wp_rank, pp_rank, rq_rank, dt2_rank].sum
       
@@ -109,8 +112,8 @@ class PagesController < ApplicationController
         pp_rank,
         rq_rank,
         dt2_rank,
-        si.stock.earnings_dates.count > 1 ? si.stock.earnings_dates.first.date : nil,
-        si.stock.earnings_dates.count > 0 ? si.stock.earnings_dates.last.date : nil
+        prev_ed.empty? ? "N/A" : "#{(Date.today - prev_ed.last).to_i} days ago"
+        next_ed.empty? ? "N/A" : (Date.today - prev_ed.last).to_i == 0 ? "Today" : "In #{(next_ed.first - Date.today).to_i} days"
       ]
     end
     # calculate programmatic action (si[4]), total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup
@@ -224,7 +227,9 @@ class PagesController < ApplicationController
       # set dist_total_2_rank
       dt2_rank_raw = dist_total_2_array.index(si.dist_total_2) + 1
       dt2_rank = (dt2_rank_raw / (count_sm / 10.0)).ceil
-      # set large_cap/small_cap
+      # set next and prev earnings dates
+      prev_ed = si.stock.earnings_dates.where('date < ?', Date.today)
+      next_ed = si.stock.earnings_dates.where('date >= ?', Date.today)
       
       total_score = [nsi_rank, ra_rank, noas_rank, ag_rank, aita_rank, l52wp_rank, pp_rank, rq_rank, dt2_rank].sum
       
@@ -249,8 +254,8 @@ class PagesController < ApplicationController
         pp_rank,
         rq_rank,
         dt2_rank,
-        si.stock.earnings_dates.count > 1 ? si.stock.earnings_dates.first.date : nil,
-        si.stock.earnings_dates.count > 0 ? si.stock.earnings_dates.last.date : nil
+        prev_ed.empty? ? "N/A" : "#{(Date.today - prev_ed.last).to_i} days ago"
+        next_ed.empty? ? "N/A" : (Date.today - prev_ed.last).to_i == 0 ? "Today" : "In #{(next_ed.first - Date.today).to_i} days"
       ]
     end
     # calculate total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup

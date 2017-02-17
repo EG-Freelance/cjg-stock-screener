@@ -112,7 +112,7 @@ class PagesController < ApplicationController
         pp_rank,
         rq_rank,
         dt2_rank,
-        prev_ed.empty? ? "N/A" : "#{(Date.today - prev_ed.last).to_i} days ago"
+        prev_ed.empty? ? "N/A" : "#{(Date.today - prev_ed.last).to_i} days ago",
         next_ed.empty? ? "N/A" : (Date.today - prev_ed.last).to_i == 0 ? "Today" : "In #{(next_ed.first - Date.today).to_i} days"
       ]
     end
@@ -254,7 +254,7 @@ class PagesController < ApplicationController
         pp_rank,
         rq_rank,
         dt2_rank,
-        prev_ed.empty? ? "N/A" : "#{(Date.today - prev_ed.last).to_i} days ago"
+        prev_ed.empty? ? "N/A" : "#{(Date.today - prev_ed.last).to_i} days ago",
         next_ed.empty? ? "N/A" : (Date.today - prev_ed.last).to_i == 0 ? "Today" : "In #{(next_ed.first - Date.today).to_i} days"
       ]
     end

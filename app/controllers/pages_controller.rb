@@ -254,8 +254,8 @@ class PagesController < ApplicationController
         pp_rank,
         rq_rank,
         dt2_rank,
-        prev_ed.empty? ? "N/A" : "#{(Date.today - prev_ed.last.date).to_i} days ago",
-        next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? "Today" : "In #{(next_ed.first.date - Date.today).to_i} days"
+        prev_ed.empty? ? "N/A" : "#{(Date.today - prev_ed.last.date).to_i} day(s) ago",
+        next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? "Today" : "In #{(next_ed.first.date - Date.today).to_i} day(s)"
       ]
     end
     # calculate total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup

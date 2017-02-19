@@ -113,7 +113,7 @@ class PagesController < ApplicationController
         rq_rank,
         dt2_rank,
         prev_ed.empty? ? "N/A" : "#{(Date.today - prev_ed.last).to_i} days ago",
-        next_ed.empty? ? "N/A" : (Date.today - prev_ed.last).to_i == 0 ? "Today" : "In #{(next_ed.first - Date.today).to_i} days"
+        next_ed.empty? ? "N/A" : (Date.today - next_ed.last).to_i == 0 ? "Today" : "In #{(next_ed.first - Date.today).to_i} days"
       ]
     end
     # calculate programmatic action (si[4]), total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup
@@ -255,7 +255,7 @@ class PagesController < ApplicationController
         rq_rank,
         dt2_rank,
         prev_ed.empty? ? "N/A" : "#{(Date.today - prev_ed.last).to_i} days ago",
-        next_ed.empty? ? "N/A" : (Date.today - prev_ed.last).to_i == 0 ? "Today" : "In #{(next_ed.first - Date.today).to_i} days"
+        next_ed.empty? ? "N/A" : (Date.today - next_ed.last).to_i == 0 ? "Today" : "In #{(next_ed.first - Date.today).to_i} days"
       ]
     end
     # calculate total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup

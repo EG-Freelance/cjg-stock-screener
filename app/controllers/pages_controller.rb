@@ -13,7 +13,7 @@ class PagesController < ApplicationController
     
     # portfolio items
     pi_set_date_array = portfolio_items.map { |pi| pi.set_created_at }.uniq.sort
-    @pi_period = params['pi_period'] ||= pi_set_date_array.last
+    @pi_period = pi_set_date_array.last
     pi_pool = portfolio_items.where(set_created_at: @pi_period)
     
     # array of portfolio symbols
@@ -21,7 +21,7 @@ class PagesController < ApplicationController
     
     # screen item variables and arrays
     si_set_date_array = screen_items.map { |si| si.set_created_at }.uniq.sort
-    @si_period = params['si_period'] ||= si_set_date_array.last
+    @si_period = si_set_date_array.last
     si_pool = screen_items.where(set_created_at: @si_period)
     
     # set cap_separator

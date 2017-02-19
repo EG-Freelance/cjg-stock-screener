@@ -15,7 +15,7 @@ class UpdateEarningsDatesWorker
       response = agent.get("https://biz.yahoo.com/research/earncal/#{date_string}.html")
     rescue
       puts "No earnings or date error for #{date}"
-      break
+      return false
     end
     
     # table varies in what column it uses to display time, so check for time index

@@ -4,6 +4,9 @@ class UpdateEarningsDatesWorker
   sidekiq_options queue: 'high'
   
   def perform(date)
+    # get Date object for date
+    date = Date.parse(date)
+    # eager load stocks
     stocks = Stock.all.includes(:earnings_dates)
     # get next earnings_date by date of announcement
     agent = Mechanize.new

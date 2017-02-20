@@ -42,7 +42,17 @@ class ImportPortfolioWorker
       # save remaining data
       sym = position_data[1]
       pi_description = row["Description"]
-      exchange = row["Exchange"]
+      if row["Exchange"] == "NSDQ"
+        exchange = "NASD"
+      elsif row["Exchange"] == "CINC" && !Stock.where(symbol: sym).empty?
+        exchange = Stock.find_by(symbol: sym).exchange
+      else
+        if Stock.find_by(symbol: sym).exchange == "CINC" && row["Exchange"] != "CINC"
+          Stock.update(exchange: row["Exchange"])
+        else
+          exchange = row["Exchange"]
+        end
+      end
       market_cap_data = row["Market Cap"].match(/([\d\,\.]+)((?:M|B))/)
       market_cap = market_cap_data[1].to_f * (market_cap_data[2] == "B" ? 1000000000 : 1000000)
       pi_description = row["Description"]

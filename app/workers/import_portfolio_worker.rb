@@ -48,7 +48,7 @@ class ImportPortfolioWorker
         exchange = Stock.find_by(symbol: sym).exchange
       else
         stock = Stock.find_by(symbol: sym)
-        if !stock.nil? &&  stock.exchange == "CINC" && row["Exchange"] != "CINC"
+        if !stock.nil? && stock.exchange == "CINC" && row["Exchange"] != "CINC"
           stock.update(exchange: row["Exchange"])
         else
           exchange = row["Exchange"]
@@ -80,10 +80,12 @@ class ImportPortfolioWorker
         exchange: exchange, 
         symbol: sym
       ).first_or_create
-      stock.update(
-        pi_description: pi_description, 
-        market_cap: market_cap
-      )
+      unless market_cap == 0
+        stock.update(
+          pi_description: pi_description, 
+          market_cap: market_cap
+        )
+      end
       
       # create/update portfolio entry
       pi = PortfolioItem.where(

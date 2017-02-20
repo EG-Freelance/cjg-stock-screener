@@ -47,8 +47,9 @@ class ImportPortfolioWorker
       elsif row["Exchange"] == "CINC" && !Stock.where(symbol: sym).empty?
         exchange = Stock.find_by(symbol: sym).exchange
       else
-        if Stock.find_by(symbol: sym).exchange == "CINC" && row["Exchange"] != "CINC"
-          Stock.update(exchange: row["Exchange"])
+        stock = Stock.find_by(symbol: sym)
+        if !stock.nil? &&  stock.exchange == "CINC" && row["Exchange"] != "CINC"
+          stock.update(exchange: row["Exchange"])
         else
           exchange = row["Exchange"]
         end

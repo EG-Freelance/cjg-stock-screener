@@ -23,7 +23,7 @@
 					<th class="hidden">Totals</th>
 					<th style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
 					<th style="text-align:center">Dist > 7<br>or > 8</th>
-					<th style="text-align:center; width:110px">Market Cap</th>
+					<th style="text-align:center; width:110px">Market Cap (in M)</th>
 					<th class="hidden">Net Stock Issues Score</th>
 					<th class="hidden">RelAccruals Score</th>
 					<th class="hidden">NetOpAssetsScaled Score</th>
@@ -51,7 +51,7 @@
 						<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 						<td style="text-align:center"><%= number_to_percentage(si[7]) %></td> <!-- Total Score Percentile -->
 						<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
-						<td style="text-align:right; padding-right:2px"><%= number_to_human(si[9], precision: 3, format: "%n%u", units: { million: "M" }) %></td> <!-- Market Cap -->
+						<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000, :precision => 3, :delimiter => ',' ) %></td> <!-- Market Cap -->
 						<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
 						<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
 						<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
@@ -83,7 +83,7 @@
 					<th class="hidden">Totals</th>
 					<th style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
 					<th style="text-align:center">Dist > 7<br>or > 8</th>
-					<th style="text-align:center; width:110px">Market Cap</th>
+					<th style="text-align:center; width:110px">Market Cap (in M)</th>
 					<th class="hidden">Net Stock Issues Score</th>
 					<th class="hidden">RelAccruals Score</th>
 					<th class="hidden">NetOpAssetsScaled Score</th>
@@ -111,7 +111,7 @@
 						<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 						<td style="text-align:center"><%= number_to_percentage(si[7]) %></td> <!-- Total Score Percentile -->
 						<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
-						<td style="text-align:right; padding-right:2px"><%= number_to_human(si[9], precision: 3, format: "%n%u", units: { million: "M" }) %></td> <!-- Market Cap -->
+						<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000, :precision => 3, :delimiter => ',') %></td> <!-- Market Cap -->
 						<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
 						<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
 						<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->

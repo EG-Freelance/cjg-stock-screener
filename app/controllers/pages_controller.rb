@@ -392,6 +392,11 @@ class PagesController < ApplicationController
     redirect_to root_url, notice: "Screen data being gathered and processed; this may take a minute or two."
   end
   
+  def auto_import_ed
+    Stock.get_earnings_by_date
+    redirect_to root_url, notice: "Gathering next two weeks of earnings dates; this will take a few seconds."
+  end
+  
 
   private
     # Use callbacks to share common setup or constraints between actions.

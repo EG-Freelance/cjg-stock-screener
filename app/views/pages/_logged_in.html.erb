@@ -14,7 +14,7 @@
 		    </div>
 		  </div>
 		  <div style="padding-top:10px">
-		    <button type="submit" name="commit" value="Import" id='home-submit-page'>
+		    <button type="submit" name="commit" value="Import" id='pi-submit-page'>
 		      Import
 		    </button>
 		  </div>
@@ -50,7 +50,20 @@
 		    <h2>Automatically Import Screen Data</h2>
 		  </div>
 		  <div style="padding-top:10px">
-		    <button type="submit" name="commit" value="Import" id='home-submit-page'>
+		    <button type="submit" name="commit" value="Import" id='si-submit-page'>
+		      Import
+		    </button>
+		  </div>
+		<% end %>
+	</div>
+	
+	<div class="col-md-6">
+		<%= form_tag auto_import_ed_path do %>
+		  <div>
+		    <h2>Automatically Import Earnings Dates (2 wks)</h2>
+		  </div>
+		  <div style="padding-top:10px">
+		    <button type="submit" name="commit" value="Import" id='ed-submit-page'>
 		      Import
 		    </button>
 		  </div>

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     post 'pages/import_pi' => 'pages#import_pi', :as => 'import_pi'
     post 'pages/import_si' => 'pages#import_si', :as => 'import_si'
     post 'pages/auto_import_si' => 'pages#auto_import_si', :as => 'auto_import_si'
+    post 'pages/auto_import_earnings_dates' => 'pages#auto_import_ed', :as => 'auto_import_ed'
     get 'analysis' => 'pages#analysis', :as => 'analysis'
   end
   

@@ -12,20 +12,20 @@ class PagesController < ApplicationController
     screen_items = ScreenItem.all.includes(:stock, :stock => :earnings_dates)
     
     # portfolio items
-    pi_set_date_array = portfolio_items.map { |pi| pi.set_created_at }.uniq.sort
+    pi_set_date_array = portfolio_items.pluck(:set_created_at).uniq.sort
     @pi_period = pi_set_date_array.last
     pi_pool = portfolio_items.where(set_created_at: @pi_period)
     
     # array of portfolio symbols
-    portfolio_securities = pi_pool.map { |pi| pi.stock.symbol }
+    portfolio_securities = pi_pool.pluck(:'stocks.symbol')
     
     # screen item variables and arrays
-    si_set_date_array = screen_items.map { |si| si.set_created_at }.uniq.sort
+    si_set_date_array = screen_items.pluck(:set_created_at).uniq.sort
     @si_period = si_set_date_array.last
     si_pool = screen_items.where(set_created_at: @si_period)
     
     # set cap_separator
-    separator = MathStuff.median(si_pool.map { |si| si.stock.market_cap })
+    separator = MathStuff.median(si_pool.pluck(:'stocks.market_cap'))
     cap_diff_array = si_pool.partition { |si| si.stock.market_cap >= separator }
     si_pool_lg = cap_diff_array[0]
     si_pool_sm = cap_diff_array[1]

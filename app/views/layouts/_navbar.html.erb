@@ -8,7 +8,7 @@
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
           <li><%= link_to "HOME", root_path %></li>
-          <li><%= link_to "ANALYSIS", analysis_path %></li>
+          <li><%= link_to "ANALYSIS", analysis_path, data: { turbolinks: false } %></li>
           <li><%= link_to "LOG OUT", destroy_user_session_path, method: :delete, style: "color: #aa7777;" %></li>
         <% else %>
           <%= simple_form_for(:user, :url => session_path(:user), class: 'navbar-form navbar-right loginBar' ) do |f| %>

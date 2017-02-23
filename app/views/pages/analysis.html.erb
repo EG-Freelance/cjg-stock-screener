@@ -1,14 +1,16 @@
 <p><b>Portfolio last updated:</b> <%= @pi_period.strftime("%m/%d/%Y") %> -- <b>Screen last updated:</b> <%= @si_period.strftime("%m/%d/%Y") %></p>
 
-<br>
-Search Text: <input type="text" id="search-text">
-<br>
-<br>
-
-<ul class="nav nav-pills">
-  <li id="small-cap-btn" role="presentation" class="active"><a href="#small-cap" aria-controls="small-cap" data-toggle="tab">Small Cap</a></li>
-  <li id="large-cap-btn" role="presentation"><a href="#large-cap" aria-controls="large-cap" data-toggle="tab">Large Cap</a></li>
-</ul>
+<div class="wrapper" style="text-align:center">
+	Search Text: <input type="text" id="search-text" style="border-radius:5px">
+	<br>
+	<br>
+	
+	<ul class="nav nav-pills">
+	  <li id="small-cap-btn" role="presentation" class="active"><a href="#small-cap" aria-controls="small-cap" data-toggle="tab">Small Cap</a></li>
+	  <li id="large-cap-btn" role="presentation"><a href="#large-cap" aria-controls="large-cap" data-toggle="tab">Large Cap</a></li>
+	</ul>
+	<br>
+</div>
 
 <!-- Tab panes -->
 <div class="tab-content">
@@ -18,7 +20,7 @@ Search Text: <input type="text" id="search-text">
   	<table class="table-striped sortable analysis-table">
 			<thead>
 				<tr>
-					<th class="analysis-header" style='width:65px'>Sym</th>
+					<th class="analysis-header" style='width:65px; padding-left:10px'>Sym</th>
 					<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
 					<th class="analysis-header" style="text-align:center">Company Name</th>
 					<th class="analysis-header" style="text-align:center">Days from <br>Prev Earn</th>
@@ -46,7 +48,7 @@ Search Text: <input type="text" id="search-text">
 		
 				<% @si_sm.each do |si| %>
 					<tr>
-						<td><%= si[0] %></td> <!-- Symbol -->
+						<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
 						<td><%= si[1] %></td> <!-- Exchange -->
 						<td><%= si[2] %></td> <!-- Company Name -->
 						<td><%= si[19] %></td> <!-- Prev Earn -->
@@ -78,7 +80,7 @@ Search Text: <input type="text" id="search-text">
   	<table class="table-striped sortable analysis-table">
 			<thead>
 				<tr>
-					<th class="analysis-header" style='width:65px'>Sym</th>
+					<th class="analysis-header" style='width:65px; padding-left: 10px'>Sym</th>
 					<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
 					<th class="analysis-header" style="text-align:center">Company Name</th>
 					<th class="analysis-header" style="text-align:center">Days from <br>Prev Earn</th>
@@ -106,7 +108,7 @@ Search Text: <input type="text" id="search-text">
 		
 				<% @si_lg.each do |si| %>
 					<tr>
-						<td><%= si[0] %></td> <!-- Symbol -->
+						<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
 						<td><%= si[1] %></td> <!-- Exchange -->
 						<td><%= si[2] %></td> <!-- Company Name -->
 						<td><%= si[19] %></td> <!-- Prev Earn -->

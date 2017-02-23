@@ -1,3 +1,8 @@
+body {
+	font-family: 'Roboto', sans-serif !important;
+	width: 100%;
+}
+
 .notice-msg{
 	color: darkgreen;
 	background-color: lightgreen;
@@ -27,11 +32,50 @@
 }
 
 .analysis-table{
-	background-color: white;
-	opacity: 0.95;
+	background-color: #e6e6e6;
+	margin: 0 auto;
 }
 
-.center {
-	text-align: center !important;
-	width: 100%;
+.submit-btn {
+  background: #c1c5c7;
+  background-image: -webkit-linear-gradient(top, #c1c5c7, #545454);
+  background-image: -moz-linear-gradient(top, #c1c5c7, #545454);
+  background-image: -ms-linear-gradient(top, #c1c5c7, #545454);
+  background-image: -o-linear-gradient(top, #c1c5c7, #545454);
+  background-image: linear-gradient(to bottom, #c1c5c7, #545454);
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 5px 20px 5px 20px;
+  border: solid #000000 2px;
+  text-decoration: none;
+  opacity: 1.0;
+}
+
+.submit-btn:hover {
+  background: #949494;
+  background-image: -webkit-linear-gradient(top, #949494, #292929);
+  background-image: -moz-linear-gradient(top, #949494, #292929);
+  background-image: -ms-linear-gradient(top, #949494, #292929);
+  background-image: -o-linear-gradient(top, #949494, #292929);
+  background-image: linear-gradient(to bottom, #949494, #292929);
+  text-decoration: none;
+}
+
+h2 {
+	font-family: 'Dosis', sans-serif !important;
+}
+
+.nav-tabs > li, .nav-pills > li {
+    float: none !important;
+    display: inline-block !important;
+    *display: inline !important; /* ie7 fix */
+     zoom: 1 !important; /* hasLayout ie7 trigger */
+}
+
+.nav-tabs, .nav-pills {
+    text-align: center !important;
 }

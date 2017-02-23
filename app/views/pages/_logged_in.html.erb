@@ -8,15 +8,16 @@
 		    <p>Select file "ETrade Equities [date]"</p>
 		    <div class='input-field'>
 		      <div class="file-field input-field">
-		        <div >
-		          <span><b><i>Portfolio File</i></b></span>
-		          <%= file_field_tag :file %>
+		        <div>
+		          <span><b><i>Portfolio File</i></b>
+		          	<%= file_field_tag :file %>
+		          </span>
 		        </div>
 		      </div>
 		    </div>
 		  </div>
 		  <div style="padding-top:10px">
-		    <button type="submit" name="commit" value="Import" id='pi-submit-page'>
+		    <button type="submit" name="commit" value="Import" id='pi-submit-page' class='submit-btn'>
 		      Import
 		    </button>
 		  </div>
@@ -55,7 +56,7 @@
 		    <h2>Automatically Import Screen Data</h2>
 		  </div>
 		  <div style="padding-top:10px">
-		    <button type="submit" name="commit" value="Import" id='si-submit-page'>
+		    <button type="submit" name="commit" value="Import" id='si-submit-page' class='submit-btn'>
 		      Import
 		    </button>
 		  </div>
@@ -72,7 +73,7 @@
 		    <h2>Automatically Import Earnings Dates (2 wks)</h2>
 		  </div>
 		  <div style="padding-top:10px">
-		    <button type="submit" name="commit" value="Import" id='ed-submit-page'>
+		    <button type="submit" name="commit" value="Import" id='ed-submit-page' class='submit-btn'>
 		      Import
 		    </button>
 		  </div>

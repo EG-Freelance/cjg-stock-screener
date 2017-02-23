@@ -1,12 +1,14 @@
+
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-3"></div>
+	<div class="col-md-6 home-module">
 		<%= form_tag import_pi_path, multipart: true do %>
 		  <div>
 		    <h2>Import Portfolio Data</h2>
 		    <p>Select file "ETrade Equities [date]"</p>
 		    <div class='input-field'>
 		      <div class="file-field input-field">
-		        <div>
+		        <div >
 		          <span><b><i>Portfolio File</i></b></span>
 		          <%= file_field_tag :file %>
 		        </div>
@@ -20,6 +22,8 @@
 		  </div>
 		<% end %>
 	</div>
+	<div class="col-md-3"></div>
+</div>
 	
 	<!--The section below is unneeded since there is a fully automated version-->
 	<!--<div class="col-md-6">-->
@@ -43,8 +47,9 @@
 	<!--	  </div>-->
 	<!--	<% end %>-->
 	<!--</div>-->
-	
-	<div class="col-md-6">
+<div class="row">	
+	<div class="col-md-3"></div>
+	<div class="col-md-6 home-module">
 		<%= form_tag auto_import_si_path do %>
 		  <div>
 		    <h2>Automatically Import Screen Data</h2>
@@ -56,8 +61,12 @@
 		  </div>
 		<% end %>
 	</div>
+	<div class="col-md-3"></div>
+</div>
+<div class="row">
 	
-	<div class="col-md-6">
+	<div class="col-md-3"></div>
+	<div class="col-md-6 home-module">
 		<%= form_tag auto_import_ed_path do %>
 		  <div>
 		    <h2>Automatically Import Earnings Dates (2 wks)</h2>
@@ -69,4 +78,5 @@
 		  </div>
 		<% end %>
 	</div>
+	<div class="col-md-3"></div>
 </div>

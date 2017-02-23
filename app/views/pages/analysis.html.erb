@@ -1,4 +1,10 @@
 <p><b>Portfolio last updated:</b> <%= @pi_period.strftime("%m/%d/%Y") %> -- <b>Screen last updated:</b> <%= @si_period.strftime("%m/%d/%Y") %></p>
+
+<br>
+Search Text: <input type="text" id="search-text">
+<br>
+<br>
+
 <ul class="nav nav-pills">
   <li id="small-cap-btn" role="presentation" class="active"><a href="#small-cap" aria-controls="small-cap" data-toggle="tab">Small Cap</a></li>
   <li id="large-cap-btn" role="presentation"><a href="#large-cap" aria-controls="large-cap" data-toggle="tab">Large Cap</a></li>
@@ -9,7 +15,7 @@
   
   <!-- Small cap tab -->
   <div role="tabpanel" class="tab-pane active" id="small-cap">
-  	<table class="table-striped sortable">
+  	<table class="table-striped sortable analysis-table">
 			<thead>
 				<tr>
 					<th class="analysis-header" style='width:65px'>Sym</th>
@@ -69,7 +75,7 @@
   
   <!-- Large cap tab -->
   <div role="tabpanel" class="tab-pane" id="large-cap">
-  	<table class="table-striped sortable">
+  	<table class="table-striped sortable analysis-table">
 			<thead>
 				<tr>
 					<th class="analysis-header" style='width:65px'>Sym</th>

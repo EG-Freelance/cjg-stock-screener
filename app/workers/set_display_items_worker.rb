@@ -1,28 +1,28 @@
-class PagesController < ApplicationController
-  before_action :set_page, only: [:show, :edit, :update, :destroy]
-
-  # GET /pages
-  # GET /pages.json
-  def index
-    @pages = Page.all
-  end
+# Worker for setting display items for analysis page
+class SetDisplayItemsWorker
+  include Sidekiq::Worker
+  sidekiq_options queue: 'high'
   
-  def analysis  
+  def perform
+    # clear out current DisplayItem set
+    DisplayItem.destroy_all
+    
+    disp_set_created_at = DateTime.now
     portfolio_items = PortfolioItem.all.includes(:stock, :stock => :earnings_dates)
     screen_items = ScreenItem.all.includes(:stock, :stock => :earnings_dates)
     
     # portfolio items
     pi_set_date_array = portfolio_items.pluck(:set_created_at).uniq.sort
-    @pi_period = pi_set_date_array.last
-    pi_pool = portfolio_items.where(set_created_at: @pi_period)
+    pi_period = pi_set_date_array.last
+    pi_pool = portfolio_items.where(set_created_at: pi_period)
     
     # array of portfolio symbols
     portfolio_securities = pi_pool.pluck(:'stocks.symbol')
     
     # screen item variables and arrays
     si_set_date_array = screen_items.pluck(:set_created_at).uniq.sort
-    @si_period = si_set_date_array.last
-    si_pool = screen_items.where(set_created_at: @si_period)
+    si_period = si_set_date_array.last
+    si_pool = screen_items.where(set_created_at: si_period)
     
     # set cap_separator
     separator = MathStuff.median(si_pool.pluck(:'stocks.market_cap'))
@@ -53,7 +53,8 @@ class PagesController < ApplicationController
     roa_q_array = roa_q_array.sort
     dist_total_2_array = dist_total_2_array.sort
     
-    @si_lg = []
+    si_lg = []
+    si_lg_import = []
     #process data
     si_pool_lg.each do |si|
       # set net_stock_issues rank
@@ -92,7 +93,7 @@ class PagesController < ApplicationController
       total_score = [nsi_rank, ra_rank, noas_rank, ag_rank, aita_rank, l52wp_rank, pp_rank, rq_rank, dt2_rank].sum
       
       # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings
-      @si_lg << [
+      si_lg << [
         si.stock.symbol, 
         si.stock.exchange,
         si.stock.si_description,
@@ -117,8 +118,8 @@ class PagesController < ApplicationController
       ]
     end
     # calculate programmatic action (si[4]), total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup
-    ts_array = @si_lg.map { |si| si[6] }.sort
-    @si_lg.each do |si| 
+    ts_array = si_lg.map { |si| si[6] }.sort
+    si_lg.each do |si| 
       si[7] = 1 - ((ts_array.index(si[6]) + 1)/ts_array.length.to_f)
       # set dist
       if si[7] >= 0.9
@@ -168,9 +169,39 @@ class PagesController < ApplicationController
           # No, Middle 80%, Any Dist
           si[4] = "No action"
         end
-      end 
+      end     
+      # instantiate display objects
+      si_lg_import << DisplayItem.new(
+        classification: "large", 
+        set_created_at: disp_set_created_at,
+        symbol: si[0],
+        exchange: si[1],
+        company: si[2],
+        in_pf: si[3],
+        rec_action: si[4],
+        action: si[5],
+        total_score: si[6],
+        total_score_pct: si[7],
+        dist_status: si[8],
+        mkt_cap: si[9],
+        nsi_score: si[10],
+        ra_score: si[11],
+        noas_score: si[12],
+        ag_score: si[13],
+        aita_score: si[14], 
+        l52wp_score: si[15],
+        pp_score: si[16],
+        rq_score: si[17],
+        dt2_score: si[18],
+        prev_ed: si[19],
+        next_ed: si[20]
+      )
+      
     end
-    @si_lg.sort_by! { |si| si[6] }
+    
+    # import lg_cap
+    DisplayItem.import si_lg_import
+    
     
     ##########################
     # Get Small Cap Listings #
@@ -195,7 +226,8 @@ class PagesController < ApplicationController
     roa_q_array = roa_q_array.sort
     dist_total_2_array = dist_total_2_array.sort
     
-    @si_sm = []
+    si_sm = []
+    si_sm_import = []
     #process data
     si_pool_sm.each do |si|
       # set net_stock_issues rank
@@ -234,7 +266,7 @@ class PagesController < ApplicationController
       total_score = [nsi_rank, ra_rank, noas_rank, ag_rank, aita_rank, l52wp_rank, pp_rank, rq_rank, dt2_rank].sum
       
       # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings
-      @si_sm << [
+      si_sm << [
         si.stock.symbol, 
         si.stock.exchange,
         si.stock.si_description,
@@ -259,8 +291,8 @@ class PagesController < ApplicationController
       ]
     end
     # calculate total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup
-    ts_array = @si_sm.map { |si| si[6] }.sort
-    @si_sm.each do |si| 
+    ts_array = si_sm.map { |si| si[6] }.sort
+    si_sm.each do |si| 
       si[7] = 1 - ((ts_array.index(si[6]) + 1)/ts_array.length.to_f)
       
       # set dist
@@ -312,100 +344,33 @@ class PagesController < ApplicationController
         end
       end
     end
-    @si_sm.sort_by! { |si| si[6] }
+      # instantiate objects
+      si_sm_import << DisplayItem.new(
+        classification: "large", 
+        set_created_at: disp_set_created_at,
+        symbol: si[0],
+        exchange: si[1],
+        company: si[2],
+        in_pf: si[3],
+        rec_action: si[4],
+        action: si[5],
+        total_score: si[6],
+        total_score_pct: si[7],
+        dist_status: si[8],
+        mkt_cap: si[9],
+        nsi_score: si[10],
+        ra_score: si[11],
+        noas_score: si[12],
+        ag_score: si[13],
+        aita_score: si[14], 
+        l52wp_score: si[15],
+        pp_score: si[16],
+        rq_score: si[17],
+        dt2_score: si[18],
+        prev_ed: si[19],
+        next_ed: si[20]
+      )
   end
-
-  # GET /pages/1
-  # GET /pages/1.json
-  def show
-  end
-
-  # GET /pages/new
-  def new
-    @page = Page.new
-  end
-
-  # GET /pages/1/edit
-  def edit
-  end
-
-  # POST /pages
-  # POST /pages.json
-  def create
-    @page = Page.new(page_params)
-
-    respond_to do |format|
-      if @page.save
-        format.html { redirect_to @page, notice: 'Page was successfully created.' }
-        format.json { render :show, status: :created, location: @page }
-      else
-        format.html { render :new }
-        format.json { render json: @page.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /pages/1
-  # PATCH/PUT /pages/1.json
-  def update
-    respond_to do |format|
-      if @page.update(page_params)
-        format.html { redirect_to @page, notice: 'Page was successfully updated.' }
-        format.json { render :show, status: :ok, location: @page }
-      else
-        format.html { render :edit }
-        format.json { render json: @page.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /pages/1
-  # DELETE /pages/1.json
-  def destroy
-    @page.destroy
-    respond_to do |format|
-      format.html { redirect_to pages_url, notice: 'Page was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
-  
-  def import_pi
-    if params[:file].nil?
-      redirect_to root_url, alert: "Please select a compatible file to import."
-    else
-      PortfolioItem.import_pi(params[:file])
-      redirect_to root_url, notice: "Portfolio data being processed; this will take about a minute."
-    end
-  end
-
-  def import_si
-    if params[:file].nil?
-      redirect_to root_url, alert: "Please select a compatible file to import."
-    else
-      ScreenItem.import_si(params[:file])
-      redirect_to root_url, notice: "Screen data being processed; this will take a minute or two."
-    end
-  end
-  
-  def auto_import_si
-    GetScreenMechanizeWorker.perform_async
-    redirect_to root_url, notice: "Screen data being gathered and processed; this may take a minute or two."
-  end
-  
-  def auto_import_ed
-    Stock.get_earnings_by_date
-    redirect_to root_url, notice: "Gathering next two weeks of earnings dates; this will take a few seconds."
-  end
-  
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_page
-      @page = Page.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def page_params
-      params.fetch(:page, {})
-    end
+  # import sm_cap
+  DisplayItem.import si_sm_import
 end

@@ -11,9 +11,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170215175503) do
+ActiveRecord::Schema.define(version: 20170302134636) do
 
   create_table "data_sets", force: :cascade do |t|
+  end
+
+  create_table "display_items", force: :cascade do |t|
+    t.string   "classification"
+    t.datetime "set_created_at"
+    t.string   "symbol"
+    t.string   "exchange"
+    t.string   "company"
+    t.string   "in_pf"
+    t.string   "rec_action"
+    t.string   "action"
+    t.integer  "total_score"
+    t.decimal  "total_score_pct"
+    t.string   "dist_status"
+    t.integer  "mkt_cap"
+    t.integer  "nsi_score"
+    t.integer  "ra_score"
+    t.integer  "noas_score"
+    t.integer  "ag_score"
+    t.integer  "aita_score"
+    t.integer  "l52wp_score"
+    t.integer  "pp_score"
+    t.integer  "rq_score"
+    t.integer  "dt2_score"
+    t.integer  "prev_ed"
+    t.integer  "next_ed"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "earnings_dates", force: :cascade do |t|

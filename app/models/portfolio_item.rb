@@ -1,7 +1,7 @@
 class PortfolioItem < ActiveRecord::Base
 	belongs_to :stock
 	
-	def self.import(file)
+	def self.import_pi(file)
 	  data_set = DataSet.create()
 	  
 	  spreadsheet = open_spreadsheet(file)

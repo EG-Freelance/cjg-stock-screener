@@ -17,7 +17,7 @@ class ScreenItem < ActiveRecord::Base
 
   end
   
-  def self.import(file)
+  def self.import_si(file)
     data_set = DataSet.create()
     
     # import microsoft excel file

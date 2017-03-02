@@ -21,6 +21,9 @@ gem 'mechanize'
 # use watir and phantomjs to drive the headless browser
 gem 'watir', "~> 6.0"
 
+# use activerecord-import for batch importing
+gem 'activerecord-import'
+
 # devise for user authentication
 gem 'devise'
 
@@ -35,6 +38,7 @@ gem 'simple_form'
 gem 'redis'
 gem 'sidekiq'
 gem 'sidekiq-failures'
+gem 'sidekiq-status'
 
 
 # Use SCSS for stylesheets

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     post 'pages/auto_import_si' => 'pages#auto_import_si', :as => 'auto_import_si'
     post 'pages/auto_import_earnings_dates' => 'pages#auto_import_ed', :as => 'auto_import_ed'
     get 'analysis' => 'pages#analysis', :as => 'analysis'
+    post 'pages/update_display' => 'pages#update_display', :as => 'update_display'
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

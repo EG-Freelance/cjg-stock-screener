@@ -1,3 +1,4 @@
+<p class="home-module" style="padding-top:5px; padding-left: 10px; padding-bottom:5px"><b>Portfolio last updated:</b> <%= @pi_period.strftime("%m/%d/%Y") %> -- <b>Screen last updated:</b> <%= @si_period.strftime("%m/%d/%Y") %> -- <b>Display last updated:</b> <span style="<%= if @pi_period > @di_period || @si_period > @di_period then 'color:red' end %>"><%= @di_period.strftime("%m/%d/%Y") %></span></p>
 
 <div class="row">
 	<div class="col-md-3"></div>
@@ -64,8 +65,8 @@
 	</div>
 	<div class="col-md-3"></div>
 </div>
+
 <div class="row">
-	
 	<div class="col-md-3"></div>
 	<div class="col-md-6 home-module">
 		<%= form_tag auto_import_ed_path do %>
@@ -75,6 +76,23 @@
 		  <div style="padding-top:10px">
 		    <button type="submit" name="commit" value="Import" id='ed-submit-page' class='submit-btn'>
 		      Import
+		    </button>
+		  </div>
+		<% end %>
+	</div>
+	<div class="col-md-3"></div>
+</div>
+
+<div class="row">
+	<div class="col-md-3"></div>
+	<div class="col-md-6 home-module">
+		<%= form_tag update_display_path do %>
+		  <div>
+		    <h2>Update Analysis Data</h2>
+		  </div>
+		  <div style="padding-top:10px">
+		    <button type="submit" name="commit" value="Update" id='update-analysis-page' class='submit-btn'>
+		      Update
 		    </button>
 		  </div>
 		<% end %>

@@ -8,6 +8,8 @@ class PagesController < ApplicationController
   end
   
   def analysis
+    portfolio_items = PortfolioItem.all
+    screen_items = ScreenItem.all
     # portfolio items
     @pi_period = portfolio_items.pluck(:set_created_at).uniq.sort.last
     

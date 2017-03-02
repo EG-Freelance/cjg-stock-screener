@@ -343,7 +343,6 @@ class SetDisplayItemsWorker
           si[4] = "No action"
         end
       end
-    end
       # instantiate objects
       si_sm_import << DisplayItem.new(
         classification: "large", 
@@ -370,7 +369,8 @@ class SetDisplayItemsWorker
         prev_ed: si[19],
         next_ed: si[20]
       )
+    end
+    # import sm_cap
+    DisplayItem.import si_sm_import
   end
-  # import sm_cap
-  DisplayItem.import si_sm_import
 end

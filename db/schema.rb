@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302134636) do
+ActiveRecord::Schema.define(version: 20170302191531) do
 
   create_table "data_sets", force: :cascade do |t|
   end
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20170302134636) do
     t.integer  "total_score"
     t.decimal  "total_score_pct"
     t.string   "dist_status"
-    t.integer  "mkt_cap"
+    t.integer  "mkt_cap",         limit: 8
     t.integer  "nsi_score"
     t.integer  "ra_score"
     t.integer  "noas_score"
@@ -40,8 +40,8 @@ ActiveRecord::Schema.define(version: 20170302134636) do
     t.integer  "dt2_score"
     t.integer  "prev_ed"
     t.integer  "next_ed"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "earnings_dates", force: :cascade do |t|

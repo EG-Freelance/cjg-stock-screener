@@ -8,6 +8,12 @@ class PagesController < ApplicationController
   end
   
   def analysis
+    # portfolio items
+    @pi_period = portfolio_items.pluck(:set_created_at).uniq.sort.last
+    
+    # screen item variables and arrays
+    @si_period = screen_items.pluck(:set_created_at).uniq.sort.last
+
     si_pool_lg = DisplayItem.where(classification: "large")
     si_pool_sm = DisplayItem.where(classification: "small")
     @si_lg = si_pool_lg.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed] }.sort_by { |si| si[7] }.reverse!

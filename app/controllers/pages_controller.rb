@@ -106,7 +106,7 @@ class PagesController < ApplicationController
     if Sidekiq::Stats.new.workers_size > 0
       redirect_to root_url, alert: "Screen or portfolio data are still being processed.  Please try again momentarily."
     else
-      SetDisplayItemsWorker.perform_async
+      GetDisplayItemsWorker.perform_async
       redirect_to root_url, notice: "Updating data for analysis page"
     end
   end

@@ -1,5 +1,4 @@
 class PagesController < ApplicationController
-  include ActionController::Live
   before_action :set_page, only: [:show, :edit, :update, :destroy]
   before_action :set_update_times, only: [:index, :analysis]
 

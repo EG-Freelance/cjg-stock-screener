@@ -345,7 +345,7 @@ class SetDisplayItemsWorker
       end
       # instantiate objects
       si_sm_import << DisplayItem.new(
-        classification: "large", 
+        classification: "small", 
         set_created_at: disp_set_created_at,
         symbol: si[0],
         exchange: si[1],

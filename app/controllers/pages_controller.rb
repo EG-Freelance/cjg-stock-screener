@@ -9,7 +9,7 @@ class PagesController < ApplicationController
   end
   
   def analysis
-    if Sidekiq::Stats.new.workers_size > 0
+    if Rails.env == "production" && Sidekiq::Stats.new.workers_size > 0
       redirect_to :back, alert: "Screen or portfolio data are still being compiled, or analysis data are being processed; please try again momentarily."
     end
     #screen item variables and arrays
@@ -102,7 +102,7 @@ class PagesController < ApplicationController
   end
   
   def update_display
-    if Sidekiq::Stats.new.workers_size > 0
+    if Rails.env == "production" && Sidekiq::Stats.new.workers_size > 0
       redirect_to root_url, alert: "Screen or portfolio data are still being processed.  Please try again momentarily."
     else
       SetDisplayItemsWorker.perform_async

@@ -53,8 +53,8 @@
 						<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
 						<td><%= si[1] %></td> <!-- Exchange -->
 						<td><%= si[2] %></td> <!-- Company Name -->
-						<td><%= if si[19] != "N/A" ? si[19] + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
-						<td><%= if si[20] != "N/A" ? si[20] - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
+						<td><%= si[19] != "N/A" ? si[19] + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
+						<td><%= si[20] != "N/A" ? si[20] - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
 						<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 						<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 						<td class="hidden"><%= si[5] %></td> <!-- Action -->
@@ -113,8 +113,8 @@
 						<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
 						<td><%= si[1] %></td> <!-- Exchange -->
 						<td><%= si[2] %></td> <!-- Company Name -->
-						<td><%= if si[19] != "N/A" ? si[19] + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
-						<td><%= if si[20] != "N/A" ? si[20] - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
+						<td><%= si[19] != "N/A" ? si[19] + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
+						<td><%= si[20] != "N/A" ? si[20] - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
 						<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 						<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 						<td class="hidden"><%= si[5] %></td> <!-- Action -->

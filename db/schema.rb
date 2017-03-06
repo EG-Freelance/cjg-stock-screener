@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170306201442) do
+ActiveRecord::Schema.define(version: 20170306203435) do
 
   create_table "data_sets", force: :cascade do |t|
   end
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20170306201442) do
     t.string   "next_ed"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-    t.integer  "lm_revenue"
+    t.integer  "lm_revenue",      limit: 8
   end
 
   create_table "earnings_dates", force: :cascade do |t|
@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(version: 20170306201442) do
     t.datetime "updated_at",               null: false
     t.string   "si_description"
     t.string   "pi_description"
-    t.integer  "lm_revenue"
+    t.integer  "lm_revenue",     limit: 8
   end
 
   create_table "users", force: :cascade do |t|

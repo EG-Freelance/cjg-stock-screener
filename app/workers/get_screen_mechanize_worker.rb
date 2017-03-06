@@ -1,7 +1,7 @@
 # Worker for getting screen CSV
 class GetScreenMechanizeWorker
   include Sidekiq::Worker
-  sidekiq_options queue: 'high'
+  sidekiq_options queue: 'high', unique: :until_executed
   
   def perform
   	    

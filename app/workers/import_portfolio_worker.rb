@@ -2,7 +2,7 @@
 class ImportPortfolioWorker
   include Sidekiq::Worker
   include ApplicationHelper
-  sidekiq_options queue: 'high'
+  sidekiq_options queue: 'high', unique: :until_executed
   
   def perform(data_set_id)
     set = DataSet.find(data_set_id)

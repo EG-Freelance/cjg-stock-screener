@@ -1,7 +1,7 @@
 # Worker for setting display items for analysis page
 class SetDisplayItemsWorker
   include Sidekiq::Worker
-  sidekiq_options queue: 'high'
+  sidekiq_options queue: 'high', unique: :until_executed
   
   def perform
     # clear out current DisplayItem set

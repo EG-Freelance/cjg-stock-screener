@@ -129,14 +129,16 @@ class PagesController < ApplicationController
     default_format = Spreadsheet::Format.new :border => :thin, :horizontal_align => :center, :size => 9, :text_wrap => true, :vertical_align => :top
 
     # set header
-    page.row(0).push "Symbol", "Exchange", "Company", "In Portfolio", "Recommended Action", "Action", "Total Score", "Total Score Percentile", "Dist > 7 or 8", "Market Cap", "Net Stock Issues Score", "RelAccruals Score", "NetOpAssetsScaled Score", "Assets Growth Score", "InvestToAssets Score", "52 Week Price Score", "Profit Premium Score", "ROA Quarterly Score", "DistTotal2 Score", "Days from Previous Earnings", "Days to Next Earnings", "Last Month Revenue", "Classification"
-    23.times do |i|
+    page.row(0).push "Symbol", "Exchange", "Company", "In Portfolio", "Recommended Action", "Action", "Total Score", "Total Score Percentile", "Dist > 7 or 8", "Market Cap", "Net Stock Issues", "Net Stock Issues Rank", "RelAccruals", "RelAccruals Rank", "NetOpAssetsScaled", "NetOpAssetsScaled Rank", "Assets Growth", "Assets Growth Rank", "InvestToAssets", "InvestToAssets Rank", "52 Week Price", "52 Week Price Rank", "Profit Premium", "Profit Premium Rank", "ROA Quarterly", "ROA Quarterly Rank", "DistTotal2", "DistTotal2 Rank", "Days from Previous Earnings", "Days to Next Earnings", "Last Month Revenue", "Classification"
+    32.times do |i|
       page.row(0).set_format(i, header_format)
     end
     
     display_items = DisplayItem.all
+    screen_items = ScreenItem.all.includes(:stock)
     display_items.each_with_index do |di, i|
-      page.row(i+1).push di.symbol, di.exchange, di.company, di.in_pf, di.rec_action, di.action, di.total_score, di.total_score_pct, di.dist_status, di.mkt_cap, di.nsi_score, di.ra_score, di.noas_score, di.ag_score, di.aita_score, di.l52wp_score, di.pp_score, di.rq_score, di.dt2_score, di.prev_ed, di.next_ed, di.lm_revenue, di.classification
+      si = screen_items.find_by(:stocks => { :symbol => di.symbol, :exchange => di.exchange })
+      page.row(i+1).push di.symbol, di.exchange, di.company, di.in_pf, di.rec_action, di.action, di.total_score, di.total_score_pct, di.dist_status, di.mkt_cap, si.net_stock_issues.to_f, di.nsi_score, si.rel_accruals.to_f, di.ra_score, di.noas_score, si.net_op_assets_scaled.to_f, di.ag_score, si.assets_growth.to_f, di.aita_score, si.adj_invest_to_assets.to_f, di.l52wp_score, si.l_52_wk_price.to_f, di.pp_score, si.profit_prem.to_f, di.rq_score, si.roa_q.to_f, di.dt2_score, si.dist_total_2.to_f, di.prev_ed, di.next_ed, di.lm_revenue, di.classification
     end
     
     summary = StringIO.new

@@ -22,7 +22,7 @@ class GetScreenMechanizeWorker
     
     # load data from screen
     # set header row
-    results = [["Symbol", "Company Name", "NetStockIssues", "RelAccruals", "NetOpAssets Scaled", "Assets Growth", "InvestToAssets", "Price-52 week price percent change", "Market capitalization", "Gross Profit Premium", "ROA Quarterly", "DistTotal2", "Revenue-Last Month"]]
+    results = [["Symbol", "Company Name", "NetStockIssues", "RelAccruals", "NetOpAssets Scaled", "Assets Growth", "InvestToAssets", "Price-52 week price percent change", "Market capitalization", "Gross Profit Premium", "ROA Quarterly", "DistTotal2", "Revenue-Last Quarter"]]
     counter = 0
     loop do 
       start_number = counter * 50      

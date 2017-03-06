@@ -32,7 +32,7 @@ class ImportScreenWorker
       exchange = position_data[1]
       market_cap = row["Market capitalization"]
       si_description = row["Company Name"]
-      lm_revenue = row["Revenue-Last Month"]
+      lq_revenue = row["Revenue-Last Quarter"]
 
       # SI params
       net_stock_issues = row["NetStockIssues"].to_d
@@ -54,7 +54,7 @@ class ImportScreenWorker
       stock.update(
         si_description: si_description, 
         market_cap: market_cap,
-        lm_revenue: lm_revenue
+        lq_revenue: lq_revenue
       )
       
       # create/update portfolio entry

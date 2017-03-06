@@ -47,7 +47,7 @@
 				</tr>
 			</thead>
 			<tbody>
-		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LM Rev -->
+		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LQ Rev -->
 		
 				<% @si_sm.each do |si| %>
 					<tr>
@@ -63,7 +63,7 @@
 						<td style="text-align:center"><%= number_to_percentage(si[7]*100) %></td> <!-- Total Score Percentile -->
 						<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
 						<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000, :precision => 3, :delimiter => ',' ) %></td> <!-- Market Cap -->
-						<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 3, :delimiter => ',' ) : "N/A" %></td> <!-- LM Rev -->
+						<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 3, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
 						<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
 						<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
 						<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
@@ -109,7 +109,7 @@
 				</tr>
 			</thead>
 			<tbody>
-		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn-->
+		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LQ Revenue-->
 		
 				<% @si_lg.each do |si| %>
 					<tr>
@@ -125,7 +125,7 @@
 						<td style="text-align:center"><%= number_to_percentage(si[7]*100) %></td> <!-- Total Score Percentile -->
 						<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
 						<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000, :precision => 3, :delimiter => ',') %></td> <!-- Market Cap -->
-						<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 3, :delimiter => ',' ) : "N/A" %></td> <!-- LM Rev -->
+						<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 3, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
 						<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
 						<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
 						<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->

@@ -92,7 +92,7 @@ class SetDisplayItemsWorker
       
       total_score = [nsi_rank, ra_rank, noas_rank, ag_rank, aita_rank, l52wp_rank, pp_rank, rq_rank, dt2_rank].sum
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LM Rev
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev
       si_lg << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -115,7 +115,7 @@ class SetDisplayItemsWorker
         dt2_rank,
         prev_ed.empty? ? "N/A" : (Date.today - prev_ed.last.date).to_i,
         next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? 0.1 : (next_ed.last.date - Date.today).to_i,
-        si.stock.lm_revenue
+        si.stock.lq_revenue
       ]
     end
     # calculate programmatic action (si[4]), total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup
@@ -196,7 +196,7 @@ class SetDisplayItemsWorker
         dt2_score: si[18],
         prev_ed: si[19],
         next_ed: si[20],
-        lm_revenue: si[21]
+        lq_revenue: si[21]
       )
       
     end
@@ -267,7 +267,7 @@ class SetDisplayItemsWorker
       
       total_score = [nsi_rank, ra_rank, noas_rank, ag_rank, aita_rank, l52wp_rank, pp_rank, rq_rank, dt2_rank].sum
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LM Rev
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev
       si_sm << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -290,7 +290,7 @@ class SetDisplayItemsWorker
         dt2_rank,
         prev_ed.empty? ? "N/A" : (Date.today - prev_ed.last.date).to_i,
         next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? 0.1 : (next_ed.last.date - Date.today).to_i,
-        si.stock.lm_revenue
+        si.stock.lq_revenue
       ]
     end
     # calculate total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup
@@ -371,7 +371,7 @@ class SetDisplayItemsWorker
         dt2_score: si[18],
         prev_ed: si[19],
         next_ed: si[20],
-        lm_revenue: si[21]
+        lq_revenue: si[21]
       )
     end
     # import sm_cap

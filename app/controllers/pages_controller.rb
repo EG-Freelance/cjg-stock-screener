@@ -130,7 +130,7 @@ class PagesController < ApplicationController
 
     # set header
     page.row(0).push "Symbol", "Exchange", "Company", "In Portfolio", "Recommended Action", "Action", "Total Score", "Total Score Percentile", "Dist > 7 or 8", "Market Cap", "Net Stock Issues Score", "RelAccruals Score", "NetOpAssetsScaled Score", "Assets Growth Score", "InvestToAssets Score", "52 Week Price Score", "Profit Premium Score", "ROA Quarterly Score", "DistTotal2 Score", "Days from Previous Earnings", "Days to Next Earnings", "Classification"
-    21.times do |i|
+    2.times do |i|
       page.row(0).set_format(i, header_format)
     end
     

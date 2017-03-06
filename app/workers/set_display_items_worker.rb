@@ -99,7 +99,7 @@ class SetDisplayItemsWorker
         si.stock.si_description,
         portfolio_securities.include?(si.stock.symbol) ? "Yes" : "No",
         "ph", #rec action
-        "ph", #action
+        "placeholder", #action
         total_score,
         nil, #total score percentile (move down)
         nil, #Dist top10% > 7 or bottom10% > 8 (move down)

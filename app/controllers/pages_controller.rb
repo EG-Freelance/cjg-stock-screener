@@ -110,6 +110,41 @@ class PagesController < ApplicationController
     end
   end
   
+  def export_to_excel
+    if Rails.env == "production" && Sidekiq::Stats.new.workers_size > 0
+      redirect_to root_url, alert: "Data are still being processed.  Please try again momentarily."
+    else
+      self.create_spreadsheet
+    end
+  end
+  
+  def create_spreadsheet
+    
+    spreadsheet = Spreadsheet::Workbook.new
+    
+    page = spreadsheet.create_worksheet :name => "Screen Results"
+    
+    ####### ROW/CELL FORMATS ########
+    header_format = Spreadsheet::Format.new :weight => :bold, :border => :thin, :horizontal_align => :center, :pattern_fg_color => :lime, :pattern => 1, :size => 9, :text_wrap => true, :vertical_align => :top
+    default_format = Spreadsheet::Format.new :border => :thin, :horizontal_align => :center, :size => 9, :text_wrap => true, :vertical_align => :top
+
+    # set header
+    page.row(0).push "Symbol", "Exchange", "Company", "In Portfolio", "Recommended Action", "Action", "Total Score", "Total Score Percentile", "Dist > 7 or 8", "Market Cap", "Net Stock Issues Score", "RelAccruals Score", "NetOpAssetsScaled Score", "Assets Growth Score", "InvestToAssets Score", "52 Week Price Score", "Profit Premium Score", "ROA Quarterly Score", "DistTotal2 Score", "Days from Previous Earnings", "Days to Next Earnings", "Classification"
+    21.times do |i|
+      page.row(0).set_format(i, header_format)
+    end
+    
+    display_items = DisplayItem.all
+    display_items.each_with_index do |di, i|
+      page.row(i+1).push di.symbol, di.exchange, di.company, di.in_pf, di.rec_action, di.action, di.total_score, di.total_score_pct, di.dist_status, di.mkt_cap, di.nsi_score, di.ra_score, di.noas_score, di.ag_score, di.aita_score, di.l52wp_score, di.pp_score, di.rq_score, di.dt2_score, di.prev_ed, di.next_ed, di.classification
+    end
+    
+    summary = StringIO.new
+    spreadsheet.write summary
+    file = "Screen Summary #{Date.today.strftime("%Y.%m.%d")}.xls"
+    send_data summary.string, :filename => "#{file}", :type=>"application/excel", :disposition=>'attachment'
+  end
+  
 
   private
     # Use callbacks to share common setup or constraints between actions.

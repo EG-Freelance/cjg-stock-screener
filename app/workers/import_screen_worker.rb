@@ -26,12 +26,13 @@ class ImportScreenWorker
       # pairing up header column with data
       row = Hash[[header, spreadsheet[i]].transpose]
       
-      # position_data: 0. full text; 1. exchange; 2. symbol
+      # position_data: 0. full text; 1. exchange
       position_data = row["Symbol"].match(/(.+)\:(.+)/)
       sym = position_data[2]
       exchange = position_data[1]
       market_cap = row["Market capitalization"]
       si_description = row["Company Name"]
+      lm_revenue = row["Revenue-Last Month"]
 
       # SI params
       net_stock_issues = row["NetStockIssues"].to_d
@@ -52,7 +53,8 @@ class ImportScreenWorker
       ).first_or_create
       stock.update(
         si_description: si_description, 
-        market_cap: market_cap
+        market_cap: market_cap,
+        lm_revenue: lm_revenue
       )
       
       # create/update portfolio entry

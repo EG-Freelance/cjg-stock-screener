@@ -44,7 +44,7 @@ class ImportScreenWorker
       l_52_wk_price = row["Price-52 week price percent change"].to_d
       profit_prem = row["Gross Profit Premium"].to_d
       roa_q = row["ROA Quarterly"].to_d
-      dist_total_2 = row["DistTotal2"].to_i
+      dist_total_2 = row["DistTotal2"].to_d
       
       # create/update security
       stock = Stock.where(

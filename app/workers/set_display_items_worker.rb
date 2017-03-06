@@ -371,7 +371,7 @@ class SetDisplayItemsWorker
         dt2_score: si[18],
         prev_ed: si[19],
         next_ed: si[20],
-        lm_reveneu: si[21]
+        lm_revenue: si[21]
       )
     end
     # import sm_cap

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302191531) do
+ActiveRecord::Schema.define(version: 20170306152958) do
 
   create_table "data_sets", force: :cascade do |t|
   end
@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(version: 20170302191531) do
     t.integer  "pp_score"
     t.integer  "rq_score"
     t.integer  "dt2_score"
-    t.integer  "prev_ed"
-    t.integer  "next_ed"
+    t.string   "prev_ed"
+    t.string   "next_ed"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end

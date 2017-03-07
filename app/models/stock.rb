@@ -2,6 +2,7 @@ class Stock < ActiveRecord::Base
   has_many :screen_items
   has_many :portfolio_items
   has_many :earnings_dates
+  belongs_to :display_item
   
   def get_next_earnings_date
     # get next earnings_date by stock symbol

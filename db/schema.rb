@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170306220732) do
+ActiveRecord::Schema.define(version: 20170307144435) do
 
   create_table "data_sets", force: :cascade do |t|
   end
@@ -107,13 +107,16 @@ ActiveRecord::Schema.define(version: 20170306220732) do
   create_table "stocks", force: :cascade do |t|
     t.string   "exchange"
     t.string   "symbol"
-    t.integer  "market_cap",     limit: 8
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.integer  "market_cap",      limit: 8
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.string   "si_description"
     t.string   "pi_description"
-    t.integer  "lq_revenue",     limit: 8
+    t.integer  "lq_revenue",      limit: 8
+    t.integer  "display_item_id"
   end
+
+  add_index "stocks", ["display_item_id"], name: "index_stocks_on_display_item_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

@@ -376,5 +376,10 @@ class SetDisplayItemsWorker
     end
     # import sm_cap
     DisplayItem.import si_sm_import
+    
+    # associate stocks with display_items
+    display_items = DisplayItem.all
+    stocks = Stock.all
+    display_items.each { |di| di << stocks.find_by(symbol: di.symbol, exchange: di.exchange) }
   end
 end

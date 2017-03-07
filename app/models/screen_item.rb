@@ -37,10 +37,14 @@ class ScreenItem < ActiveRecord::Base
     data_set = DataSet.create()
     
     header = auto_data[0]
-    RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "screen")
+    row_data = []
+    row_data << RowDatum.new(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "screen")
     auto_data[1..-1].each_with_index do |row, i|
-      RowDatum.create(data_set_id: data_set.id, data: row.to_s, row_number: i + 2, data_type: "screen")
+      row_data << RowDatum.new(data_set_id: data_set.id, data: row.to_s, row_number: i + 2, data_type: "screen")
     end
+    
+    # batch create
+    RowDatum.import row_data
     
     ImportScreenWorker.perform_async(data_set.id)
   end

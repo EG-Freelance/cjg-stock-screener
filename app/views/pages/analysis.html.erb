@@ -139,7 +139,31 @@
 					<tr>
 						<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
 						<td><%= si[1] %></td> <!-- Exchange -->
-						<td><%= si[2] %></td> <!-- Company Name -->
+						<td>
+							<%= si[2] %>
+							<div class="relative-wrap">
+	              <div class="overflow-wrap">
+	                <div class="popover">
+	                	<% if !si[22].empty? %>
+		                	<% si[22].each_with_index do |pi,i| %>
+		                		<b>(<%= i+1 %>)</b> <b>Date: </b> <%= pi.date_acq.strftime("%Y-%m-%d") %> <br />
+		                		<b>Position: </b> <%= pi.position.capitalize %> <br />
+		                		<b>Type: </b> <%= pi.pos_type.capitalize %> <br />
+		                		<b>Quantity: </b> <%= pi.quantity %><br />
+		                		<% if pi.pos_type == "option" %>
+		                			<b>Option Type: </b> <%= pi.op_type.capitalize %> <br />
+		                			<b>Strike Price: </b> <%= pi.op_strike %> <br />
+		                			<b>Expiration: </b> <%= pi.op_expiration %> <br />
+	                			<% end %>
+	                			<% unless pi == si[22][-1] %><hr><% end %>
+	              			<% end %>
+              			<% else %>
+              				<i>No current investments in this entity.</i>
+            				<% end %>
+	                </div>
+	              </div>
+	            </div> <!-- Portfolio ownership -->
+            </td> <!-- Company Name -->
 						<td><%= si[19] != "N/A" ? si[19].to_i + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 						<td><%= si[20] != "N/A" ? si[20].to_i - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
 						<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->

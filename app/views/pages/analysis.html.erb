@@ -58,7 +58,7 @@
 							<div class="relative-wrap">
 	              <div class="overflow-wrap">
 	                <div class="popover">
-	                	<% si[22].each do |pi| %>
+	                	<% si[22].each_with_index do |pi,i| %>
 	                		<b>(<%= i+1 %>)</b> <b>Date: </b> <%= pi.date_acq.strftime("%Y-%m-%d") %> <br />
 	                		<b>Position: </b> <%= pi.position.capitalize %> <br />
 	                		<b>Type: </b> <%= pi.pos_type.capitalize %> <br />

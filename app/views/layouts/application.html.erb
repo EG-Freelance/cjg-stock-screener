@@ -23,10 +23,10 @@
   <div id="container" style="padding-top:75px; padding-left:20px; padding-right:20px; padding-bottom:10px">
 
   <% if flash[:notice] %>
-    <div class="notice-msg"><%= flash[:notice] %></div>
+    <div style="border-radius: 5px" class="notice-msg"><%= flash[:notice] %></div>
   <% end %>
    <% if flash[:alert] %>
-    <div class="alert-msg"><%= flash[:alert] %></div>
+    <div style="border-radius: 5px" class="alert-msg"><%= flash[:alert] %></div>
   <% end %>
   <%= yield %>
   </div>

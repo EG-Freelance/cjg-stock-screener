@@ -380,6 +380,6 @@ class SetDisplayItemsWorker
     # associate stocks with display_items
     display_items = DisplayItem.all
     stocks = Stock.all
-    display_items.each { |di| di << stocks.find_by(symbol: di.symbol, exchange: di.exchange) }
+    display_items.each { |di| di.stock = stocks.find_by(symbol: di.symbol, exchange: di.exchange) }
   end
 end

@@ -29,7 +29,17 @@ class ImportScreenWorker
       # position_data: 0. full text; 1. exchange
       position_data = row["Symbol"].match(/(.+)\:(.+)/)
       sym = position_data[2]
-      exchange = position_data[1]
+      # default to using non OTC/CINC exchanges where possible
+      if position_data[1] == "OTC" || position_data[1] == "CINC"
+        stock = Stock.find_by(symbol: sym)
+        if stock.nil?
+          exchange = position_data[1]
+        else
+          exchange = stock.exchange
+        end
+      else
+        exchange = position_data[1]
+      end
       market_cap = row["Market capitalization"]
       si_description = row["Company Name"]
       lq_revenue = row["Revenue-Last Quarter"]
@@ -48,10 +58,10 @@ class ImportScreenWorker
       
       # create/update security
       stock = Stock.where(
-        exchange: exchange, 
         symbol: sym
       ).first_or_create
       stock.update(
+        exchange: exchange, 
         si_description: si_description, 
         market_cap: market_cap,
         lq_revenue: lq_revenue

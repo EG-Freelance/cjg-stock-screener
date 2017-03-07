@@ -44,15 +44,10 @@ class ImportPortfolioWorker
       pi_description = row["Description"]
       if row["Exchange"] == "NSDQ"
         exchange = "NASD"
-      elsif row["Exchange"] == "CINC" && !Stock.where(symbol: sym).empty?
+      elsif (row["Exchange"] == "CINC" || row["Exchange"] == "OTC" ) && !Stock.where(symbol: sym).empty?
         exchange = Stock.find_by(symbol: sym).exchange
       else
-        stock = Stock.find_by(symbol: sym)
-        if !stock.nil? && stock.exchange == "CINC" && row["Exchange"] != "CINC"
-          stock.update(exchange: row["Exchange"])
-        else
-          exchange = row["Exchange"]
-        end
+        exchange = row["Exchange"]
       end
       market_cap_data = row["Market Cap"].match(/([\d\,\.]+)((?:M|B))/)
       market_cap = market_cap_data[1].to_f * (market_cap_data[2] == "B" ? 1000000000 : 1000000)
@@ -77,11 +72,11 @@ class ImportPortfolioWorker
       
       # create/update security
       stock = Stock.where(
-        exchange: exchange, 
         symbol: sym
       ).first_or_create
       unless market_cap == 0
         stock.update(
+          exchange: exchange, 
           pi_description: pi_description, 
           market_cap: market_cap
         )

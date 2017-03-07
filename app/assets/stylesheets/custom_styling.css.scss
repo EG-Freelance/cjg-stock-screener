@@ -79,3 +79,35 @@ h2 {
 .nav-tabs, .nav-pills {
     text-align: center !important;
 }
+
+/*********************
+* HOVER TEXT STYLING *
+*********************/
+.relative-wrap {
+  /*relative on second parent*/
+  position: relative;
+}
+
+.overflow-wrap {
+  /*no relative on immediate parent*/
+}
+.popover {
+	width: 750px !important;
+  margin-left: 25% !important;
+  padding-left: 5px !important;
+  padding-top: 5px !important;
+  padding-bottom: 20px !important;
+  padding-right: 15px !important;
+  position: absolute !important; 
+  //top: -50px !important;
+  z-index: 1000 !important; 
+  opacity: 0.75 !important;
+  background-color: #444444 !important;
+  color: white !important;
+  display: none;
+  white-space: normal !important;
+  pointer-events: none !important;
+  border-radius: 5px !important;
+  border: 2px solid blue !important;
+  box-shadow: 5px 5px 1px black !important;
+}

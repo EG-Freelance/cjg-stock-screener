@@ -381,5 +381,7 @@ class SetDisplayItemsWorker
     display_items = DisplayItem.all
     stocks = Stock.all
     display_items.each { |di| di.stock = stocks.find_by(symbol: di.symbol, exchange: di.exchange) }
+    # destroy any display items that don't have an associated stock as a fail-safe (WBT/MFS pointed this error out)
+    display_items.includes(:stock).where(stocks: {id: nil}).destroy_all
   end
 end

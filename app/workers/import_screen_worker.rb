@@ -17,6 +17,9 @@ class ImportScreenWorker
     # set common timestamp for all entries
     set_created_at = DateTime.now
     
+    # remove all previous screen items (trying to stay below 10k DB entries)
+    ScreenItem.where('set_created_at < ?', set_created_at).destroy_all
+    
     # use array to set adj_invest_to_assets to limit DB calls
     si_array = []
     
@@ -67,7 +70,7 @@ class ImportScreenWorker
         lq_revenue: lq_revenue
       )
       
-      # create/update portfolio entry
+      # create/update screen item
       si = ScreenItem.where(
       	stock_id: stock.id,
       	net_stock_issues: net_stock_issues,
@@ -84,12 +87,26 @@ class ImportScreenWorker
       ).first_or_create
       si_array << si
     end
-    # set adj_invest_to_assets
-    invest_to_assets_array = si_array.map { |si| si.invest_to_assets }.compact
-    med_ita = MathStuff.median(invest_to_assets_array)
-    si_array.each { |si| si.update(adj_invest_to_assets: med_ita) if si.invest_to_assets.nil? }
+    # split screen items into large-cap and small-cap
+    screen_items = ScreenItem.all.includes(:stock)
+    separator = MathStuff.median(screen_items.map { |si| si.stock.market_cap })
+    screen_items.each { |si| si.stock.market_cap >= separator ? si.update(classification: "large") : si.update(classification: "small") }
     
-    # remove all previous screen items (trying to stay below 10k DB entries)
-    ScreenItem.where('set_created_at < ?', set_created_at).destroy_all
+    # set adj_invest_to_assets
+    screen_items_lg = screen_items.where(classification: "large")
+    screen_items_sm = screen_items.where(classification: "small")
+    
+    ita_array_lg = screen_items_lg.map { |si| si.invest_to_assets }.compact
+    ita_array_sm = screen_items_sm.map { |si| si.invest_to_assets }.compact
+    
+    med_ita_lg = MathStuff.median(ita_array_lg)
+    med_ita_sm = MathStuff.median(ita_array_sm)
+    
+    screen_items_lg.each { |si| si.update(adj_invest_to_assets: med_ita_lg) if si.invest_to_assets.nil? }
+    screen_items_sm.each { |si| si.update(adj_invest_to_assets: med_ita_sm) if si.invest_to_assets.nil? }
+    
+    # invest_to_assets_array = si_array.map { |si| si.invest_to_assets }.compact
+    # med_ita = MathStuff.median(invest_to_assets_array)
+    # si_array.each { |si| si.update(adj_invest_to_assets: med_ita) if si.invest_to_assets.nil? }
   end
 end

@@ -78,8 +78,8 @@
 	              </div>
 	            </div> <!-- Portfolio ownership -->
 						</td> <!-- Company Name -->
-						<td><%= si[19] != "N/A" ? number_with_precision(si[19].to_i + (Date.today - @di_period.to_date).to_f, :precision => 0) : "N/A" %></td> <!-- Prev Earn -->
-						<td><%= si[20] != "N/A" ? number_with_precision(si[20].to_i - (Date.today - @di_period.to_date).to_f, :precision => 0) : "N/A" %></td> <!-- Next Earn -->
+						<td><%= si[19] != "N/A" ? si[19].to_i + (Date.today - @di_period.to_date).to_f : "N/A" %></td> <!-- Prev Earn -->
+						<td><%= si[20] != "N/A" ? si[20].to_i - (Date.today - @di_period.to_date).to_f : "N/A" %></td> <!-- Next Earn -->
 						<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 						<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 						<td class="hidden"><%= si[5] %></td> <!-- Action -->

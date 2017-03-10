@@ -5,6 +5,7 @@ class ImportPortfolioWorker
   sidekiq_options queue: 'high', unique: :until_executed
   
   def perform(data_set_id)
+    
     set = DataSet.find(data_set_id)
   	
   	last_row = set.row_data.map { |rd| rd.row_number }.max
@@ -89,11 +90,10 @@ class ImportPortfolioWorker
         pos_type: pos_type, 
         op_type: op_type, 
         op_strike: op_strike, 
-        op_expiration: 
-        op_expiration
+        op_expiration: op_expiration,
+        date_acq: date_acq 
       ).first_or_create
       pi.update(
-        date_acq: date_acq, 
         quantity: quantity, 
         paid: paid, 
         last: last, 
@@ -106,8 +106,8 @@ class ImportPortfolioWorker
         set_created_at: set_created_at
       )
     end
-    # Consider destroying PortfolioItems that are no longer active; for now, can just separate (for archive purposes)
-    # Portfolio.where.not(set_created_at: set_created_at).destroy_all
+    # Destroy PortfolioItems that are no longer active to avoid carrying closed positions
+    Portfolio.where.not(set_created_at: set_created_at).destroy_all
     RowDatum.destroy_all
     DataSet.destroy_all
   end

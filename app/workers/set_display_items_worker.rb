@@ -10,11 +10,14 @@ class SetDisplayItemsWorker
     disp_set_created_at = DateTime.now
     portfolio_items = PortfolioItem.all.includes(:stock, :stock => :earnings_dates)
     screen_items = ScreenItem.all.includes(:stock, :stock => :earnings_dates)
+    portfolio_only = Stock.all.map { |s| s.portfolio_items if !s.portfolio_items.empty? && s.screen_items.empty? }.compact.flatten
     
     # portfolio items
     pi_set_date_array = portfolio_items.pluck(:set_created_at).uniq.sort
     pi_period = pi_set_date_array.last
     pi_pool = portfolio_items.where(set_created_at: pi_period)
+    # portfolio-only
+    po_pool = portfolio_only.where(set_created_at: pi_period)
     
     # array of portfolio symbols
     portfolio_securities = pi_pool.pluck(:'stocks.symbol')
@@ -97,7 +100,7 @@ class SetDisplayItemsWorker
         si.stock.si_description,
         portfolio_securities.include?(si.stock.symbol) ? "Yes" : "No",
         "ph", #rec action
-        "placeholder", #action
+        si.stock.actions.last.description, #action
         total_score,
         nil, #total score percentile (move down)
         nil, #Dist top10% > 7 or bottom10% > 8 (move down)
@@ -272,7 +275,7 @@ class SetDisplayItemsWorker
         si.stock.si_description,
         portfolio_securities.include?(si.stock.symbol) ? "Yes" : "No",
         "ph", #rec action
-        "ph", #action
+        si.stock.actions.last.description, #action
         total_score,
         nil, #total score percentile (move down)
         nil, #Dist top10% > 7 or bottom10% > 8 (move down)
@@ -374,6 +377,80 @@ class SetDisplayItemsWorker
     end
     # import sm_cap
     DisplayItem.import si_sm_import
+    
+    ############################
+    # Get all fallen out items #
+    ############################
+    
+    po = []
+    po_import = []
+    #process data
+    po_pool.each do |pi|
+      # set next and prev earnings dates
+      prev_ed = si.stock.earnings_dates.where('date < ?', Date.today)
+      next_ed = si.stock.earnings_dates.where('date >= ?', Date.today)
+
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev
+      po << [
+        pi.stock.symbol, 
+        pi.stock.exchange,
+        pi.stock.si_description,
+        portfolio_securities.include?(si.stock.symbol) ? "Yes" : "No",
+        "ph", #rec action
+        pi.stock.actions.last.description, #action
+        "N/A",
+        "N/A", #total score percentile (move down)
+        "N/A", #Dist top10% > 7 or bottom10% > 8 (move down)
+        pi.stock.market_cap,
+        "N/A",
+        "N/A",
+        "N/A",
+        "N/A",
+        "N/A",
+        "N/A",
+        "N/A",
+        "N/A",
+        "N/A",
+        prev_ed.empty? ? "N/A" : (Date.today - prev_ed.last.date).to_i,
+        next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? 0.1 : (next_ed.last.date - Date.today).to_i,
+        pi.stock.lq_revenue
+      ]
+    end
+    po.each do |pi| 
+      # instantiate display objects
+      po_import << DisplayItem.new(
+        classification: "fallen out", 
+        set_created_at: disp_set_created_at,
+        symbol: pi[0],
+        exchange: pi[1],
+        company: pi[2],
+        in_pf: pi[3],
+        rec_action: pi[4],
+        action: pi[5],
+        total_score: pi[6],
+        total_score_pct: pi[7],
+        dist_status: pi[8],
+        mkt_cap: pi[9],
+        nsi_score: pi[10],
+        ra_score: pi[11],
+        noas_score: pi[12],
+        ag_score: pi[13],
+        aita_score: pi[14], 
+        l52wp_score: pi[15],
+        pp_score: pi[16],
+        rq_score: pi[17],
+        dt2_score: pi[18],
+        prev_ed: pi[19],
+        next_ed: pi[20],
+        lq_revenue: pi[21]
+      )
+      
+    end
+    
+    # import fallen out
+    DisplayItem.import po_import
+  
+    ###################################################
     
     # associate stocks with display_items
     display_items = DisplayItem.all

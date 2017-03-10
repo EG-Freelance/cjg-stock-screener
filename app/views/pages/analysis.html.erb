@@ -10,6 +10,7 @@
 	<ul class="nav nav-pills">
 	  <li id="small-cap-btn" role="presentation" class="active"><a href="#small-cap" aria-controls="small-cap" data-toggle="tab">Small Cap</a></li>
 	  <li id="large-cap-btn" role="presentation"><a href="#large-cap" aria-controls="large-cap" data-toggle="tab">Large Cap</a></li>
+	  <li id="non-screen-btn" role="presentation"><a href="#non-screen" aria-controls="non-screen" data-toggle="tab">Non-Screen</a></li>
 	</ul>
 	<br>
 </div>
@@ -29,11 +30,11 @@
 					<th class="analysis-header" style="text-align:center">Days to <br>Next Earn</th>
 					<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 					<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
-					<th class="analysis-header hidden">Action</th>
+					<th class="analysis-header">Action</th>
 					<th class="analysis-header hidden">Totals</th>
 					<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
 					<th class="analysis-header" style="text-align:center">Dist > 7<br>or > 8</th>
-					<th class="analysis-header" style="text-align:center; width:110px">Market Cap (in M)</th>
+					<th class="analysis-header hidden" style="text-align:center; width:110px">Market Cap (in M)</th>
 					<th class="analysis-header" style="text-align:center; width:110px">Last Q Rev (in K)</th>
 					<th class="analysis-header hidden">Net Stock Issues Score</th>
 					<th class="analysis-header hidden">RelAccruals Score</th>
@@ -44,60 +45,66 @@
 					<th class="analysis-header hidden">Profit Premium Score</th>
 					<th class="analysis-header hidden">ROA Quarterly Score</th>
 					<th class="analysis-header hidden">DistTotal2 Score</th>
+					<th class="analysis-header">Update</th>
 				</tr>
 			</thead>
 			<tbody>
 		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LQ Rev, 22. Portfolio Items -->
 		
 				<% @si_sm.each do |si| %>
-					<tr>
-						<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
-						<td><%= si[1] %></td> <!-- Exchange -->
-						<td>
-							<%= si[2] %>
-							<div class="relative-wrap">
-	              <div class="overflow-wrap">
-	                <div class="popover">
-	                	<% if !si[22].empty? %>
-		                	<% si[22].each_with_index do |pi,i| %>
-		                		<b>(<%= i+1 %>)</b> <b>Date: </b> <%= pi.date_acq.strftime("%Y-%m-%d") %> <br />
-		                		<b>Position: </b> <%= pi.position.capitalize %> <br />
-		                		<b>Type: </b> <%= pi.pos_type.capitalize %> <br />
-		                		<b>Quantity: </b> <%= pi.quantity %><br />
-		                		<% if pi.pos_type == "option" %>
-		                			<b>Option Type: </b> <%= pi.op_type.capitalize %> <br />
-		                			<b>Strike Price: </b> <%= pi.op_strike %> <br />
-		                			<b>Expiration: </b> <%= pi.op_expiration %> <br />
-	                			<% end %>
-	                			<% unless pi == si[22][-1] %><hr><% end %>
-	              			<% end %>
-              			<% else %>
-              				<i>No current investments in this entity.</i>
-            				<% end %>
-	                </div>
-	              </div>
-	            </div> <!-- Portfolio ownership -->
-						</td> <!-- Company Name -->
-						<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
-						<td><%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
-						<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
-						<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
-						<td class="hidden"><%= si[5] %></td> <!-- Action -->
-						<td class="hidden"><%= si[6] %></td> <!-- Totals -->
-						<td style="text-align:center"><%= number_to_percentage(si[7]*100) %></td> <!-- Total Score Percentile -->
-						<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
-						<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000, :precision => 3, :delimiter => ',' ) %></td> <!-- Market Cap -->
-						<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 3, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
-						<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
-						<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
-						<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
-						<td class="hidden"><%= si[13] %></td> <!-- Assets Growth Score -->
-						<td class="hidden"><%= si[14] %></td> <!-- InvestToAssets Score -->
-						<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
-						<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
-						<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
-						<td class="hidden"><%= si[18] %></td> <!-- DistTotal2 Score -->
-					</tr>
+					<%= simple_form_for(:si, :remote => true, :controller => "pages", :action => "update_action", url: update_action_path) do |f| %>
+						<%= f.hidden_field :symbol, :value => si[0] %>
+						<%= f.hidden_field :exchange, :value => si[1] %>
+						<tr>
+							<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
+							<td><%= si[1] %></td> <!-- Exchange -->
+							<td>
+								<%= si[2] %>
+								<div class="relative-wrap">
+		              <div class="overflow-wrap">
+		                <div class="popover">
+		                	<% if !si[22].empty? %>
+			                	<% si[22].each_with_index do |pi,i| %>
+			                		<b>(<%= i+1 %>)</b> <b>Date: </b> <%= pi.date_acq.strftime("%Y-%m-%d") %> <br />
+			                		<b>Position: </b> <%= pi.position.capitalize %> <br />
+			                		<b>Type: </b> <%= pi.pos_type.capitalize %> <br />
+			                		<b>Quantity: </b> <%= pi.quantity %><br />
+			                		<% if pi.pos_type == "option" %>
+			                			<b>Option Type: </b> <%= pi.op_type.capitalize %> <br />
+			                			<b>Strike Price: </b> <%= pi.op_strike %> <br />
+			                			<b>Expiration: </b> <%= pi.op_expiration %> <br />
+		                			<% end %>
+		                			<% unless pi == si[22][-1] %><hr><% end %>
+		              			<% end %>
+	              			<% else %>
+	              				<i>No current investments in this entity.</i>
+	            				<% end %>
+		                </div>
+		              </div>
+		            </div> <!-- Portfolio ownership -->
+	            </td> <!-- Company Name -->
+							<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
+							<td><%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
+							<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
+							<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
+							<td><%= f.text_field :description, label: false, value: si[5] %></td> <!-- Action -->
+							<td class="hidden"><%= si[6] %></td> <!-- Totals -->
+							<td style="text-align:center"><%= number_to_percentage(si[7]*100) %></td> <!-- Total Score Percentile -->
+							<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
+							<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000, :precision => 3, :delimiter => ',') %></td> <!-- Market Cap -->
+							<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 3, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
+							<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
+							<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
+							<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
+							<td class="hidden"><%= si[13] %></td> <!-- Assets Growth Score -->
+							<td class="hidden"><%= si[14] %></td> <!-- InvestToAssets Score -->
+							<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
+							<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
+							<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
+							<td class="hidden"><%= si[18] %></td> <!-- DistTotal2 Score -->
+							<td><%= f.submit "Update Action" %></td>
+						</tr>
+					<% end %>
 				<% end %>
 			</tbody>
 		</table>
@@ -115,11 +122,11 @@
 					<th class="analysis-header" style="text-align:center">Days to <br>Next Earn</th>
 					<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 					<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
-					<th class="analysis-header hidden">Action</th>
+					<th class="analysis-header">Action</th>
 					<th class="analysis-header hidden">Totals</th>
 					<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
 					<th class="analysis-header" style="text-align:center">Dist > 7<br>or > 8</th>
-					<th class="analysis-header" style="text-align:center; width:110px">Market Cap (in M)</th>
+					<th class="analysis-header hidden" style="text-align:center; width:110px">Market Cap (in M)</th>
 					<th class="analysis-header" style="text-align:center; width:110px">Last Q Rev (in K)</th>
 					<th class="analysis-header hidden">Net Stock Issues Score</th>
 					<th class="analysis-header hidden">RelAccruals Score</th>
@@ -130,60 +137,160 @@
 					<th class="analysis-header hidden">Profit Premium Score</th>
 					<th class="analysis-header hidden">ROA Quarterly Score</th>
 					<th class="analysis-header hidden">DistTotal2 Score</th>
+					<th class="analysis-header">Update</th>
 				</tr>
 			</thead>
 			<tbody>
 		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LQ Revenue, 22. Portfolio Items -->
 		
 				<% @si_lg.each do |si| %>
-					<tr>
-						<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
-						<td><%= si[1] %></td> <!-- Exchange -->
-						<td>
-							<%= si[2] %>
-							<div class="relative-wrap">
-	              <div class="overflow-wrap">
-	                <div class="popover">
-	                	<% if !si[22].empty? %>
-		                	<% si[22].each_with_index do |pi,i| %>
-		                		<b>(<%= i+1 %>)</b> <b>Date: </b> <%= pi.date_acq.strftime("%Y-%m-%d") %> <br />
-		                		<b>Position: </b> <%= pi.position.capitalize %> <br />
-		                		<b>Type: </b> <%= pi.pos_type.capitalize %> <br />
-		                		<b>Quantity: </b> <%= pi.quantity %><br />
-		                		<% if pi.pos_type == "option" %>
-		                			<b>Option Type: </b> <%= pi.op_type.capitalize %> <br />
-		                			<b>Strike Price: </b> <%= pi.op_strike %> <br />
-		                			<b>Expiration: </b> <%= pi.op_expiration %> <br />
-	                			<% end %>
-	                			<% unless pi == si[22][-1] %><hr><% end %>
-	              			<% end %>
-              			<% else %>
-              				<i>No current investments in this entity.</i>
-            				<% end %>
-	                </div>
-	              </div>
-	            </div> <!-- Portfolio ownership -->
-            </td> <!-- Company Name -->
-						<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
-						<td><%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
-						<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
-						<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
-						<td class="hidden"><%= si[5] %></td> <!-- Action -->
-						<td class="hidden"><%= si[6] %></td> <!-- Totals -->
-						<td style="text-align:center"><%= number_to_percentage(si[7]*100) %></td> <!-- Total Score Percentile -->
-						<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
-						<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000, :precision => 3, :delimiter => ',') %></td> <!-- Market Cap -->
-						<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 3, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
-						<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
-						<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
-						<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
-						<td class="hidden"><%= si[13] %></td> <!-- Assets Growth Score -->
-						<td class="hidden"><%= si[14] %></td> <!-- InvestToAssets Score -->
-						<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
-						<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
-						<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
-						<td class="hidden"><%= si[18] %></td> <!-- DistTotal2 Score -->
-					</tr>
+					<%= simple_form_for(:si, :remote => true, :controller => "pages", :action => "update_action", url: update_action_path) do |f| %>
+						<% f.hidden_field :symbol, :value => si[0] %>
+						<% f.hidden_field :exchange, :value => si[1] %>
+						<tr>
+							<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
+							<td><%= si[1] %></td> <!-- Exchange -->
+							<td>
+								<%= si[2] %>
+								<div class="relative-wrap">
+		              <div class="overflow-wrap">
+		                <div class="popover">
+		                	<% if !si[22].empty? %>
+			                	<% si[22].each_with_index do |pi,i| %>
+			                		<b>(<%= i+1 %>)</b> <b>Date: </b> <%= pi.date_acq.strftime("%Y-%m-%d") %> <br />
+			                		<b>Position: </b> <%= pi.position.capitalize %> <br />
+			                		<b>Type: </b> <%= pi.pos_type.capitalize %> <br />
+			                		<b>Quantity: </b> <%= pi.quantity %><br />
+			                		<% if pi.pos_type == "option" %>
+			                			<b>Option Type: </b> <%= pi.op_type.capitalize %> <br />
+			                			<b>Strike Price: </b> <%= pi.op_strike %> <br />
+			                			<b>Expiration: </b> <%= pi.op_expiration %> <br />
+		                			<% end %>
+		                			<% unless pi == si[22][-1] %><hr><% end %>
+		              			<% end %>
+	              			<% else %>
+	              				<i>No current investments in this entity.</i>
+	            				<% end %>
+		                </div>
+		              </div>
+		            </div> <!-- Portfolio ownership -->
+	            </td> <!-- Company Name -->
+							<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
+							<td><%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
+							<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
+							<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
+							<td><%= f.text_field :description, label: false, value: si[5] %></td> <!-- Action -->
+							<td class="hidden"><%= si[6] %></td> <!-- Totals -->
+							<td style="text-align:center"><%= number_to_percentage(si[7]*100) %></td> <!-- Total Score Percentile -->
+							<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
+							<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000, :precision => 3, :delimiter => ',') %></td> <!-- Market Cap -->
+							<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 3, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
+							<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
+							<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
+							<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
+							<td class="hidden"><%= si[13] %></td> <!-- Assets Growth Score -->
+							<td class="hidden"><%= si[14] %></td> <!-- InvestToAssets Score -->
+							<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
+							<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
+							<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
+							<td class="hidden"><%= si[18] %></td> <!-- DistTotal2 Score -->
+							<td><%= f.submit "Update Action" %></td>
+						</tr>
+					<% end %>
+				<% end %>
+			</tbody>
+		</table>
+    
+  </div>
+  
+  <!-- Non-screen tab -->
+  <div role="tabpanel" class="tab-pane" id="large-cap">
+  	<table class="table-striped sortable analysis-table">
+			<thead>
+				<tr>
+					<th class="analysis-header" style='width:65px; padding-left: 10px'>Sym</th>
+					<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
+					<th class="analysis-header" style="text-align:center">Company Name</th>
+					<th class="analysis-header" style="text-align:center">Days from <br>Prev Earn</th>
+					<th class="analysis-header" style="text-align:center">Days to <br>Next Earn</th>
+					<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
+					<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
+					<th class="analysis-header hidden">Action</th>
+					<th class="analysis-header hidden">Totals</th>
+					<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
+					<th class="analysis-header" style="text-align:center">Dist > 7<br>or > 8</th>
+					<th class="analysis-header hidden" style="text-align:center; width:110px">Market Cap (in M)</th>
+					<th class="analysis-header" style="text-align:center; width:110px">Last Q Rev (in K)</th>
+					<th class="analysis-header hidden">Net Stock Issues Score</th>
+					<th class="analysis-header hidden">RelAccruals Score</th>
+					<th class="analysis-header hidden">NetOpAssetsScaled Score</th>
+					<th class="analysis-header hidden">Assets Growth Score</th>
+					<th class="analysis-header hidden">InvestToAssets Score</th>
+					<th class="analysis-header hidden">52 Week Price Score</th>
+					<th class="analysis-header hidden">Profit Premium Score</th>
+					<th class="analysis-header hidden">ROA Quarterly Score</th>
+					<th class="analysis-header hidden">DistTotal2 Score</th>
+					<th class="analysis-header">Update</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LQ Revenue, 22. Portfolio Items -->
+		
+				<% @po.each do |pi| %>
+					<%= simple_form_for(:si, :remote => true, :controller => "pages", :action => "update_action", url: update_action_path) do |f| %>
+						<% f.hidden_field :symbol, :value => si[0] %>
+						<% f.hidden_field :exchange, :value => si[1] %>
+
+						<tr>
+							<td style="padding-left:10px"><%= pi[0] %></td> <!-- Symbol -->
+							<td><%= pi[1] %></td> <!-- Exchange -->
+							<td>
+								<%= pi[2] %>
+								<div class="relative-wrap">
+		              <div class="overflow-wrap">
+		                <div class="popover">
+		                	<% if !pi[22].empty? %>
+			                	<% pi[22].each_with_index do |ppi,i| %>
+			                		<b>(<%= i+1 %>)</b> <b>Date: </b> <%= ppi.date_acq.strftime("%Y-%m-%d") %> <br />
+			                		<b>Position: </b> <%= ppi.position.capitalize %> <br />
+			                		<b>Type: </b> <%= ppi.pos_type.capitalize %> <br />
+			                		<b>Quantity: </b> <%= ppi.quantity %><br />
+			                		<% if ppi.pos_type == "option" %>
+			                			<b>Option Type: </b> <%= ppi.op_type.capitalize %> <br />
+			                			<b>Strike Price: </b> <%= ppi.op_strike %> <br />
+			                			<b>Expiration: </b> <%= ppi.op_expiration %> <br />
+		                			<% end %>
+		                			<% unless ppi == pi[22][-1] %><hr><% end %>
+		              			<% end %>
+	              			<% else %>
+	              				<i>No current investments in this entity.</i>
+	            				<% end %>
+		                </div>
+		              </div>
+		            </div> <!-- Portfolio ownership -->
+	            </td> <!-- Company Name -->
+							<td><%= pi[19] != "N/A" ? pi[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
+							<td><%= pi[20] != "N/A" ? pi[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
+							<td style="text-align:center"><%= pi[3] %></td>	<!-- In Portfolio -->
+							<td style="padding-left:10px"><%= pi[4] %></td> <!-- Rec Action -->
+							<td><%= f.text_field :description, label: false, value: pi[5] %></td> <!-- Action -->
+							<td class="hidden"><%= pi[6] %></td> <!-- Totals -->
+							<td style="text-align:center"><%= number_to_percentage(pi[7]*100) %></td> <!-- Total Score Percentile -->
+							<td style='text-align:center'><%= pi[8] %></td> <!-- Dist > 7 or > 8 -->
+							<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(pi[9]/1000000, :precision => 3, :delimiter => ',') %></td> <!-- Market Cap -->
+							<td style="text-align:right; padding-right:2px"><%= !pi[21].nil? ? number_with_precision(pi[21]/1000, :precision => 3, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
+							<td class="hidden"><%= pi[10] %></td> <!-- Net Stock Issues Score -->
+							<td class="hidden"><%= pi[11] %></td> <!-- RelAccruals Score -->
+							<td class="hidden"><%= pi[12] %></td> <!-- NetOpAssetsScaled Score -->
+							<td class="hidden"><%= pi[13] %></td> <!-- Assets Growth Score -->
+							<td class="hidden"><%= pi[14] %></td> <!-- InvestToAssets Score -->
+							<td class="hidden"><%= pi[15] %></td> <!-- 52 Week Price Score -->
+							<td class="hidden"><%= pi[16] %></td> <!-- Profit Premium Score -->
+							<td class="hidden"><%= pi[17] %></td> <!-- ROA Quarterly Score -->
+							<td class="hidden"><%= pi[18] %></td> <!-- DistTotal2 Score -->
+							<td><%= f.submit "Update Action" %></td>
+						</tr>
+					<% end %>
 				<% end %>
 			</tbody>
 		</table>

@@ -2,6 +2,7 @@ class Stock < ActiveRecord::Base
   has_many :screen_items
   has_many :portfolio_items
   has_many :earnings_dates
+  has_many :actions
   belongs_to :display_item
   
   def get_next_earnings_date
@@ -38,8 +39,6 @@ class Stock < ActiveRecord::Base
     date_range.each do |date|
       UpdateEarningsDatesWorker.perform_async(date)
     end # end date array
-     
-    
   end
   
 end

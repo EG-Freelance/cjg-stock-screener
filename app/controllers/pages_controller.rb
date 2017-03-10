@@ -15,8 +15,19 @@ class PagesController < ApplicationController
     #screen item variables and arrays
     si_pool_lg = DisplayItem.includes(:portfolio_items).where(classification: "large")
     si_pool_sm = DisplayItem.includes(:portfolio_items).where(classification: "small")
+    po_pool = DisplayItem.includes(:portfolio_items).where(classification: "fallen out")
     @si_lg = si_pool_lg.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items] }.sort_by { |si| si[7] }.reverse!
     @si_sm = si_pool_sm.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items] }.sort_by { |si| si[7] }.reverse!
+    @po = po_pool.map { |pi| [pi.symbol, pi.exchange, pi.company, pi.in_pf, pi.rec_action, pi.action, pi.total_score, pi.total_score_pct, pi.dist_status, pi.mkt_cap, pi.nsi_score, pi.ra_score, pi.noas_score, pi.ag_score, pi.aita_score, pi.l52wp_score, pi.pp_score, pi.rq_score, pi.dt2_score, pi.prev_ed, pi.next_ed, pi.lq_revenue, pi.stock.portfolio_items] }.sort_by { |pi| pi[7] }.reverse!
+  end
+  
+  def update_action
+    stock = Stock.find_by(symbol: params['si']['symbol'], exchange: params['si']['exchange'])
+    stock.actions.where(description: params['si']['description']).first_or_create
+    stock.display_item.update(action: params['si']['description'])
+    respond_to do |format|
+      format.js { }
+    end
   end
 
   # GET /pages/1

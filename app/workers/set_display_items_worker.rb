@@ -100,7 +100,7 @@ class SetDisplayItemsWorker
         si.stock.si_description,
         portfolio_securities.include?(si.stock.symbol) ? "Yes" : "No",
         "ph", #rec action
-        si.stock.actions.last.description, #action
+        si.stock.actions.empty? ? "N/A" : si.stock.actions.last.description, #action
         total_score,
         nil, #total score percentile (move down)
         nil, #Dist top10% > 7 or bottom10% > 8 (move down)
@@ -275,7 +275,7 @@ class SetDisplayItemsWorker
         si.stock.si_description,
         portfolio_securities.include?(si.stock.symbol) ? "Yes" : "No",
         "ph", #rec action
-        si.stock.actions.last.description, #action
+        si.stock.actions.empty? ? "N/A" : si.stock.actions.last.description, #action
         total_score,
         nil, #total score percentile (move down)
         nil, #Dist top10% > 7 or bottom10% > 8 (move down)
@@ -397,7 +397,7 @@ class SetDisplayItemsWorker
         pi.stock.si_description,
         portfolio_securities.include?(si.stock.symbol) ? "Yes" : "No",
         "ph", #rec action
-        pi.stock.actions.last.description, #action
+        pi.stock.actions.empty? ? "N/A" : pi.stock.actions.last.description, #action
         "N/A",
         "N/A", #total score percentile (move down)
         "N/A", #Dist top10% > 7 or bottom10% > 8 (move down)

@@ -17,7 +17,7 @@ class SetDisplayItemsWorker
     pi_period = pi_set_date_array.last
     pi_pool = portfolio_items.where(set_created_at: pi_period)
     # portfolio-only
-    po_pool = portfolio_only.where(set_created_at: pi_period)
+    po_pool = portfolio_only.select { |po| po.set_created_at == pi_period }
     
     # array of portfolio symbols
     portfolio_securities = pi_pool.pluck(:'stocks.symbol')
@@ -387,15 +387,15 @@ class SetDisplayItemsWorker
     #process data
     po_pool.each do |pi|
       # set next and prev earnings dates
-      prev_ed = si.stock.earnings_dates.where('date < ?', Date.today)
-      next_ed = si.stock.earnings_dates.where('date >= ?', Date.today)
+      prev_ed = pi.stock.earnings_dates.where('date < ?', Date.today)
+      next_ed = pi.stock.earnings_dates.where('date >= ?', Date.today)
 
       # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev
       po << [
         pi.stock.symbol, 
         pi.stock.exchange,
         pi.stock.si_description,
-        portfolio_securities.include?(si.stock.symbol) ? "Yes" : "No",
+        portfolio_securities.include?(pi.stock.symbol) ? "Yes" : "No",
         "ph", #rec action
         pi.stock.actions.empty? ? "N/A" : pi.stock.actions.last.description, #action
         "N/A",

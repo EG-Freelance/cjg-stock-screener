@@ -149,7 +149,7 @@ class PagesController < ApplicationController
     screen_items = ScreenItem.all.includes(:stock)
     display_items.each_with_index do |di, i|
       si = screen_items.find_by(:stocks => { :symbol => di.symbol, :exchange => di.exchange })
-      page.row(i+1).push di.symbol, di.exchange, di.company, di.in_pf, di.rec_action, di.action, di.total_score, di.total_score_pct, di.dist_status, di.mkt_cap, si.net_stock_issues.to_f, di.nsi_score, si.rel_accruals.to_f, di.ra_score, si.net_op_assets_scaled.to_f, di.noas_score, si.assets_growth.to_f, di.ag_score, si.adj_invest_to_assets.to_f, di.aita_score, si.l_52_wk_price.to_f, di.l52wp_score, si.profit_prem.to_f, di.pp_score, si.roa_q.to_f, di.rq_score, si.dist_total_2.to_f, di.dt2_score, di.prev_ed, di.next_ed, di.lq_revenue, di.classification
+      page.row(i+1).push di.symbol, di.exchange, di.company, di.in_pf, di.rec_action, di.action, di.total_score, di.total_score_pct, di.dist_status, di.mkt_cap, !si.nil? ? si.net_stock_issues.to_f : "N/A", di.nsi_score, !si.nil? ? si.rel_accruals.to_f : "N/A", di.ra_score, !si.nil? ? si.net_op_assets_scaled.to_f : "N/A", di.noas_score, !si.nil? ? si.assets_growth.to_f : "N/A", di.ag_score, !si.nil? ? si.adj_invest_to_assets.to_f : "N/A", di.aita_score, !si.nil? ? si.l_52_wk_price.to_f : "N/A", di.l52wp_score, !si.nil? ? si.profit_prem.to_f : "N/A", di.pp_score, !si.nil? ? si.roa_q.to_f : "N/A", di.rq_score, !si.nil? ? si.dist_total_2.to_f : "N/A", di.dt2_score, di.prev_ed, di.next_ed, di.lq_revenue, di.classification
     end
     
     summary = StringIO.new

@@ -107,7 +107,7 @@ class ImportPortfolioWorker
       )
     end
     # Destroy PortfolioItems that are no longer active to avoid carrying closed positions
-    Portfolio.where.not(set_created_at: set_created_at).destroy_all
+    PortfolioItem.where.not(set_created_at: set_created_at).destroy_all
     RowDatum.destroy_all
     DataSet.destroy_all
   end

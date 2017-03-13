@@ -2,6 +2,14 @@
 
 <div class="row">
 	<div class="col-md-3"></div>
+	<div class="col-md-6 home-module" id="workers-module">
+		<%= render 'pages/workers' %>
+	</div>
+	<div class="col-md-3"></div>
+</div>
+
+<div class="row">
+	<div class="col-md-3"></div>
 	<div class="col-md-6 home-module">
 		<%= form_tag import_pi_path, multipart: true do %>
 		  <div>
@@ -26,29 +34,6 @@
 	</div>
 	<div class="col-md-3"></div>
 </div>
-	
-	<!--The section below is unneeded since there is a fully automated version-->
-	<!--<div class="col-md-6">-->
-	<!--	<%= form_tag import_si_path, multipart: true do %>-->
-	<!--	  <div>-->
-	<!--	    <h2>Import Screen Data</h2>-->
-	<!--	    <p>Select file "Stock Consolidator.xlsx"</p>-->
-	<!--	    <div class='input-field'>-->
-	<!--	      <div class="file-field input-field">-->
-	<!--	        <div>-->
-	<!--	          <span><b><i>Screen Data File</i></b></span>-->
-	<!--	          <%= file_field_tag :file %>-->
-	<!--	        </div>-->
-	<!--	      </div>-->
-	<!--	    </div>-->
-	<!--	  </div>-->
-	<!--	  <div style="padding-top:10px">-->
-	<!--	    <button type="submit" name="commit" value="Import" id='home-submit-page'>-->
-	<!--	      Import-->
-	<!--	    </button>-->
-	<!--	  </div>-->
-	<!--	<% end %>-->
-	<!--</div>-->
 <div class="row">	
 	<div class="col-md-3"></div>
 	<div class="col-md-6 home-module">
@@ -109,10 +94,33 @@
 		  </div>
 		  <div style="padding-top:10px">
 		    <button type="submit" name="commit" value="Update" id='update-analysis-page' class='submit-btn'>
-		      Confirm Request
+		      Export
 		    </button>
 		  </div>
 		<% end %>
 	</div>
 	<div class="col-md-3"></div>
 </div>
+	
+	<!--The section below is unneeded since there is a fully automated version-->
+	<!--<div class="col-md-6">-->
+	<!--	<%= form_tag import_si_path, multipart: true do %>-->
+	<!--	  <div>-->
+	<!--	    <h2>Import Screen Data</h2>-->
+	<!--	    <p>Select file "Stock Consolidator.xlsx"</p>-->
+	<!--	    <div class='input-field'>-->
+	<!--	      <div class="file-field input-field">-->
+	<!--	        <div>-->
+	<!--	          <span><b><i>Screen Data File</i></b></span>-->
+	<!--	          <%= file_field_tag :file %>-->
+	<!--	        </div>-->
+	<!--	      </div>-->
+	<!--	    </div>-->
+	<!--	  </div>-->
+	<!--	  <div style="padding-top:10px">-->
+	<!--	    <button type="submit" name="commit" value="Import" id='home-submit-page'>-->
+	<!--	      Import-->
+	<!--	    </button>-->
+	<!--	  </div>-->
+	<!--	<% end %>-->
+	<!--</div>-->

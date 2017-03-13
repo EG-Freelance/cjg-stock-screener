@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
   before_action :set_page, only: [:show, :edit, :update, :destroy]
   before_action :set_update_times, only: [:index, :analysis]
+  before_action :set_workers, only: [:index, :analysis]
 
   # GET /pages
   # GET /pages.json
@@ -38,6 +39,13 @@ class PagesController < ApplicationController
   # GET /pages/new
   def new
     @page = Page.new
+  end
+  
+  def update_workers
+    self.set_workers
+    respond_to do |format|
+      format.js { }
+    end
   end
 
   # GET /pages/1/edit
@@ -156,6 +164,19 @@ class PagesController < ApplicationController
     spreadsheet.write summary
     file = "Screen Summary #{Date.today.strftime("%Y.%m.%d")}.xls"
     send_data summary.string, :filename => "#{file}", :type=>"application/excel", :disposition=>'attachment'
+  end
+  
+  def set_workers
+    if Rails.env == "production"
+      @worker_hash = {}
+      worker_types = ['ImportScreenWorker', 'GetScreenMechanizeWorker', 'ImportPortfolioWorker', 'SetDisplayItemsWorker', 'UpdateEarningsDatesWorker']
+      workers = Sidekiq::Workers.new
+      worker_classes = workers.map { |process_id, thread_id, work| work['payload']['class'] }
+      worker_types.each { |w| @worker_hash[w] = worker_classes.count(w) }
+    else
+      # populate local hash with dummy data
+      @worker_hash = { 'ImportScreenWorker' => 0, 'GetScreenMechanizeWorker' => 1, 'ImportPortfolioWorker' => 2, 'SetDisplayItemsWorker' => 3, 'UpdateEarningsDatesWorker' => 4 } 
+    end
   end
   
 

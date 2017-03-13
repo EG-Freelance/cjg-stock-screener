@@ -1,0 +1,1 @@
+$('#workers-module').html('<%= j render "pages/workers" %>');

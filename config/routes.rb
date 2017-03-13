@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     post 'pages/update_display' => 'pages#update_display', :as => 'update_display'
     post 'pages/export_to_excel' => 'pages#export_to_excel', :as => 'export_to_excel'
     post 'pages/update_action' => 'pages#update_action', :as => 'update_action'
+    post 'pages/update_workers' => 'pages#update_workers', :as => 'update_workers'
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

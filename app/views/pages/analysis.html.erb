@@ -87,7 +87,32 @@
 							<td><%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
 							<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 							<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
-							<td><%= f.text_field :description, label: false, value: si[5] %></td> <!-- Action -->
+							<td>
+								<%= f.text_field :description, label: false, value: si[5], id: si[0]+si[1]+"-action" %>
+								<script>
+									function update(){
+										var currText = $('#<%= si[0] %><%= si[1] %>-action').val();
+										return currText;
+									};
+									
+									
+									var oldText = "N/A";
+									var newText = "N/A";
+									$('#<%= si[0] %><%= si[1] %>-action').focusin(function(){
+										oldText = update();
+									});
+									
+									$('#<%= si[0] %><%= si[1] %>-action').focusout(function(){
+										newText = update();
+										if(newText == oldText){
+											return false
+										}else{
+											$('#<%= si[0] %><%= si[1] %>-submit').trigger('click');
+										}
+										console.log(oldText, newText);
+									});
+								</script>
+							</td> <!-- Action -->
 							<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 							<td style="text-align:center"><%= number_to_percentage(si[7]*100) %></td> <!-- Total Score Percentile -->
 							<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
@@ -102,7 +127,7 @@
 							<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
 							<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
 							<td class="hidden"><%= si[18] %></td> <!-- DistTotal2 Score -->
-							<td><%= f.submit "Update Action", class: 'update-btn' %></td>
+							<td><%= f.submit "Update Action", class: 'update-btn', id: si[0]+si[1]+"-submit" %></td>
 						</tr>
 					<% end %>
 				<% end %>
@@ -179,7 +204,32 @@
 							<td><%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
 							<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 							<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
-							<td><%= f.text_field :description, label: false, value: si[5] %></td> <!-- Action -->
+							<td>
+								<%= f.text_field :description, label: false, value: si[5] %>
+								<script>
+									function update(){
+										var currText = $('#<%= si[0] %><%= si[1] %>-action').val();
+										return currText;
+									};
+									
+									
+									var oldText = "N/A";
+									var newText = "N/A";
+									$('#<%= si[0] %><%= si[1] %>-action').focusin(function(){
+										oldText = update();
+									});
+									
+									$('#<%= si[0] %><%= si[1] %>-action').focusout(function(){
+										newText = update();
+										if(newText == oldText){
+											return false
+										}else{
+											$('#<%= si[0] %><%= si[1] %>-submit').trigger('click');
+										}
+										console.log(oldText, newText);
+									});
+								</script>
+							</td> <!-- Action -->
 							<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 							<td style="text-align:center"><%= number_to_percentage(si[7]*100) %></td> <!-- Total Score Percentile -->
 							<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
@@ -273,7 +323,32 @@
 							<td><%= pi[20] != "N/A" ? pi[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
 							<td style="text-align:center"><%= pi[3] %></td>	<!-- In Portfolio -->
 							<td style="padding-left:10px"><%= pi[4] %></td> <!-- Rec Action -->
-							<td><%= f.text_field :description, label: false, value: pi[5] %></td> <!-- Action -->
+							<td>
+								<%= f.text_field :description, label: false, value: pi[5] %>
+								<script>
+									function update(){
+										var currText = $('#<%= pi[0] %><%= pi[1] %>-action').val();
+										return currText;
+									};
+									
+									
+									var oldText = "N/A";
+									var newText = "N/A";
+									$('#<%= pi[0] %><%= pi[1] %>-action').focusin(function(){
+										oldText = update();
+									});
+									
+									$('#<%= pi[0] %><%= pi[1] %>-action').focusout(function(){
+										newText = update();
+										if(newText == oldText){
+											return false
+										}else{
+											$('#<%= pi[0] %><%= pi[1] %>-submit').trigger('click');
+										}
+										console.log(oldText, newText);
+									});
+								</script>
+							</td> <!-- Action -->
 							<td class="hidden"><%= pi[6] %></td> <!-- Totals -->
 							<td style="text-align:center"><%= number_to_percentage(pi[7]*100) %></td> <!-- Total Score Percentile -->
 							<td style='text-align:center'><%= pi[8] %></td> <!-- Dist > 7 or > 8 -->

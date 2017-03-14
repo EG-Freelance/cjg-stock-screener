@@ -88,7 +88,7 @@
 							<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 							<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 							<td>
-								<%= f.text_field :description, label: false, value: si[5], id: si[0]+si[1]+"-action" %>
+								<%= f.text_field :description, label: false, value: si[5], id: si[0]+si[1]+"-action", class: "action-field" %>
 								<script>
 									function update(){
 										var currText = $('#<%= si[0] %><%= si[1] %>-action').val();
@@ -205,7 +205,7 @@
 							<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 							<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 							<td>
-								<%= f.text_field :description, label: false, value: si[5] %>
+								<%= f.text_field :description, label: false, value: si[5], id: si[0]+si[1]+"-action", class: "action-field" %>
 								<script>
 									function update(){
 										var currText = $('#<%= si[0] %><%= si[1] %>-action').val();
@@ -244,7 +244,7 @@
 							<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
 							<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
 							<td class="hidden"><%= si[18] %></td> <!-- DistTotal2 Score -->
-							<td><%= f.submit "Update Action", class: 'update-btn' %></td>
+							<td><%= f.submit "Update Action", class: 'update-btn', id: si[0]+si[1]+'-submit' %></td>
 						</tr>
 					<% end %>
 				<% end %>
@@ -324,7 +324,7 @@
 							<td style="text-align:center"><%= pi[3] %></td>	<!-- In Portfolio -->
 							<td style="padding-left:10px"><%= pi[4] %></td> <!-- Rec Action -->
 							<td>
-								<%= f.text_field :description, label: false, value: pi[5] %>
+								<%= f.text_field :description, label: false, value: pi[5], id: pi[0]+pi[1]+"-action", class: "action-field" %>
 								<script>
 									function update(){
 										var currText = $('#<%= pi[0] %><%= pi[1] %>-action').val();
@@ -363,7 +363,7 @@
 							<td class="hidden"><%= pi[16] %></td> <!-- Profit Premium Score -->
 							<td class="hidden"><%= pi[17] %></td> <!-- ROA Quarterly Score -->
 							<td class="hidden"><%= pi[18] %></td> <!-- DistTotal2 Score -->
-							<td><%= f.submit "Update Action", class: 'update-btn' %></td>
+							<td><%= f.submit "Update Action", class: 'update-btn', id: pi[0]+pi[1]+'-submit' %></td>
 						</tr>
 					<% end %>
 				<% end %>

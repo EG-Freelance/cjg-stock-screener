@@ -24,6 +24,7 @@ class PagesController < ApplicationController
   
   def update_action
     stock = Stock.find_by(symbol: params['si']['symbol'], exchange: params['si']['exchange'])
+    stock.actions.each { |a| a.destroy }
     stock.actions.where(description: params['si']['description']).first_or_create
     stock.display_item.update(action: params['si']['description'])
     respond_to do |format|

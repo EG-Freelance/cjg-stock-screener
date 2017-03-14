@@ -89,29 +89,29 @@
 							<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 							<td>
 								<%= f.text_field :description, label: false, value: si[5], id: 'id-'+si[0]+si[1]+"-action", class: "action-field" %>
-								<script>
-									function update(){
-										var currText = $('#<%= si[0] %><%= si[1] %>-action').val();
-										return currText;
-									};
+								<!--<script>-->
+								<!--	function update(){-->
+								<!--		var currText = $('#<%= si[0] %><%= si[1] %>-action').val();-->
+								<!--		return currText;-->
+								<!--	};-->
 									
 									
-									var oldText = "N/A";
-									var newText = "N/A";
-									$('#id-<%= si[0] %><%= si[1] %>-action').focusin(function(){
-										oldText = update();
-									});
+								<!--	var oldText = "N/A";-->
+								<!--	var newText = "N/A";-->
+								<!--	$('#id-<%= si[0] %><%= si[1] %>-action').focusin(function(){-->
+								<!--		oldText = update();-->
+								<!--	});-->
 									
-									$('#id-<%= si[0] %><%= si[1] %>-action').focusout(function(){
-										newText = update();
-										if(newText == oldText){
-											return false
-										}else{
-											$('#id-<%= si[0] %><%= si[1] %>-submit').trigger('click');
-										}
-										console.log(oldText, newText);
-									});
-								</script>
+								<!--	$('#id-<%= si[0] %><%= si[1] %>-action').focusout(function(){-->
+								<!--		newText = update();-->
+								<!--		if(newText == oldText){-->
+								<!--			return false-->
+								<!--		}else{-->
+								<!--			$('#id-<%= si[0] %><%= si[1] %>-submit').trigger('click');-->
+								<!--		}-->
+								<!--		console.log(oldText, newText);-->
+								<!--	});-->
+								<!--</script>-->
 							</td> <!-- Action -->
 							<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 							<td style="text-align:center"><%= number_to_percentage(si[7]*100) %></td> <!-- Total Score Percentile -->
@@ -206,29 +206,29 @@
 							<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 							<td>
 								<%= f.text_field :description, label: false, value: si[5], id: 'id-'+si[0]+si[1]+"-action", class: "action-field" %>
-								<script>
-									function update(){
-										var currText = $('#<%= si[0] %><%= si[1] %>-action').val();
-										return currText;
-									};
+								<!--<script>-->
+								<!--	function update(){-->
+								<!--		var currText = $('#<%= si[0] %><%= si[1] %>-action').val();-->
+								<!--		return currText;-->
+								<!--	};-->
 									
 									
-									var oldText = "N/A";
-									var newText = "N/A";
-									$('#id-<%= si[0] %><%= si[1] %>-action').focusin(function(){
-										oldText = update();
-									});
+								<!--	var oldText = "N/A";-->
+								<!--	var newText = "N/A";-->
+								<!--	$('#id-<%= si[0] %><%= si[1] %>-action').focusin(function(){-->
+								<!--		oldText = update();-->
+								<!--	});-->
 									
-									$('#id-<%= si[0] %><%= si[1] %>-action').focusout(function(){
-										newText = update();
-										if(newText == oldText){
-											return false
-										}else{
-											$('#id-<%= si[0] %><%= si[1] %>-submit').trigger('click');
-										}
-										console.log(oldText, newText);
-									});
-								</script>
+								<!--	$('#id-<%= si[0] %><%= si[1] %>-action').focusout(function(){-->
+								<!--		newText = update();-->
+								<!--		if(newText == oldText){-->
+								<!--			return false-->
+								<!--		}else{-->
+								<!--			$('#id-<%= si[0] %><%= si[1] %>-submit').trigger('click');-->
+								<!--		}-->
+								<!--		console.log(oldText, newText);-->
+								<!--	});-->
+								<!--</script>-->
 							</td> <!-- Action -->
 							<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 							<td style="text-align:center"><%= number_to_percentage(si[7]*100) %></td> <!-- Total Score Percentile -->
@@ -325,29 +325,29 @@
 							<td style="padding-left:10px"><%= pi[4] %></td> <!-- Rec Action -->
 							<td>
 								<%= f.text_field :description, label: false, value: pi[5], id: 'id-'+pi[0]+pi[1]+"-action", class: "action-field" %>
-								<script>
-									function update(){
-										var currText = $('#<%= pi[0] %><%= pi[1] %>-action').val();
-										return currText;
-									};
+								<!--<script>-->
+								<!--	function update(){-->
+								<!--		var currText = $('#<%= pi[0] %><%= pi[1] %>-action').val();-->
+								<!--		return currText;-->
+								<!--	};-->
 									
 									
-									var oldText = "N/A";
-									var newText = "N/A";
-									$('#id-<%= pi[0] %><%= pi[1] %>-action').focusin(function(){
-										oldText = update();
-									});
+								<!--	var oldText = "N/A";-->
+								<!--	var newText = "N/A";-->
+								<!--	$('#id-<%= pi[0] %><%= pi[1] %>-action').focusin(function(){-->
+								<!--		oldText = update();-->
+								<!--	});-->
 									
-									$('#id-<%= pi[0] %><%= pi[1] %>-action').focusout(function(){
-										newText = update();
-										if(newText == oldText){
-											return false
-										}else{
-											$('#id-<%= pi[0] %><%= pi[1] %>-submit').trigger('click');
-										}
-										console.log(oldText, newText);
-									});
-								</script>
+								<!--	$('#id-<%= pi[0] %><%= pi[1] %>-action').focusout(function(){-->
+								<!--		newText = update();-->
+								<!--		if(newText == oldText){-->
+								<!--			return false-->
+								<!--		}else{-->
+								<!--			$('#id-<%= pi[0] %><%= pi[1] %>-submit').trigger('click');-->
+								<!--		}-->
+								<!--		console.log(oldText, newText);-->
+								<!--	});-->
+								<!--</script>-->
 							</td> <!-- Action -->
 							<td class="hidden"><%= pi[6] %></td> <!-- Totals -->
 							<td style="text-align:center"><%= number_to_percentage(pi[7]*100) %></td> <!-- Total Score Percentile -->

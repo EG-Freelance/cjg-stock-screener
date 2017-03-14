@@ -145,8 +145,8 @@
 		
 				<% @si_lg.each do |si| %>
 					<%= simple_form_for(:si, :remote => true, :controller => "pages", :action => "update_action", url: update_action_path) do |f| %>
-						<% f.hidden_field :symbol, :value => si[0] %>
-						<% f.hidden_field :exchange, :value => si[1] %>
+						<%= f.hidden_field :symbol, :value => si[0] %>
+						<%= f.hidden_field :exchange, :value => si[1] %>
 						<tr>
 							<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
 							<td><%= si[1] %></td> <!-- Exchange -->
@@ -238,8 +238,8 @@
 		
 				<% @po.each do |pi| %>
 					<%= simple_form_for(:si, :remote => true, :controller => "pages", :action => "update_action", url: update_action_path) do |f| %>
-						<% f.hidden_field :symbol, :value => pi[0] %>
-						<% f.hidden_field :exchange, :value => pi[1] %>
+						<%= f.hidden_field :symbol, :value => pi[0] %>
+						<%= f.hidden_field :exchange, :value => pi[1] %>
 
 						<tr>
 							<td style="padding-left:10px"><%= pi[0] %></td> <!-- Symbol -->

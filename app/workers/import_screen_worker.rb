@@ -108,5 +108,7 @@ class ImportScreenWorker
     # invest_to_assets_array = si_array.map { |si| si.invest_to_assets }.compact
     # med_ita = MathStuff.median(invest_to_assets_array)
     # si_array.each { |si| si.update(adj_invest_to_assets: med_ita) if si.invest_to_assets.nil? }
+    
+    SetDisplayItemsWorker.perform_async
   end
 end

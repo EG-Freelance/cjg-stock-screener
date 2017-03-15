@@ -110,5 +110,6 @@ class ImportPortfolioWorker
     PortfolioItem.where.not(set_created_at: set_created_at).destroy_all
     RowDatum.destroy_all
     DataSet.destroy_all
+    GetScreenMechanizeWorker.perform_async
   end
 end

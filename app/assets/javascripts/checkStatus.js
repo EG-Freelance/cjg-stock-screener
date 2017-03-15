@@ -1,0 +1,23 @@
+function checkBackground() {
+	
+	function clearI(interval) {
+		clearInterval(interval);
+	}
+	
+	$('#check-bg').click(function(){
+		setTimeout(function(){
+			var i = 0;
+			var sum = parseInt($('#import-workers').text()) + parseInt($('#screen-workers').text()) + parseInt($('#display-workers').text()) + parseInt($('#earnings-workers').text());
+			var interval = setInterval(function(){
+				if(sum == 0 || i == 60){ clearI(interval); }
+				sum = parseInt($('#import-workers').text()) + parseInt($('#screen-workers').text()) + parseInt($('#display-workers').text()) + parseInt($('#earnings-workers').text());
+				$('#check-bg').trigger('click');
+				console.log(i);
+				i++;
+			},5000);
+		},500);
+	});
+	
+}
+
+$(document).ready(checkBackground);

@@ -1,12 +1,12 @@
 <div>
 	<h2>Background Processes Currently Running</h2>
 	<ul style="list-style:none">
-		<li><b>Screen Import: </b><%= @worker_hash['ImportScreenWorker'] + @worker_hash['GetScreenMechanizeWorker'] %></li>
-		<li><b>Portfolio Import: </b><%= @worker_hash['ImportPortfolioWorker'] %></li>
-		<li><b>Earnings Dates Import: </b><%= @worker_hash['UpdateEarningsDatesWorker'] %></li>
-		<li><b>Display Import: </b><%= @worker_hash['SetDisplayItemsWorker'] %></li>
+		<li><b>Screen Import: </b><span id="screen-workers"><%= @worker_hash['ImportScreenWorker'] + @worker_hash['GetScreenMechanizeWorker'] %></span></li>
+		<li><b>Portfolio Import: </b><span id="import-workers"><%= @worker_hash['ImportPortfolioWorker'] %></span></li>
+		<li><b>Earnings Dates Import: </b><span id="earnings-workers"><%= @worker_hash['UpdateEarningsDatesWorker'] %></span></li>
+		<li><b>Display Import: </b><span id="display-workers"><%= @worker_hash['SetDisplayItemsWorker'] %></span></li>
 	</ul>
 	<%= form_tag update_workers_path, method: :post, :remote => true do %>
-		<%= submit_tag 'Update Listings', class: 'update-btn' %>
+		<%= submit_tag 'Update Listings', class: 'update-btn', id: 'check-bg' %>
 	<% end %>
 </div>

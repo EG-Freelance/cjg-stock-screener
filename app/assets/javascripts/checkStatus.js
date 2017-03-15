@@ -5,8 +5,8 @@ function checkBackground() {
 	}
 	
 	$('#check-bg').click(function(){
-		$('#polling-alert').css('visibility', 'visible');
 		setTimeout(function(){
+			$('#polling-alert').css('visibility', 'visible');
 			var i = 0;
 			var sum = parseInt($('#import-workers').text()) + parseInt($('#screen-workers').text()) + parseInt($('#display-workers').text()) + parseInt($('#earnings-workers').text());
 			var interval = setInterval(function(){

@@ -5,11 +5,15 @@ function checkBackground() {
 	}
 	
 	$('#check-bg').click(function(){
+		$('#polling-alert').css('visibility', 'visible');
 		setTimeout(function(){
 			var i = 0;
 			var sum = parseInt($('#import-workers').text()) + parseInt($('#screen-workers').text()) + parseInt($('#display-workers').text()) + parseInt($('#earnings-workers').text());
 			var interval = setInterval(function(){
-				if(sum == 0 || i == 60){ clearI(interval); }
+				if(sum == 0 || i == 60){ 
+					clearI(interval); 
+					$('#polling-alert').css('visibility', 'hidden');
+				}
 				sum = parseInt($('#import-workers').text()) + parseInt($('#screen-workers').text()) + parseInt($('#display-workers').text()) + parseInt($('#earnings-workers').text());
 				$('#check-bg').trigger('click');
 				console.log(i);

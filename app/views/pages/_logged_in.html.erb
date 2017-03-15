@@ -2,8 +2,13 @@
 
 <div class="row">
 	<div class="col-md-3"></div>
-	<div class="col-md-6 home-module" id="workers-module">
-		<%= render 'pages/workers' %>
+	<div class="col-md-6 home-module" style="padding-bottom:10px !important">
+		<div id="workers-module">
+			<%= render 'pages/workers' %>
+		</div>
+		<div>
+		  <span style="visibility:hidden" id="polling-alert">(Polling every 5 seconds)</span>
+		</div>
 	</div>
 	<div class="col-md-3"></div>
 </div>

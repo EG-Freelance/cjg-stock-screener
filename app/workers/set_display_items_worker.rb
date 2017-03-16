@@ -122,6 +122,8 @@ class SetDisplayItemsWorker
     # calculate programmatic action (si[4]), total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup
     ts_array = si_lg.map { |si| si[6] }.sort
     si_lg.each do |si| 
+      stock = Stock.find_by(symbol: si[0], exchange: si[1])
+      positions = stock.portfolio_items.map { |pi| pi.op_type.nil? ? pi.position : pi.op_type == "Put" ? "short" : "long" }.uniq
       si[7] = 1 - ((ts_array.index(si[6]) + 1)/ts_array.length.to_f)
       # set dist
       if si[7] >= 0.9
@@ -134,44 +136,59 @@ class SetDisplayItemsWorker
       end
       
       # set programmatic actions
+      # si[3] - in portfolio
+      # si[4] - recommended action
+      # si[7] - total score percentile
+      
+      # if in portfolio
       if si[3] == "Yes"
-        if si[7] >= 0.9
-          if si[18] <= 7
-            # Yes, Top 10%, <=7
-            si[4] = "Hold or add"
+        # if there are no conflicting positions (long vs short underlying security)
+        if positions.count == 1
+          # if the position is short
+          if positions[0] == "short"
+            case 
+            # in top 10%
+            when si[7] >= 0.9
+              si[4] = "Close and Buy"
+            # in bottom 15%
+            when si[7] <= 0.15
+              si[4] = "Hold"
+            # in middle 75%
+            else
+              si[4] = "Close"
+            end
+          # if the position is long
           else
-            # Yes, Top 10%, >7
-            si[4] = "Hold or sell"
+            case 
+            # in top 15%
+            when si[7] >= 0.85
+              si[4] = "Hold"
+            # in bottom 10%
+            when si[7] <= 0.1
+              si[4] = "Close and Short"
+            # in middle 75%
+            else
+              si[4] = "Close"
+            end
           end
-        elsif si[7] <= 0.1
-          # Yes, Bottom 10%, Any Dist
-          si[4] = "Sell"
+        # if positions are conflicting
         else
-          # Yes, Middle 80%, Any Dist
-          si[4] = "Close"
+          si[4] = "!!! L & S"
         end
+      # if not in portfolio
       else
-        if si[7] >= 0.9
-          if si[18] <= 7
-            # No, Top 10%, <=7
-            si[4] = "No action"
-          else
-            # No, Top 10%, >7
-            si[4] = "No action"
-          end
-        elsif si[7] <= 0.1
-          if si[18] <= 8
-            # No, Bottom 10%, <=8
-            si[4] = "Short and put"
-          else
-            # No, Bottom 10%, >8
-            si[4] = "Short and put"
-          end
+        case
+        # if in top 10%
+        when si[7] >= 0.9
+          si[4] = "BUY"
+        # if in bottom 10%
+        when si[7] <= 0.1
+          si[4] = "SHORT"
+        # if in middle 80%
         else
-          # No, Middle 80%, Any Dist
-          si[4] = "No action"
+          si[4] = "N/A"
         end
-      end     
+      end
       # instantiate display objects
       si_lg_import << DisplayItem.new(
         classification: "large", 
@@ -294,11 +311,12 @@ class SetDisplayItemsWorker
         si.stock.lq_revenue
       ]
     end
-    # calculate total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup
+    # calculate programmatic action (si[4]), total score percentile (si[7]), and dist > 7 or 8 (si[8]) after initial setup
     ts_array = si_sm.map { |si| si[6] }.sort
-    si_sm.each do |si| 
+    si_sm.each do |si|       
+      stock = Stock.find_by(symbol: si[0], exchange: si[1])
+      positions = stock.portfolio_items.map { |pi| pi.op_type.nil? ? pi.position : pi.op_type == "Put" ? "short" : "long" }.uniq
       si[7] = 1 - ((ts_array.index(si[6]) + 1)/ts_array.length.to_f)
-      
       # set dist
       if si[7] >= 0.9
         si[8] = si[18] > 7 ? "Yes" : "No"
@@ -309,42 +327,57 @@ class SetDisplayItemsWorker
       end
       
       # set programmatic actions
+      # si[3] - in portfolio
+      # si[4] - recommended action
+      # si[7] - total score percentile
+      
+      # if in portfolio
       if si[3] == "Yes"
-        if si[7] >= 0.9
-          if si[18] <= 7
-            # Yes, Top 10%, <=7
-            si[4] = "Hold or add"
+        # if there are no conflicting positions (long vs short underlying security)
+        if positions.count == 1
+          # if the position is short
+          if positions[0] == "short"
+            case 
+            # in top 10%
+            when si[7] >= 0.9
+              si[4] = "Close and Buy"
+            # in bottom 15%
+            when si[7] <= 0.15
+              si[4] = "Hold"
+            # in middle 75%
+            else
+              si[4] = "Close"
+            end
+          # if the position is long
           else
-            # Yes, Top 10%, >7
-            si[4] = "Hold or sell"
+            case 
+            # in top 15%
+            when si[7] >= 0.85
+              si[4] = "Hold"
+            # in bottom 10%
+            when si[7] <= 0.1
+              si[4] = "Close and Short"
+            # in middle 75%
+            else
+              si[4] = "Close"
+            end
           end
-        elsif si[7] <= 0.1
-          # Yes, Bottom 10%, Any Dist
-          si[4] = "Sell"
+        # if positions are conflicting
         else
-          # Yes, Middle 80%, Any Dist
-          si[4] = "Close"
+          si[4] = "!!! L & S"
         end
+      # if not in portfolio
       else
-        if si[7] >= 0.9
-          if si[18] <= 7
-            # No, Top 10%, <=7
-            si[4] = "Long and call"
-          else
-            # No, Top 10%, >7
-            si[4] = "Long and call"
-          end
-        elsif si[7] <= 0.1
-          if si[18] <= 8
-            # No, Bottom 10%, <=8
-            si[4] = "No action"
-          else
-            # No, Bottom 10%, >8
-            si[4] = "No action"
-          end
+        case
+        # if in top 10%
+        when si[7] >= 0.9
+          si[4] = "BUY"
+        # if in bottom 10%
+        when si[7] <= 0.1
+          si[4] = "SHORT"
+        # if in middle 80%
         else
-          # No, Middle 80%, Any Dist
-          si[4] = "No action"
+          si[4] = "N/A"
         end
       end
       # instantiate objects
@@ -396,7 +429,7 @@ class SetDisplayItemsWorker
         pi.stock.exchange,
         pi.stock.si_description,
         portfolio_securities.include?(pi.stock.symbol) ? "Yes" : "No",
-        "ph", #rec action
+        "Close", #rec action
         pi.stock.actions.empty? ? "N/A" : pi.stock.actions.last.description, #action
         "N/A",
         "N/A", #total score percentile (move down)

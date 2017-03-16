@@ -6,7 +6,6 @@ function updateActions() {
 	$('.action-field').focusin(function(){
 		oldText = $(this).val();
 		el = $(this);
-		console.log(el);
 		submitId = $(this).attr('id').replace('action', 'submit');
 		
 		// set function for exit of this field

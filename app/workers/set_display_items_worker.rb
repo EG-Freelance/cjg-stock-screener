@@ -429,7 +429,7 @@ class SetDisplayItemsWorker
         pi.stock.exchange,
         pi.stock.si_description,
         portfolio_securities.include?(pi.stock.symbol) ? "Yes" : "No",
-        "Close", #rec action
+        "Hold", #rec action
         pi.stock.actions.empty? ? "N/A" : pi.stock.actions.last.description, #action
         "N/A",
         "N/A", #total score percentile (move down)

@@ -294,9 +294,7 @@
 						<td><%= pi[20] != "N/A" ? pi[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
 						<td style="text-align:center"><%= pi[3] %></td>	<!-- In Portfolio -->
 						<td style="padding-left:10px"><%= pi[4] %></td> <!-- Rec Action -->
-						<td>
-							<%= f.text_field :description, label: false, value: pi[5], id: 'id-'+pi[0]+pi[1]+"-action", class: "action-field" %>
-						</td> <!-- Action -->
+						<td id="id-<%= pi[0] %><%= pi[1] %>-action", class: 'action-field'><%= pi[5] %></td> <!-- Action -->
 						<td class="hidden"><%= pi[6] %></td> <!-- Totals -->
 						<td style="text-align:center"><%= number_to_percentage(pi[7]*100) %></td> <!-- Total Score Percentile -->
 						<td style='text-align:center'><%= pi[8] %></td> <!-- Dist > 7 or > 8 -->

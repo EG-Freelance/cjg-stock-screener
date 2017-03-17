@@ -7,14 +7,6 @@ $.extend($.expr[':'], {
   }
 });
 
-// function filterText(){
-// 	$('tr').show();
-// 	var searchText = $('#search-text').val();
-	
-// 	var hide = $('tr:not(:contains("Exchange")):not(:containsi("'+searchText+'"))');
-// 	$.each(hide, function(){ $(this).hide() });
-// }
-
 function filterMultiText(){
 	$('tr').show();
 	var searchText2 = $('#search-text-2').val().replace(/\s\|\|\s/g,"||");

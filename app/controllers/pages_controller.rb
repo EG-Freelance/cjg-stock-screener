@@ -23,10 +23,37 @@ class PagesController < ApplicationController
   end
   
   def update_action
-    stock = Stock.find_by(symbol: params['si']['symbol'], exchange: params['si']['exchange'])
-    stock.actions.each { |a| a.destroy }
-    stock.actions.where(description: params['si']['description']).first_or_create
-    stock.display_item.update(action: params['si']['description'])
+    symbol = eval(params['symbol'])[:value]
+    exchange = eval(params['exchange'])[:value]
+    action = eval(params['rec_action'])[:value]
+    @id = "id-#{symbol}#{exchange}-action"
+    commit = params['commit']
+    stock = Stock.find_by(symbol: symbol, exchange: exchange)
+    stock.actions.destroy_all
+    if commit == "Confirm"
+      time = Time.now.in_time_zone("Eastern Time (US & Canada)")
+      if time.wday > 5
+        action_date = Date.today + (8-time.wday).days
+      else
+        if time.strftime("%H:%M") > "16:30"
+          if time.wday == 5
+            action_date = Date.today + 3.days
+          else
+            action_date = Date.today + 1.day
+          end
+        else
+          action_date = Date.today
+        end
+      end
+      @description = action_date.strftime("%Y/%m/%d") + " - " + action
+      stock.actions.where(description: @description).first_or_create
+      stock.display_item.update(action: @description)
+    else
+      @description = "IGNORE"
+      stock.actions.where(description: @description).first_or_create
+      stock.display_item.update(action: @description)
+    end
+
     respond_to do |format|
       format.js { }
     end

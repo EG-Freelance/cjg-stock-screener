@@ -149,26 +149,26 @@ class SetDisplayItemsWorker
             case 
             # in top 10%
             when si[7] >= 0.9
-              si[4] = "Close and Buy"
+              si[4] = "CLOSE AND BUY"
             # in bottom 15%
             when si[7] <= 0.15
-              si[4] = "Hold"
+              si[4] = "HOLD"
             # in middle 75%
             else
-              si[4] = "Close"
+              si[4] = "CLOSE"
             end
           # if the position is long
           else
             case 
             # in top 15%
             when si[7] >= 0.85
-              si[4] = "Hold"
+              si[4] = "HOLD"
             # in bottom 10%
             when si[7] <= 0.1
-              si[4] = "Close and Short"
+              si[4] = "CLOSE AND SHORT"
             # in middle 75%
             else
-              si[4] = "Close"
+              si[4] = "CLOSE"
             end
           end
         # if positions are conflicting
@@ -186,7 +186,7 @@ class SetDisplayItemsWorker
           si[4] = "SHORT"
         # if in middle 80%
         else
-          si[4] = "N/A"
+          si[4] = "(n/a)"
         end
       end
       # instantiate display objects
@@ -340,26 +340,26 @@ class SetDisplayItemsWorker
             case 
             # in top 10%
             when si[7] >= 0.9
-              si[4] = "Close and Buy"
+              si[4] = "CLOSE AND BUY"
             # in bottom 15%
             when si[7] <= 0.15
-              si[4] = "Hold"
+              si[4] = "HOLD"
             # in middle 75%
             else
-              si[4] = "Close"
+              si[4] = "CLOSE"
             end
           # if the position is long
           else
             case 
             # in top 15%
             when si[7] >= 0.85
-              si[4] = "Hold"
+              si[4] = "HOLD"
             # in bottom 10%
             when si[7] <= 0.1
-              si[4] = "Close and Short"
+              si[4] = "CLOSE AND SHORT"
             # in middle 75%
             else
-              si[4] = "Close"
+              si[4] = "CLOSE"
             end
           end
         # if positions are conflicting
@@ -377,7 +377,7 @@ class SetDisplayItemsWorker
           si[4] = "SHORT"
         # if in middle 80%
         else
-          si[4] = "N/A"
+          si[4] = "(n/a)"
         end
       end
       # instantiate objects
@@ -429,7 +429,7 @@ class SetDisplayItemsWorker
         pi.stock.exchange,
         pi.stock.si_description,
         portfolio_securities.include?(pi.stock.symbol) ? "Yes" : "No",
-        "Hold", #rec action
+        "HOLD", #rec action
         pi.stock.actions.empty? ? "N/A" : pi.stock.actions.last.description, #action
         "N/A",
         "N/A", #total score percentile (move down)

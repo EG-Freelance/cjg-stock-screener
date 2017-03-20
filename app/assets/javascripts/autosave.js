@@ -1,4 +1,4 @@
-/********** Don't use while we're using buttons to save **********
+/********** Don't use while we're using buttons to save **********/
 
 // function updateActions() {
 // 	var oldText;

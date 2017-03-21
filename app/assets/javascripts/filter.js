@@ -8,12 +8,14 @@ $.extend($.expr[':'], {
 });
 
 function filterMultiText(){
-	$('tr').show();
+	$('tr').removeClass('hide');
 	var searchText2 = $('#search-text-2').val().replace(/\s\|\|\s/g,"||");
 	var searchText2String = searchText2.split("||").map(function(e){ return ':not(:containsi("'+e+'"))' }).join("")
 	
 	var hide = $('tr:not(:contains("Exchange"))'+searchText2String);
-	$.each(hide, function(){ $(this).hide() });
+	$.each(hide, function(){ $(this).addClass('hide') });
+	$('tr:not(.hide):even').addClass('even').removeClass('odd');
+	$('tr:not(.hide):odd').addClass('odd').removeClass('even');
 }
 
 

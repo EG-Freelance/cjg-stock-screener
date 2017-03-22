@@ -10,17 +10,40 @@ class PagesController < ApplicationController
   end
   
   def analysis
+    # eager load display_items
+    display_items = DisplayItem.all.includes(:portfolio_items)
+    # total cost basis = paid * quantity * 100^0 for stock, paid * quantity * 100^1 for options for all "HOLD" items
+    cost_basis = display_items.where(rec_action: "HOLD").map { |di| di.portfolio_items.map { |pi| pi.paid.to_f * pi.quantity * 100**(pi.pos_type == "option" ? 1 : 0) }.sum }.sum
+    if Rails.env == "production"
+      return_funds = display_items.where('rec_action ~* ?', 'CLOSE').map { |di| di.portfolio_items.map { |pi| pi.paid.to_f * pi.quantity * 100**(pi.pos_type == "option" ? 1 : 0) }.sum }.sum
+    else
+      return_funds = display_items.where('rec_action LIKE ?', 'CLOSE').map { |di| di.portfolio_items.map { |pi| pi.paid.to_f * pi.quantity * 100**(pi.pos_type == "option" ? 1 : 0) }.sum }.sum
+    end
+    # usable funds = 2.8M - all stocks currently in portfolio + all stocks in current portfolio being closed
+    usable_funds = 2800000 - cost_basis + return_funds
+    if Rails.env == "production"
+      lg_purch = display_items.where('(rec_action ~* ? OR rec_action ~* ?) AND classification = ?', 'BUY', 'SHORT', 'large')
+      sm_purch = display_items.where('(rec_action ~* ? OR rec_action ~* ?) AND classification = ?', 'BUY', 'SHORT', 'small')
+    else
+      lg_purch = display_items.where('(rec_action LIKE ? OR rec_action LIKE ?) AND classification = ?', 'BUY', 'SHORT', 'large')
+      sm_purch = display_items.where('(rec_action LIKE ? OR rec_action LIKE ?) AND classification = ?', 'BUY', 'SHORT', 'small')
+    end
+    # allocation to each pool is (no. purchases/total purchases) * 2.8M
+    lg_pool = (lg_purch.count.to_f / (lg_purch.count + sm_purch.count) ) * 2800000
+    sm_pool = 2800000 - lg_pool
+    # mkt_cap base for each
+    lg_cap_base = lg_purch.map { |di| di.mkt_cap }.sum
+    sm_cap_base = sm_purch.map { |di| di.mkt_cap }.sum
+    
     if Rails.env == "production" && Sidekiq::Stats.new.workers_size > 0
       redirect_to :back, alert: "Screen or portfolio data are still being compiled, or analysis data are being processed; please try again momentarily."
     end
-    # eager load display_items
-    display_items = DisplayItem.all.includes(:portfolio_items)
     #screen item variables and arrays
     si_pool_lg = display_items.where(classification: "large")
     si_pool_sm = display_items.where(classification: "small")
     po_pool = display_items.where(classification: "fallen out")
-    @si_lg = si_pool_lg.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items] }.sort_by { |si| si[7] }.reverse!
-    @si_sm = si_pool_sm.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items] }.sort_by { |si| si[7] }.reverse!
+    @si_lg = si_pool_lg.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, lg_purch.include?(si) ? (si.mkt_cap / lg_cap_base.to_f ) * 2800000 : 0] }
+    @si_sm = si_pool_sm.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, sm_purch.include?(si) ? (si.mkt_cap / sm_cap_base.to_f ) * 2800000 : 0] }
     
     # for development, just replicate lg pool (so there are multiple tabs of data0)
     if Rails.env == "development"

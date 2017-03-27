@@ -529,6 +529,7 @@ class SetDisplayItemsWorker
     display_items.each { |di| di.stock = stocks.find_by(symbol: di.symbol, exchange: di.exchange) }
     # destroy any display items that don't have an associated stock as a fail-safe (WBT/MFS pointed this error out)
     display_items.includes(:stock).where(stocks: {id: nil}).destroy_all
+    funds_for_alloc = 2800000 + return_funds - fallen_out_val
     display_items = DisplayItem.where('rec_action != ? AND classification != ?', "(n/a)", "fallen out")
     display_items.each do |di| 
       if di.rec_action == "CLOSE"

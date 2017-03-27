@@ -161,7 +161,7 @@ class SetDisplayItemsWorker
             # in top 10%
             when si[7] >= 0.9
               si[4] = "CLOSE AND BUY"
-              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              return_funds = return_funds + positions.last.to_f * positions.quantity
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 15%
             when si[7] <= 0.15
@@ -170,7 +170,7 @@ class SetDisplayItemsWorker
             # in middle 75%
             else
               si[4] = "CLOSE"
-              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              return_funds = return_funds + positions.last.to_f * positions.quantity
             end
           # if the position is long
           else
@@ -182,12 +182,12 @@ class SetDisplayItemsWorker
             # in bottom 10%
             when si[7] <= 0.1
               si[4] = "CLOSE AND SHORT"
-              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              return_funds = return_funds + positions.last.to_f * positions.quantity
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
-              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              return_funds = return_funds + positions.last.to_f * positions.quantity
             end
           end
         # if positions are conflicting
@@ -366,7 +366,7 @@ class SetDisplayItemsWorker
             # in top 10%
             when si[7] >= 0.9
               si[4] = "CLOSE AND BUY"
-              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              return_funds = return_funds + positions.last.to_f * positions.quantity
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 15%
             when si[7] <= 0.15
@@ -375,7 +375,7 @@ class SetDisplayItemsWorker
             # in middle 75%
             else
               si[4] = "CLOSE"
-              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              return_funds = return_funds + positions.last.to_f * positions.quantity
             end
           # if the position is long
           else
@@ -387,12 +387,12 @@ class SetDisplayItemsWorker
             # in bottom 10%
             when si[7] <= 0.1
               si[4] = "CLOSE AND SHORT"
-              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              return_funds = return_funds + positions.last.to_f * positions.quantity
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
-              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              return_funds = return_funds + positions.last.to_f * positions.quantity
             end
           end
         # if positions are conflicting

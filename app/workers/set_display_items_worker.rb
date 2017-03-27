@@ -28,8 +28,16 @@ class SetDisplayItemsWorker
     si_pool = screen_items.where(set_created_at: si_period)
     
     # separate small and large cap
-    si_pool_lg = screen_items.where(classification: "large")
-    si_pool_sm = screen_items.where(classification: "small")
+    si_pool_lg = si_pool.where(classification: "large")
+    si_pool_sm = si_pool.where(classification: "small")
+    
+    # accumulate data as code runs
+    mkt_cap_pool = 0
+    buy_val = 0
+    return_funds = 0
+    
+    # market value of PI that have no SI (fallen out)
+    fallen_out_val = PortfolioItem.all.includes(:stock).map { |pi| pi.last * pi.quantity if pi.stock.screen_items.empty? && pi.pos_type == "stock" }.compact.sum.to_f
     
     ##########################
     # Get large cap listings #
@@ -93,7 +101,9 @@ class SetDisplayItemsWorker
       
       total_score = [nsi_rank, ra_rank, noas_rank, ag_rank, aita_rank, l52wp_rank, pp_rank, rq_rank, dt2_rank].sum
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev
+      portfolio = si.stock.portfolio_items.find_by(pos_type: "stock")
+      
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position, 23. Recommended Position, 24. Rec Change in Position
       si_lg << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -116,7 +126,8 @@ class SetDisplayItemsWorker
         dt2_rank,
         prev_ed.empty? ? "N/A" : (Date.today - prev_ed.last.date).to_i,
         next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? 0.1 : (next_ed.last.date - Date.today).to_i,
-        si.stock.lq_revenue
+        si.stock.lq_revenue,
+        !portfolio.nil? ? portfolio.last * portfolio.quantity * ( portfolio.position == "long" ? 1 : -1 ) : 0
       ]
     end
     # calculate programmatic action (si[4]), total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup
@@ -150,12 +161,16 @@ class SetDisplayItemsWorker
             # in top 10%
             when si[7] >= 0.9
               si[4] = "CLOSE AND BUY"
+              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
             # in bottom 15%
             when si[7] <= 0.15
               si[4] = "HOLD"
+              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
+              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
             end
           # if the position is long
           else
@@ -163,12 +178,16 @@ class SetDisplayItemsWorker
             # in top 15%
             when si[7] >= 0.85
               si[4] = "HOLD"
+              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
             # in bottom 10%
             when si[7] <= 0.1
               si[4] = "CLOSE AND SHORT"
+              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
+              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
             end
           end
         # if positions are conflicting
@@ -181,9 +200,11 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
+          mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
+          mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
         # if in middle 80%
         else
           si[4] = "(n/a)"
@@ -214,7 +235,8 @@ class SetDisplayItemsWorker
         dt2_score: si[18],
         prev_ed: si[19],
         next_ed: si[20],
-        lq_revenue: si[21]
+        lq_revenue: si[21],
+        curr_portfolio: si[22]
       )
       
     end
@@ -285,7 +307,9 @@ class SetDisplayItemsWorker
       
       total_score = [nsi_rank, ra_rank, noas_rank, ag_rank, aita_rank, l52wp_rank, pp_rank, rq_rank, dt2_rank].sum
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev
+      portfolio = si.stock.portfolio_items.find_by(pos_type: 'stock')
+      
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position, 23. Recommended Position, 24. Rec Change in Position
       si_sm << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -308,7 +332,8 @@ class SetDisplayItemsWorker
         dt2_rank,
         prev_ed.empty? ? "N/A" : (Date.today - prev_ed.last.date).to_i,
         next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? 0.1 : (next_ed.last.date - Date.today).to_i,
-        si.stock.lq_revenue
+        si.stock.lq_revenue,
+        !portfolio.nil? ? portfolio.last * portfolio.quantity * ( portfolio.position == "long" ? 1 : -1 ) : 0
       ]
     end
     # calculate programmatic action (si[4]), total score percentile (si[7]), and dist > 7 or 8 (si[8]) after initial setup
@@ -341,12 +366,16 @@ class SetDisplayItemsWorker
             # in top 10%
             when si[7] >= 0.9
               si[4] = "CLOSE AND BUY"
+              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
             # in bottom 15%
             when si[7] <= 0.15
               si[4] = "HOLD"
+              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
+              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
             end
           # if the position is long
           else
@@ -354,12 +383,16 @@ class SetDisplayItemsWorker
             # in top 15%
             when si[7] >= 0.85
               si[4] = "HOLD"
+              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
             # in bottom 10%
             when si[7] <= 0.1
               si[4] = "CLOSE AND SHORT"
+              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
+              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
+              return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
             end
           end
         # if positions are conflicting
@@ -372,9 +405,11 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
+          mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
+          mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
         # if in middle 80%
         else
           si[4] = "(n/a)"
@@ -405,7 +440,8 @@ class SetDisplayItemsWorker
         dt2_score: si[18],
         prev_ed: si[19],
         next_ed: si[20],
-        lq_revenue: si[21]
+        lq_revenue: si[21],
+        curr_portfolio: si[22]
       )
     end
     # import sm_cap
@@ -422,8 +458,10 @@ class SetDisplayItemsWorker
       # set next and prev earnings dates
       prev_ed = pi.stock.earnings_dates.where('date < ?', Date.today)
       next_ed = pi.stock.earnings_dates.where('date >= ?', Date.today)
+      
+      portfolio = pi.find_by(pos_type: "stock")
 
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position, 23. Recommended Position, 24. Rec Change in Position
       po << [
         pi.stock.symbol, 
         pi.stock.exchange,
@@ -446,7 +484,9 @@ class SetDisplayItemsWorker
         "N/A",
         prev_ed.empty? ? "N/A" : (Date.today - prev_ed.last.date).to_i,
         next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? 0.1 : (next_ed.last.date - Date.today).to_i,
-        pi.stock.lq_revenue
+        pi.stock.lq_revenue,
+        portfolio.last * portfolio.quantity * ( portfolio.position == "long" ? 1 : -1 )
+
       ]
     end
     po.each do |pi| 
@@ -475,7 +515,8 @@ class SetDisplayItemsWorker
         dt2_score: pi[18],
         prev_ed: pi[19],
         next_ed: pi[20],
-        lq_revenue: pi[21]
+        lq_revenue: pi[21],
+        curr_portfolio: pi[22]
       )
       
     end
@@ -486,10 +527,21 @@ class SetDisplayItemsWorker
     ###################################################
     
     # associate stocks with display_items
-    display_items = DisplayItem.all
+    display_items = DisplayItem.all.includes(:portfolio_items)
     stocks = Stock.all
     display_items.each { |di| di.stock = stocks.find_by(symbol: di.symbol, exchange: di.exchange) }
     # destroy any display items that don't have an associated stock as a fail-safe (WBT/MFS pointed this error out)
     display_items.includes(:stock).where(stocks: {id: nil}).destroy_all
+    display_items = DisplayItem.where.not(rec_action: "(n/a)")
+    funds_for_alloc = 2800000 + return_funds - fallen_out_val
+    display_items.each do |di| 
+      if di.rec_action == "CLOSE"
+        rec = 0
+      else
+        rec = (di.mkt_cap / mkt_cap_pool) * funds_for_alloc
+      end
+      change = rec - curr_portfolio
+      di.update(rec_portfolio: rec, net_portfolio: change)
+    end
   end
 end

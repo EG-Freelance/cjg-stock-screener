@@ -162,11 +162,11 @@ class SetDisplayItemsWorker
             when si[7] >= 0.9
               si[4] = "CLOSE AND BUY"
               return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
-              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+              mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 15%
             when si[7] <= 0.15
               si[4] = "HOLD"
-              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+              mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -178,12 +178,12 @@ class SetDisplayItemsWorker
             # in top 15%
             when si[7] >= 0.85
               si[4] = "HOLD"
-              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+              mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 10%
             when si[7] <= 0.1
               si[4] = "CLOSE AND SHORT"
               return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
-              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+              mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -200,7 +200,7 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
-          mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+          mkt_cap_pool = mkt_cap_pool + stock.market_cap
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
@@ -367,11 +367,11 @@ class SetDisplayItemsWorker
             when si[7] >= 0.9
               si[4] = "CLOSE AND BUY"
               return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
-              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+              mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 15%
             when si[7] <= 0.15
               si[4] = "HOLD"
-              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+              mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -383,12 +383,12 @@ class SetDisplayItemsWorker
             # in top 15%
             when si[7] >= 0.85
               si[4] = "HOLD"
-              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+              mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 10%
             when si[7] <= 0.1
               si[4] = "CLOSE AND SHORT"
               return_funds = return_funds + portfolio.last.to_f * portfolio.quantity
-              mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+              mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -405,11 +405,11 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
-          mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+          mkt_cap_pool = mkt_cap_pool + stock.market_cap
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
-          mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+          mkt_cap_pool = mkt_cap_pool + stock.market_cap
         # if in middle 80%
         else
           si[4] = "(n/a)"
@@ -486,7 +486,6 @@ class SetDisplayItemsWorker
         next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? 0.1 : (next_ed.last.date - Date.today).to_i,
         pi.stock.lq_revenue,
         portfolio.last * portfolio.quantity * ( portfolio.position == "long" ? 1 : -1 )
-
       ]
     end
     po.each do |pi| 

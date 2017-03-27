@@ -12,18 +12,18 @@ class PagesController < ApplicationController
   def analysis
     # eager load display_items
     display_items = DisplayItem.all.includes(:portfolio_items)
-    # total funds available = 2.8M - [non-screen](last * quant) + [screen-close](last * quant)
-    fallen_out = display_items.where(classification: "fallen out").map { |di| di.portfolio_items.map { |pi| pi.last.to_f * pi.quantity unless pi.pos_type == "option" }.compact.sum }.sum
-    if Rails.env == "production"
-      close_pos = display_items.where('rec_action ~* ?', 'CLOSE').map { |di| di.portfolio_items.map { |pi| pi.last.to_f * pi.quantity unless pi.pos_type == "option" }.compact.sum }.sum
-    else
-      close_pos = display_items.where('rec_action LIKE ?', 'CLOSE').map { |di| di.portfolio_items.map { |pi| pi.last.to_f * pi.quantity unless pi.pos_type == "option" }.compact.sum }.sum
-    end
+    # # total funds available = 2.8M - [non-screen](last * quant) + [screen-close](last * quant)
+    # fallen_out = display_items.where(classification: "fallen out").map { |di| di.portfolio_items.map { |pi| pi.last.to_f * pi.quantity unless pi.pos_type == "option" }.compact.sum }.sum
+    # if Rails.env == "production"
+    #   close_pos = display_items.where('rec_action ~* ?', 'CLOSE').map { |di| di.portfolio_items.map { |pi| pi.last.to_f * pi.quantity unless pi.pos_type == "option" }.compact.sum }.sum
+    # else
+    #   close_pos = display_items.where('rec_action LIKE ?', 'CLOSE').map { |di| di.portfolio_items.map { |pi| pi.last.to_f * pi.quantity unless pi.pos_type == "option" }.compact.sum }.sum
+    # end
     
-    total_funds = 2800000 - fallen_out + close_pos
-    rec_portfolio = display_items.where('rec_action != ? AND rec_action != ? AND classification != ?', 'CLOSE', '(n/a)', 'fallen out')
+    # total_funds = 2800000 - fallen_out + close_pos
+    # rec_portfolio = display_items.where('rec_action != ? AND rec_action != ? AND classification != ?', 'CLOSE', '(n/a)', 'fallen out')
     
-    mkt_cap_base = rec_portfolio.map { |di| di.mkt_cap }.sum
+    # mkt_cap_base = rec_portfolio.map { |di| di.mkt_cap }.sum
 
     if Rails.env == "production" && Sidekiq::Stats.new.workers_size > 0
       redirect_to :back, alert: "Screen or portfolio data are still being compiled, or analysis data are being processed; please try again momentarily."
@@ -32,9 +32,9 @@ class PagesController < ApplicationController
     si_pool_lg = display_items.where(classification: "large")
     si_pool_sm = display_items.where(classification: "small")
     po_pool = display_items.where(classification: "fallen out")
-    @si_lg = si_pool_lg.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, rec_portfolio.include?(si) ? (si.mkt_cap / mkt_cap_base.to_f ) * total_funds : 0] }.sort_by { |si| si[7] }.reverse!
+    @si_lg = si_pool_lg.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, si.rec_portfolio, si.curr_portfolio, si.net_portfolio] }.sort_by { |si| si[7] }.reverse!
     
-    @si_sm = si_pool_sm.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, rec_portfolio.include?(si) ? (si.mkt_cap / mkt_cap_base.to_f ) * total_funds : 0] }.sort_by { |si| si[7] }.reverse!
+    @si_sm = si_pool_sm.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, si.rec_portfolio, si.curr_portfolio, si.net_portfolio] }.sort_by { |si| si[7] }.reverse!
     
     # for development, just replicate lg pool (so there are multiple tabs of data0)
     if Rails.env == "development"

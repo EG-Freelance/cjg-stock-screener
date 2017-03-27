@@ -458,10 +458,8 @@ class SetDisplayItemsWorker
       # set next and prev earnings dates
       prev_ed = pi.stock.earnings_dates.where('date < ?', Date.today)
       next_ed = pi.stock.earnings_dates.where('date >= ?', Date.today)
-      
-      portfolio = pi.find_by(pos_type: "stock")
 
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position, 23. Recommended Position, 24. Rec Change in Position
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position
       po << [
         pi.stock.symbol, 
         pi.stock.exchange,
@@ -485,7 +483,7 @@ class SetDisplayItemsWorker
         prev_ed.empty? ? "N/A" : (Date.today - prev_ed.last.date).to_i,
         next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? 0.1 : (next_ed.last.date - Date.today).to_i,
         pi.stock.lq_revenue,
-        portfolio.last * portfolio.quantity * ( portfolio.position == "long" ? 1 : -1 )
+        pi.last * pi.quantity * ( pi.position == "long" ? 1 : -1 )
       ]
     end
     po.each do |pi| 

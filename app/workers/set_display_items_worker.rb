@@ -204,7 +204,7 @@ class SetDisplayItemsWorker
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
-          mkt_cap_pool = mkt_cap_pool + si.stock.market_cap
+          mkt_cap_pool = mkt_cap_pool + stock.market_cap
         # if in middle 80%
         else
           si[4] = "(n/a)"
@@ -539,7 +539,7 @@ class SetDisplayItemsWorker
       else
         rec = (di.mkt_cap / mkt_cap_pool) * funds_for_alloc
       end
-      change = rec - curr_portfolio
+      change = rec - di.curr_portfolio
       di.update(rec_portfolio: rec, net_portfolio: change)
     end
   end

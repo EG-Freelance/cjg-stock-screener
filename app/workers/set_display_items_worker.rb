@@ -103,7 +103,7 @@ class SetDisplayItemsWorker
       
       portfolio = si.stock.portfolio_items.find_by(pos_type: "stock")
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position, 23. Recommended Position, 24. Rec Change in Position
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position
       si_lg << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -161,7 +161,7 @@ class SetDisplayItemsWorker
             # in top 10%
             when si[7] >= 0.9
               si[4] = "CLOSE AND BUY"
-              return_funds = return_funds + positions.last.to_f * positions.quantity
+              return_funds = return_funds + si[22].abs
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 15%
             when si[7] <= 0.15
@@ -170,7 +170,7 @@ class SetDisplayItemsWorker
             # in middle 75%
             else
               si[4] = "CLOSE"
-              return_funds = return_funds + positions.last.to_f * positions.quantity
+              return_funds = return_funds + si[22].abs
             end
           # if the position is long
           else
@@ -182,12 +182,12 @@ class SetDisplayItemsWorker
             # in bottom 10%
             when si[7] <= 0.1
               si[4] = "CLOSE AND SHORT"
-              return_funds = return_funds + positions.last.to_f * positions.quantity
+              return_funds = return_funds + si[22].abs
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
-              return_funds = return_funds + positions.last.to_f * positions.quantity
+              return_funds = return_funds + si[22].abs
             end
           end
         # if positions are conflicting
@@ -309,7 +309,7 @@ class SetDisplayItemsWorker
       
       portfolio = si.stock.portfolio_items.find_by(pos_type: 'stock')
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position, 23. Recommended Position, 24. Rec Change in Position
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position
       si_sm << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -366,7 +366,7 @@ class SetDisplayItemsWorker
             # in top 10%
             when si[7] >= 0.9
               si[4] = "CLOSE AND BUY"
-              return_funds = return_funds + positions.last.to_f * positions.quantity
+              return_funds = return_funds + si[22].abs
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 15%
             when si[7] <= 0.15
@@ -375,7 +375,7 @@ class SetDisplayItemsWorker
             # in middle 75%
             else
               si[4] = "CLOSE"
-              return_funds = return_funds + positions.last.to_f * positions.quantity
+              return_funds = return_funds + si[22].abs
             end
           # if the position is long
           else
@@ -387,12 +387,12 @@ class SetDisplayItemsWorker
             # in bottom 10%
             when si[7] <= 0.1
               si[4] = "CLOSE AND SHORT"
-              return_funds = return_funds + positions.last.to_f * positions.quantity
+              return_funds = return_funds + si[22].abs
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
-              return_funds = return_funds + positions.last.to_f * positions.quantity
+              return_funds = return_funds + si[22].abs
             end
           end
         # if positions are conflicting

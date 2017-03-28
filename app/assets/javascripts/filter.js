@@ -29,7 +29,7 @@ function autoFilterNa(){
 	if($('#hide-na').prop('checked') == true){
 		var filterText = "(n/a)"
 	
-		var hide = $('tr:not(.tablesorter-headerRow) td:nth-child(7):contains('+filterText+')').parent();
+		var hide = $('tr:not(.tablesorter-headerRow) td:nth-child(6):contains('+filterText+')').parent();
 		$.each(hide, function(){ $(this).addClass('hide na-hide') });
 		$('tr:not(.hide):even').addClass('even').removeClass('odd');
 		$('tr:not(.hide):odd').addClass('odd').removeClass('even');
@@ -42,7 +42,7 @@ function autoFilterHolds(){
 	if($('#hide-holds').prop('checked') == true){
 		var filterText = "HOLD"
 	
-		var hide = $('tr:not(.tablesorter-headerRow) td:nth-child(7):contains('+filterText+')').parent();
+		var hide = $('tr:not(.tablesorter-headerRow) td:nth-child(6):contains('+filterText+')').parent();
 		$.each(hide, function(){ $(this).addClass('hide hold-hide') });
 		$('tr:not(.hide):even').addClass('even').removeClass('odd');
 		$('tr:not(.hide):odd').addClass('odd').removeClass('even');

@@ -430,7 +430,7 @@
     // example sortList: [[0,0],[1,0]],
     // [[columnIndex, sortDirection], ... ]
     sortList: [
-      [10, 1]
+      [11, 1]
     ],
     // default sort that is added to the end of the users sort
     // selection.
@@ -595,7 +595,14 @@
 		setRows();
 	}
 	
+	function setTableNS(el){
+		var paramsNS = params;
+		paramsNS['sortlist'] = [[9, 1]]
+		el.tablesorter(params);
+		setRows();
+	}
+	
 	$(document).ready(setTable($('#small-cap-table')));
 	$(document).ready(setTable($('#large-cap-table')));
-	$(document).ready(setTable($('#non-screen-table')));
+	$(document).ready(setTableNS($('#non-screen-table')));
 </script>

@@ -15,4 +15,5 @@
 //= require jquery-ui
 //= require tablesorter
 //= require turbolinks
+//= require StickyTableHeaders
 //= require_tree .

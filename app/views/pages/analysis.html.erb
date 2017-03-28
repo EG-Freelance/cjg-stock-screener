@@ -1,5 +1,6 @@
 <p><b>Portfolio last updated:</b> <%= @pi_period.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d/%Y") %> -- <b>Screen last updated:</b> <%= @si_period.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d/%Y") %> -- <b>Display last updated:</b> <span style="<%= if @pi_period > @di_period || @si_period > @di_period then 'color:red' end %>"><%= @di_period.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d/%Y") %></span></p>
 
+
 <div class="wrapper" style="text-align:center">
 	Search Text (separate keywords/phrases with || ): <input type="text" id="search-text-2" style="border-radius:5px">
 	<br>
@@ -605,4 +606,13 @@
 	$(document).ready(setTable($('#small-cap-table')));
 	$(document).ready(setTable($('#large-cap-table')));
 	$(document).ready(setTableNS($('#non-screen-table')));
+</script>
+
+
+<script>
+	$(document).ready(function(){
+		$('#small-cap-table').stickyTableHeaders({ fixedOffset: $('.navbar') });	
+		$('#large-cap-table').stickyTableHeaders({ fixedOffset: $('.navbar') });	
+		$('#non-screen-table').stickyTableHeaders({ fixedOffset: $('.navbar') });	
+	});
 </script>

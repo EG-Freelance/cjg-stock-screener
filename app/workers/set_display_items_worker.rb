@@ -535,7 +535,7 @@ class SetDisplayItemsWorker
       if di.rec_action == "CLOSE"
         rec = 0
       else
-        rec = (di.mkt_cap / mkt_cap_pool) * funds_for_alloc
+        rec = (di.mkt_cap.to_f / mkt_cap_pool) * funds_for_alloc
       end
       change = rec - di.curr_portfolio
       di.update(rec_portfolio: rec, net_portfolio: change)

@@ -27,8 +27,7 @@
 							<th class="analysis-header" style='width:65px; padding-left:10px'>Sym</th>
 							<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
-							<th class="analysis-header" style="text-align:center">Days from <br>Prev Earn</th>
-							<th class="analysis-header" style="text-align:center">Days to <br>Next Earn</th>
+							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
 							<th class="analysis-header" style="text-align:center">Action</th>
@@ -84,8 +83,7 @@
 			              </div>
 			            </div> <!-- Portfolio ownership -->
 		            </td> <!-- Company Name -->
-								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
-								<td><%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
+								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Earnings -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 								<td id="id-<%= si[0] %><%= si[1] %>-action", class: 'action-field'><%= si[5] %></td> <!-- Action -->
@@ -137,8 +135,7 @@
 							<th class="analysis-header" style='width:65px; padding-left: 10px'>Sym</th>
 							<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
-							<th class="analysis-header" style="text-align:center">Days from <br>Prev Earn</th>
-							<th class="analysis-header" style="text-align:center">Days to <br>Next Earn</th>
+							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
 							<th class="analysis-header" style="text-align:center">Action</th>
@@ -195,8 +192,7 @@
 			              </div>
 			            </div> <!-- Portfolio ownership -->
 		            </td> <!-- Company Name -->
-								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
-								<td><%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
+								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 								<td id="id-<%= si[0] %><%= si[1] %>-action", class: 'action-field'><%= si[5] %></td> <!-- Action -->
@@ -249,8 +245,7 @@
 							<th class="analysis-header" style='width:65px; padding-left: 10px'>Sym</th>
 							<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
-							<th class="analysis-header" style="text-align:center">Days from <br>Prev Earn</th>
-							<th class="analysis-header" style="text-align:center">Days to <br>Next Earn</th>
+							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
 							<th class="analysis-header" style="text-align:center">Action</th>
@@ -303,8 +298,7 @@
 			              </div>
 			            </div> <!-- Portfolio ownership -->
 		            </td> <!-- Company Name -->
-								<td><%= pi[19] != "N/A" ? pi[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
-								<td><%= pi[20] != "N/A" ? pi[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Next Earn -->
+								<td><%= pi[19] != "N/A" ? pi[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= pi[20] != "N/A" ? pi[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 								<td style="text-align:center"><%= pi[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= pi[4] %></td> <!-- Rec Action -->
 								<td id="id-<%= pi[0] %><%= pi[1] %>-action", class: 'action-field'><%= pi[5] %></td> <!-- Action -->

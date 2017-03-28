@@ -535,7 +535,13 @@ class SetDisplayItemsWorker
       if di.rec_action == "CLOSE"
         rec = 0
       else
-        rec = (di.mkt_cap.to_f / mkt_cap_pool) * funds_for_alloc
+        # indicate whether total should be negative
+        if (di.rec_action == "HOLD" && di.curr_portfolio < 0) || di.rec_action["SHORT"]
+          sign = -1
+        else
+          sign = 1
+        end
+        rec = (di.mkt_cap.to_f / mkt_cap_pool) * funds_for_alloc * sign
       end
       change = rec - di.curr_portfolio
       di.update(rec_portfolio: rec, net_portfolio: change)

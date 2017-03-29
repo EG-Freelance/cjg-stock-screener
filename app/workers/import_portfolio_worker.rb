@@ -24,8 +24,12 @@ class ImportPortfolioWorker
       # pairing up header column with data
       row = Hash[[header, spreadsheet[i]].transpose]
       
+      if row["Symbol"] == 732872106
+        row["Symbol"] = "PLKI"
+      end
+      
       # position_data: 0. full text; 1. symbol; 2. option expiration; 3. option strike; 4. call/put
-      position_data = row["Symbol"].match(/^(\S+)(?:\s([A-Z][a-z]{2}\s\d{2}\s\'\d{2})\s\$([\d\.]+)\s((?:Call|Put)))?/)
+      position_data = row["Symbol"].to_s.match(/^(\S+)(?:\s([A-Z][a-z]{2}\s\d{2}\s\'\d{2})\s\$([\d\.]+)\s((?:Call|Put)))?/)
       
       # classify as stock or option
       if position_data[2].nil? && position_data[3].nil? && position_data[4].nil?

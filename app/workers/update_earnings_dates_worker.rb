@@ -26,7 +26,13 @@ class UpdateEarningsDatesWorker
     t_index = symbol_array = response.search('table').find { |table| table.at('tr').at('td').text.match(/\A\n\sEarnings/) }.search('tr')[2].search('td').index(t_el)
     
     # symbol_array: ["symbol", "earnings_date_time"]
-    symbol_array = response.search('table').find { |table| table.at('tr').at('td').text.match(/\A\n\sEarnings/) }.search('tr')[3..-3].map { |tr| [tr.search('td')[1].text, tr.search('td')[t_index].text] }  
+    symbol_array = response.search('table').find { |table| table.at('tr').at('td').text.match(/\A\n\sEarnings/) }.search('tr')[3..-3].map { |tr| [tr.search('td')[1].text, tr.search('td')[t_index].text] }
+    # use symbol lookup to compare current Earnings Dates against to destroy ones that no longer appear on this date
+    symbol_lookup = symbol_array.map { |sa| sa[0] unless sa[0].match(/\./) }.compact
+    earnings_dates = EarningsDate.where(date: date)
+    earnings_dates.each { |ed| ed.destroy unless symbol_lookup.include?(ed.stock.symbol) }
+    
+    # run through each symbol in array to create new earnings dates as necessary
     symbol_array.each do |sym|
       # remove any possible period suffixes from stocks, but skip entries without symbols
       begin

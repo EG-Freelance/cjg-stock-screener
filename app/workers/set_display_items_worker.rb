@@ -543,6 +543,7 @@ class SetDisplayItemsWorker
     funds_for_alloc = 2800000 + return_funds - fallen_out_val
     display_items = DisplayItem.where('rec_action != ? AND classification != ?', "(n/a)", "fallen out")
     display_items.each do |di| 
+      di.prev_ed == "N/A" ? prev_earn = 365 : prev_earn = di.prev_ed.to_i
       if di.rec_action == "CLOSE"
         rec = 0
       else
@@ -552,10 +553,16 @@ class SetDisplayItemsWorker
         else
           sign = 1
         end
-        rec = (di.mkt_cap.to_f / mkt_cap_pool) * funds_for_alloc * sign
+        if (prev_earn > rec_earn) && (di.rec_action == "BUY" || di.rec_action == "SHORT")
+          rec = 0
+        else
+          rec = (di.mkt_cap.to_f / mkt_cap_pool) * funds_for_alloc * sign
+        end
       end
       change = rec - di.curr_portfolio
       di.update(rec_portfolio: rec, net_portfolio: change)
     end
   end
 end
+
+DisplayItem.all.map { |di| di.rec_portfolio.abs unless di.rec_portfolio.nil? }.compact.sum

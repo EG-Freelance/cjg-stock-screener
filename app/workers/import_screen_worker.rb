@@ -112,7 +112,7 @@ class ImportScreenWorker
     Stock.get_earnings_by_date(true)
     i = 0
     unless Stock.where(created_at: (Time.now - 30.minutes)..Time.now).empty?
-      while Sidekiq::Stats.new.workers_size > 0
+      while Sidekiq::Stats.new.workers_size > 1
         sleep(5)
         i += 1
         break if i == 20

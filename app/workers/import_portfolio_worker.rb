@@ -13,7 +13,7 @@ class ImportPortfolioWorker
     spreadsheet = set.row_data.sort_by { |rd| rd.row_number }.map { |rd| eval(rd.data) }
     
     # header is in first row
-    header = spreadsheet[0]
+    header = spreadsheet[0].collect(&:strip)
     
     # set common timestamp for all entries
     set_created_at = DateTime.now

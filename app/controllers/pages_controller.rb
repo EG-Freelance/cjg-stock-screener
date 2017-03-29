@@ -30,8 +30,20 @@ class PagesController < ApplicationController
       @si_lg = @si_sm
     end
     @po = po_pool.map { |pi| [pi.symbol, pi.exchange, pi.company, pi.in_pf, pi.rec_action, pi.action, pi.total_score, pi.total_score_pct, pi.dist_status, pi.mkt_cap, pi.nsi_score, pi.ra_score, pi.noas_score, pi.ag_score, pi.aita_score, pi.l52wp_score, pi.pp_score, pi.rq_score, pi.dt2_score, pi.prev_ed, pi.next_ed, pi.lq_revenue, pi.stock.portfolio_items] }.sort_by { |pi| pi[7] }.reverse!
-    @fallen_out_val = portfolio_items.map { |pi| pi.last * pi.quantity if pi.stock.screen_items.empty? && pi.pos_type == "stock" }.compact.sum.to_f
-    # @return_funds = display_items.where('rec_action ').map { |pi|
+    
+    # summary statistics
+    #@fallen_out_val = portfolio_items.map { |pi| pi.last * pi.quantity if pi.stock.screen_items.empty? && pi.pos_type == "stock" }.compact.sum.to_f ####more intensive search
+    @fallen_out_val = display_items.where(classification: "fallen out").map { |di| di.curr_portfolio.abs }.compact.sum
+    if Rails.env == "production"
+      @return_funds = display_items.where('rec_action ~* ?', 'CLOSE').map { |di| di.curr_portfolio.abs }.compact.sum
+    else
+      @return_funds = display_items.where('rec_action LIKE ?', 'CLOSE').map { |di| di.curr_portfolio.abs }.compact.sum
+    end
+    @alloc_funds = 2800000 + @return_funds - @fallen_out_val
+    @tot_short = display_items.map { |di| di.rec_portfolio if di.rec_portfolio.to_f < 0 }.compact.sum.abs
+    @tot_long = display_items.map { |di| di.rec_portfolio if di.rec_portfolio.to_f > 0 }.compact.sum.abs
+    @net_allocate = @tot_short + @tot_long
+    
 
   end
   

@@ -343,14 +343,14 @@
 		  </div>
 		  
 		  <!-- Summary tab -->
-		  <div role="tabpanel" class="tab-pane" id="summary">
-		  	<ul>
-		  		<li><b>Funds to Return from Closes</b>: </li>
-		  		<li><b>Non-Screen Portfolio</b>: </li>
-		  		<li><b>Net Allocatable Funds</b>: </li>
-		  		<li><b>Funds Allocated to Shorts</b>: </li>
-		  		<li><b>Funds Allocated to Longs</b>: </li>
-		  		<li><b>Net Funds Allocated</b>: </li>
+		  <div role="tabpanel" class="tab-pane" id="summary" style="margin-top:20px">
+		  	<ul style="list-style: none">
+		  		<li><b>Funds to Return from Closes</b>: <%= @return_funds %></li>
+		  		<li><b>Non-Screen Portfolio</b>: <%= @fallen_out_val %></li>
+		  		<li><b>Net Allocatable Funds</b>: <%= @alloc_funds %></li>
+		  		<li><b>Funds Allocated to Shorts</b>: <%= @tot_short %></li>
+		  		<li><b>Funds Allocated to Longs</b>: <%= @tot_long %></li>
+		  		<li><b>Net Funds Allocated</b>: <%= @net_allocate %></li>
 		  		<!--<li><b></b>: </li>-->
 		  		<!--<li><b></b>: </li>-->
 		  	</ul>

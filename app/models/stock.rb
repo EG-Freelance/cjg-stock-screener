@@ -1,7 +1,7 @@
 class Stock < ActiveRecord::Base
   has_many :screen_items
   has_many :portfolio_items
-  has_many :earnings_dates
+  has_many :earnings_dates, dependent: :destroy
   has_many :actions
   belongs_to :display_item
   

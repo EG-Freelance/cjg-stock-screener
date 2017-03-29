@@ -13,6 +13,7 @@ class SetDisplayItemsWorker
     disp_set_created_at = DateTime.now
     portfolio_items = PortfolioItem.all.includes(:stock, :stock => :earnings_dates)
     screen_items = ScreenItem.all.includes(:stock, :stock => :earnings_dates)
+    portfolio_only = Stock.all.map { |s| s.portfolio_items if !s.portfolio_items.empty? && s.screen_items.empty? }.compact.flatten
     
     # portfolio items
     pi_set_date_array = portfolio_items.pluck(:set_created_at).uniq.sort

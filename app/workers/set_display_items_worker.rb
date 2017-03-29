@@ -13,7 +13,6 @@ class SetDisplayItemsWorker
     disp_set_created_at = DateTime.now
     portfolio_items = PortfolioItem.all.includes(:stock, :stock => :earnings_dates)
     screen_items = ScreenItem.all.includes(:stock, :stock => :earnings_dates)
-    portfolio_only = Stock.all.map { |s| s.portfolio_items if !s.portfolio_items.empty? && s.screen_items.empty? }.compact.flatten
     
     # portfolio items
     pi_set_date_array = portfolio_items.pluck(:set_created_at).uniq.sort
@@ -496,6 +495,7 @@ class SetDisplayItemsWorker
       ]
     end
     po.each do |pi| 
+      next if po.pos_type == "option"
       # instantiate display objects
       po_import << DisplayItem.new(
         classification: "fallen out", 
@@ -539,7 +539,7 @@ class SetDisplayItemsWorker
     # destroy any display items that don't have an associated stock as a fail-safe (WBT/MFS pointed this error out)
     display_items.includes(:stock).where(stocks: {id: nil}).destroy_all
     funds_for_alloc = 2800000 + return_funds - fallen_out_val
-    display_items = DisplayItem.where('rec_action != ? AND classification != ? AND prev_ed != ?', "(n/a)", "fallen out", "N/A")
+    display_items = DisplayItem.where('rec_action != ? AND classification != ?', "(n/a)", "fallen out")
     display_items.each do |di| 
       if di.rec_action == "CLOSE"
         rec = 0

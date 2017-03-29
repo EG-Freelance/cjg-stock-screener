@@ -12,19 +12,8 @@ class PagesController < ApplicationController
   def analysis
     # eager load display_items
     display_items = DisplayItem.all.includes(:portfolio_items)
-    # # total funds available = 2.8M - [non-screen](last * quant) + [screen-close](last * quant)
-    # fallen_out = display_items.where(classification: "fallen out").map { |di| di.portfolio_items.map { |pi| pi.last.to_f * pi.quantity unless pi.pos_type == "option" }.compact.sum }.sum
-    # if Rails.env == "production"
-    #   close_pos = display_items.where('rec_action ~* ?', 'CLOSE').map { |di| di.portfolio_items.map { |pi| pi.last.to_f * pi.quantity unless pi.pos_type == "option" }.compact.sum }.sum
-    # else
-    #   close_pos = display_items.where('rec_action LIKE ?', 'CLOSE').map { |di| di.portfolio_items.map { |pi| pi.last.to_f * pi.quantity unless pi.pos_type == "option" }.compact.sum }.sum
-    # end
+    portfolio_items = PortfolioItem.all.includes(:stock)
     
-    # total_funds = 2800000 - fallen_out + close_pos
-    # rec_portfolio = display_items.where('rec_action != ? AND rec_action != ? AND classification != ?', 'CLOSE', '(n/a)', 'fallen out')
-    
-    # mkt_cap_base = rec_portfolio.map { |di| di.mkt_cap }.sum
-
     if Rails.env == "production" && Sidekiq::Stats.new.workers_size > 0
       redirect_to :back, alert: "Screen or portfolio data are still being compiled, or analysis data are being processed; please try again momentarily."
     end
@@ -41,6 +30,9 @@ class PagesController < ApplicationController
       @si_lg = @si_sm
     end
     @po = po_pool.map { |pi| [pi.symbol, pi.exchange, pi.company, pi.in_pf, pi.rec_action, pi.action, pi.total_score, pi.total_score_pct, pi.dist_status, pi.mkt_cap, pi.nsi_score, pi.ra_score, pi.noas_score, pi.ag_score, pi.aita_score, pi.l52wp_score, pi.pp_score, pi.rq_score, pi.dt2_score, pi.prev_ed, pi.next_ed, pi.lq_revenue, pi.stock.portfolio_items] }.sort_by { |pi| pi[7] }.reverse!
+    @fallen_out_val = portfolio_items.map { |pi| pi.last * pi.quantity if pi.stock.screen_items.empty? && pi.pos_type == "stock" }.compact.sum.to_f
+    # @return_funds = display_items.where('rec_action ').map { |pi|
+
   end
   
   def update_action

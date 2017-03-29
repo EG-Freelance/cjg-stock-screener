@@ -50,7 +50,7 @@ class ImportPortfolioWorker
       else
         exchange = row["Exchange"]
       end
-      market_cap_data = row["Market Cap"].to_smatch(/([\d\,\.]+)((?:M|B))/)
+      market_cap_data = row["Market Cap"].to_s.match(/([\d\,\.]+)((?:M|B))/)
       market_cap_data = "0" if market_cap_data.nil?
       market_cap = market_cap_data[1].to_f * (market_cap_data[2] == "B" ? 1000000000 : 1000000)
       pi_description = row["Description"]

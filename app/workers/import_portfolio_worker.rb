@@ -55,8 +55,7 @@ class ImportPortfolioWorker
       market_cap = market_cap_data[1].to_f * (market_cap_data[2] == "B" ? 1000000000 : 1000000)
       pi_description = row["Description"]
       position = row["Long or Short"].downcase
-      date_acq_string = row["Date Added"]
-      date_acq_data = date_acq_string.match(/(Last\s)?(\d{1,2})\/(\d{1,2})\/(\d{2,4})/)
+      date_acq = row["Date Added"]
       quantity = row["Quantity"].abs
       paid = row["Price Paid $"].to_f
       last = row["Last Price $"].to_f

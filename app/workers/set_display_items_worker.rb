@@ -464,6 +464,8 @@ class SetDisplayItemsWorker
     po_import = []
     #process data
     po_pool.each do |pi|
+      sym = pi.stock.symbol
+      next if pi.pos_type == "option" && po_pool.find { |pi| pi.stock.symbol == sym && pi.pos_type == "stock" }
       # set next and prev earnings dates
       prev_ed = pi.stock.earnings_dates.where('date < ?', Date.today)
       next_ed = pi.stock.earnings_dates.where('date >= ?', Date.today)
@@ -496,7 +498,6 @@ class SetDisplayItemsWorker
       ]
     end
     po.each do |pi| 
-      next if po.pos_type == "option"
       # instantiate display objects
       po_import << DisplayItem.new(
         classification: "fallen out", 

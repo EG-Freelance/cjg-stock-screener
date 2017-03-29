@@ -7,6 +7,9 @@ class SetDisplayItemsWorker
     # clear out current DisplayItem set
     DisplayItem.destroy_all
     
+    # set threshold for previous earnings to be labeled as "recent"
+    rec_earn = 180
+    
     disp_set_created_at = DateTime.now
     portfolio_items = PortfolioItem.all.includes(:stock, :stock => :earnings_dates)
     screen_items = ScreenItem.all.includes(:stock, :stock => :earnings_dates)
@@ -151,6 +154,9 @@ class SetDisplayItemsWorker
       # si[4] - recommended action
       # si[7] - total score percentile
       
+      # set prev_earn to comparable number (change N/As to safe high number)
+      si[19] == "N/A" ? prev_earn = 365 : prev_earn = si[19]
+      
       # if in portfolio
       if si[3] == "Yes"
         # if there are no conflicting positions (long vs short underlying security)
@@ -159,12 +165,12 @@ class SetDisplayItemsWorker
           if positions[0] == "short"
             case 
             # in top 10%
-            when si[7] >= 0.9
+            when si[7] >= 0.9 && prev_earn <= rec_earn
               si[4] = "CLOSE AND BUY"
               return_funds = return_funds + si[22].abs
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 15%
-            when si[7] <= 0.15
+            when si[7] <= 0.15 || prev_earn > rec_earn
               si[4] = "HOLD"
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in middle 75%
@@ -176,11 +182,11 @@ class SetDisplayItemsWorker
           else
             case 
             # in top 15%
-            when si[7] >= 0.85
+            when si[7] >= 0.85 || prev_earn > rec_earn
               si[4] = "HOLD"
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 10%
-            when si[7] <= 0.1
+            when si[7] <= 0.1 && prev_earn <= rec_earn
               si[4] = "CLOSE AND SHORT"
               return_funds = return_funds + si[22].abs
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
@@ -200,11 +206,11 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
-          mkt_cap_pool = mkt_cap_pool + stock.market_cap
+          mkt_cap_pool = mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
-          mkt_cap_pool = mkt_cap_pool + stock.market_cap
+          mkt_cap_pool = mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
         # if in middle 80%
         else
           si[4] = "(n/a)"
@@ -355,6 +361,9 @@ class SetDisplayItemsWorker
       # si[3] - in portfolio
       # si[4] - recommended action
       # si[7] - total score percentile
+            
+      # set prev_earn to comparable number (change N/As to safe high number)
+      si[19] == "N/A" ? prev_earn = 365 : prev_earn = si[19]
       
       # if in portfolio
       if si[3] == "Yes"
@@ -365,12 +374,12 @@ class SetDisplayItemsWorker
             case 
             # in top 10%
             when si[7] >= 0.9
-              si[4] = "CLOSE AND BUY"
+              si[4] = "CLOSE AND BUY" && prev_earn <= rec_earn
               return_funds = return_funds + si[22].abs
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 15%
             when si[7] <= 0.15
-              si[4] = "HOLD"
+              si[4] = "HOLD" || prev_earn > rec_earn
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
@@ -382,11 +391,11 @@ class SetDisplayItemsWorker
             case 
             # in top 15%
             when si[7] >= 0.85
-              si[4] = "HOLD"
+              si[4] = "HOLD" || prev_earn > rec_earn
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in bottom 10%
             when si[7] <= 0.1
-              si[4] = "CLOSE AND SHORT"
+              si[4] = "CLOSE AND SHORT" && prev_earn <= rec_earn
               return_funds = return_funds + si[22].abs
               mkt_cap_pool = mkt_cap_pool + stock.market_cap
             # in middle 75%
@@ -405,11 +414,11 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
-          mkt_cap_pool = mkt_cap_pool + stock.market_cap
+          mkt_cap_pool = mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
-          mkt_cap_pool = mkt_cap_pool + stock.market_cap
+          mkt_cap_pool = mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
         # if in middle 80%
         else
           si[4] = "(n/a)"
@@ -530,7 +539,7 @@ class SetDisplayItemsWorker
     # destroy any display items that don't have an associated stock as a fail-safe (WBT/MFS pointed this error out)
     display_items.includes(:stock).where(stocks: {id: nil}).destroy_all
     funds_for_alloc = 2800000 + return_funds - fallen_out_val
-    display_items = DisplayItem.where('rec_action != ? AND classification != ?', "(n/a)", "fallen out")
+    display_items = DisplayItem.where('rec_action != ? AND classification != ? AND prev_ed != ?', "(n/a)", "fallen out", "N/A")
     display_items.each do |di| 
       if di.rec_action == "CLOSE"
         rec = 0

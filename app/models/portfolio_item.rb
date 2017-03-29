@@ -1,7 +1,35 @@
 class PortfolioItem < ActiveRecord::Base
 	belongs_to :stock
 	
+	#########################
+	# Import for new format #
+	#########################
 	def self.import_pi(file)
+	  data_set = DataSet.create()
+	  
+	  spreadsheet = open_spreadsheet(file)
+	  
+	  # header is in 11th row
+	  header = spreadsheet.row(7)
+	  
+    RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "portfolio")
+	  # data start on 13th row and end 3 before last row (last row is cash summary)
+    (8..(spreadsheet.last_row - 5)).each do |i|
+      data = spreadsheet.row(i)
+      data[1] = data[1].strip
+      data[2] = data[2].strip
+      data[3] == 1 ? data[3] = "long" : data[3] = "short"
+      data[4] = data[4].strip
+      RowDatum.create(data_set_id: data_set.id, data: data.to_s, row_number: i - 6, data_type: "portfolio")
+    end
+     
+    ImportPortfolioWorker.perform_async(data_set.id)
+  end
+	
+	#########################
+	# Import for old format #
+	#########################
+	def self.import_old_pi(file)
 	  data_set = DataSet.create()
 	  
 	  spreadsheet = open_spreadsheet(file)
@@ -11,7 +39,7 @@ class PortfolioItem < ActiveRecord::Base
 	  
     RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "portfolio")
 	  # data start on 13th row and end 3 before last row (last row is cash summary)
-    (13..(spreadsheet.last_row - 3)).each do |i|
+    (13..(spreadsheet.last_row - 5)).each do |i|
       data = spreadsheet.row(i)
       data[4] = data[4].to_s.gsub(/(\d{4})\-(\d{2})\-(\d{2})/, '\2/\3/\1')
       RowDatum.create(data_set_id: data_set.id, data: data.to_s, row_number: i - 11, data_type: "portfolio")
@@ -20,7 +48,7 @@ class PortfolioItem < ActiveRecord::Base
     ImportPortfolioWorker.perform_async(data_set.id)
   end
 	
-  def self.open_spreadsheet(file)
+	def self.open_spreadsheet(file)
     case File.extname(file.original_filename)
       when ".csv" then Roo::Csv.new(file.path)
       when ".xls" then Roo::Excel.new(file.path)

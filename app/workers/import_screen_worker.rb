@@ -109,6 +109,15 @@ class ImportScreenWorker
     # med_ita = MathStuff.median(invest_to_assets_array)
     # si_array.each { |si| si.update(adj_invest_to_assets: med_ita) if si.invest_to_assets.nil? }
     
+    Stock.get_earnings_by_date(true)
+    i = 0
+    unless Stock.where(created_at: (Time.now - 30.minutes)..Time.now).empty?
+      while Sidekiq::Stats.new.workers_size > 0
+        sleep(5)
+        i += 1
+        break if i == 20
+      end
+    end
     SetDisplayItemsWorker.perform_async
   end
 end

@@ -1,4 +1,4 @@
-<p><b>Portfolio last updated:</b> <%= @pi_period.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d/%Y") %> -- <b>Screen last updated:</b> <%= @si_period.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d/%Y") %> -- <b>Display last updated:</b> <span style="<%= if @pi_period > @di_period || @si_period > @di_period then 'color:red' end %>"><%= @di_period.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d/%Y") %></span></p>
+<p><b>Last update:</b> <%= @pi_period.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d/%Y") %></p>
 
 
 <div class="wrapper" style="text-align:center">

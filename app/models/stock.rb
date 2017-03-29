@@ -31,8 +31,12 @@ class Stock < ActiveRecord::Base
     end
   end
   
-  def self.get_earnings_by_date
-    b_date = Date.today
+  def self.get_earnings_by_date(full)
+    if full == true
+      b_date = Date.today - 4.weeks
+    else
+      b_date = Date.today
+    end
     e_date = Date.today + 2.weeks
     # set range to extend two weeks into future
     date_range = b_date..e_date

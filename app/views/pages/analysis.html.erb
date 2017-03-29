@@ -345,12 +345,12 @@
 		  <!-- Summary tab -->
 		  <div role="tabpanel" class="tab-pane" id="summary" style="margin-top:20px">
 		  	<ul style="list-style: none">
-		  		<li><b>Funds to Return from Closes</b>: <%= number_with_precision(@return_funds, :precision => 0, :delimiter => ',' %></li>
-		  		<li><b>Non-Screen Portfolio</b>: <%= number_with_precision(@fallen_out_val, :precision => 0, :delimiter => ',' %></li>
-		  		<li><b>Net Allocatable Funds</b>: <%=number_with_precision(@alloc_funds, :precision => 0, :delimiter => ',' %></li>
-		  		<li><b>Funds Allocated to Shorts</b>: <%=number_with_precision(@tot_short, :precision => 0, :delimiter => ',' %></li>
-		  		<li><b>Funds Allocated to Longs</b>: <%= number_with_precision(@tot_long, :precision => 0, :delimiter => ',' %></li>
-		  		<li><b>Net Funds Allocated</b>: <%= number_with_precision(@net_allocate, :precision => 0, :delimiter => ',' %></li>
+		  		<li><b>Funds to Return from Closes</b>: <%= number_with_precision(@return_funds, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>Non-Screen Portfolio</b>: <%= number_with_precision(@fallen_out_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>Net Allocatable Funds</b>: <%=number_with_precision(@alloc_funds, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>Funds Allocated to Shorts</b>: <%=number_with_precision(@tot_short, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>Funds Allocated to Longs</b>: <%= number_with_precision(@tot_long, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>Net Funds Allocated</b>: <%= number_with_precision(@net_allocate, :precision => 0, :delimiter => ',') %></li>
 		  		<!--<li><b></b>: </li>-->
 		  		<!--<li><b></b>: </li>-->
 		  	</ul>

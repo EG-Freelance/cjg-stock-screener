@@ -6,62 +6,56 @@ class UpdateEarningsDatesWorker
   def perform(date)
     # get Date object for date
     date = Date.parse(date)
-    # eager load stocks
+    # eager load stocks and create symbol array and earnings date array
     stocks = Stock.all.includes(:earnings_dates)
+    sym_array = stocks.map { |s| s.symbol }
+    ed_array = stocks.map { |s| s.earnings_dates }.flatten
+    ed_today_array = ed_array.select { |ed| ed.date == Date.today }
+    
     # get next earnings_date by date of announcement
     agent = Mechanize.new
     # set beginning date to two weeks earlier if first run
-  
-    date_string = date.strftime("%Y%m%d")
     
+    base = "http://finance.yahoo.com/calendar/earnings?day="
+    
+    date_string = date.strftime("%Y-%m-%d")
+
     begin
-      response = agent.get("https://biz.yahoo.com/research/earncal/#{date_string}.html")
+      response = agent.get(base + date_string)
     rescue
       puts "No earnings or date error for #{date}"
       return false
     end
     
-    # table varies in what column it uses to display time, so check for time index
-    t_el = response.search('table').find { |table| table.at('tr').at('td').text.match(/\A\n\sEarnings/) }.search('tr')[2].search('td').find { |td| td.text == "Time" }
-    t_index = symbol_array = response.search('table').find { |table| table.at('tr').at('td').text.match(/\A\n\sEarnings/) }.search('tr')[2].search('td').index(t_el)
+    # financial calendar table
+    table = response.at "#fin-cal-table"
     
-    # symbol_array: ["symbol", "earnings_date_time"]
-    symbol_array = response.search('table').find { |table| table.at('tr').at('td').text.match(/\A\n\sEarnings/) }.search('tr')[3..-3].map { |tr| [tr.search('td')[1].text, tr.search('td')[t_index].text] }
-    # use symbol lookup to compare current Earnings Dates against to destroy ones that no longer appear on this date
-    symbol_lookup = symbol_array.map { |sa| sa[0] unless sa[0].match(/\./) }.compact
-    earnings_dates = EarningsDate.where(date: date)
-    earnings_dates.each { |ed| ed.destroy unless symbol_lookup.include?(ed.stock.symbol) }
+    # rows of usable data
+    rows = table.search('tr')[1..-1]
     
-    # run through each symbol in array to create new earnings dates as necessary
-    symbol_array.each do |sym|
-      # remove any possible period suffixes from stocks, but skip entries without symbols
-      begin
-        s = sym[0].match(/([A-Z\d]+)(?:\.)?/)[1]
-        # skip entries from other stock exchanges for now
-        next if sym[0].match(/\./)
-      rescue
-        puts "No valid entry for #{sym}"
-        next
+    # array of usable data arrays
+    data = rows.map { |r| r.search('td').map { |c| c.text } }
+    
+    # don't use symbols with decimal points (foreign exchanges)
+    data.delete_if { |d| d[0].match(/\./) }
+    
+    # remove data for stocks that aren't in the system
+    data.delete_if { |d| !sym_array.include?(d[0]) }
+    
+    # remove earnings dates that no longer appear on this page
+    ed_delete_array = ed_today_array.delete_if { |ed| data.map { |d| d[0] }.include?(ed.stock.symbol) }
+    ed_delete_array.each { |ed| ed.destroy }
+    
+    data.each do |d|
+      # select the stock in the system
+      stock = stocks.find_by(symbol: d[0])
+      # save the current date as an entry with the provided time
+      stock.earnings_dates.where(date: date, time: d[5]).first_or_create   
+      
+      # delete unneeded old earnings dates (all except most recent and upcoming) to maintain DB size
+      if stock.earnings_dates.count >= 3
+        stock.earnings_dates[0..-3].each { |e| e.destroy }
       end
-      # select the stock in the system if it exists
-      stock = stocks.find_by(symbol: s)
-      if stock.nil?
-        # if it doesn't exist, move to the next entry
-        next
-      else
-        # if it does, save the current date as an entry with the provided time
-        stock.earnings_dates.where(date: date, time: sym[1]).first_or_create   
-        
-        # delete unneeded old earnings dates (all except most recent and upcoming) to maintain DB size
-        if stock.earnings_dates.count >= 3
-          stock.earnings_dates[0..-3].each { |e| e.destroy }
-        end
-      end
-    end # end symbol array
+    end # end data
   end
-  
-  # def perform(id)
-  # 	stock = Stock.find(id)
-  # 	stock.get_next_earnings_date
-  # end
 end

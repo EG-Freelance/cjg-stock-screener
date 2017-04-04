@@ -58,16 +58,16 @@ class PagesController < ApplicationController
     if commit == "Confirm"
       time = Time.now.in_time_zone("Eastern Time (US & Canada)")
       if time.wday > 5
-        action_date = Date.today + (8-time.wday).days
+        action_date = Time.now.in_time_zone("Eastern Time (US & Canada)").to_date + (8-time.wday).days
       else
         if time.strftime("%H:%M") > "16:30"
           if time.wday == 5
-            action_date = Date.today + 3.days
+            action_date = Time.now.in_time_zone("Eastern Time (US & Canada)").to_date + 3.days
           else
-            action_date = Date.today + 1.day
+            action_date = Time.now.in_time_zone("Eastern Time (US & Canada)").to_date + 1.day
           end
         else
-          action_date = Date.today
+          action_date = Time.now.in_time_zone("Eastern Time (US & Canada)").to_date
         end
       end
       @description = action_date.strftime("%Y/%m/%d") + " - " + action

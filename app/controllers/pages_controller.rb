@@ -72,8 +72,8 @@ class PagesController < ApplicationController
     @hold_share = @hold_mkt_cap / @tot_mkt_cap
     @total_share = @long_share + @short_share + @hold_share
     
-    @long_targets = longs.map { |di| di.rec_portfolio }.sum
-    @short_targets = shorts.map { |di| di.rec_portfolio }.sum.abs
+    @long_targets = display_items.where('rec_portfolio > ?', 0).pluck(:rec_portfolio).sum
+    @short_targets = display_items.where('rec_portfolio < ?', 0).pluck(:rec_portfolio).sum.abs
     @tot_targets = @long_targets - @short_targets
     @remainder = @net_investable - @tot_targets
     

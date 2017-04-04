@@ -74,8 +74,8 @@ class PagesController < ApplicationController
     
     @long_targets = display_items.where('rec_portfolio > ?', 0).pluck(:rec_portfolio).sum
     @short_targets = display_items.where('rec_portfolio < ?', 0).pluck(:rec_portfolio).sum.abs
-    @tot_targets = @long_targets - @short_targets
-    @remainder = @net_investable - @tot_targets
+    @tot_targets = @long_targets + @short_targets
+    @remainder = @tot_targets - @net_investable
     
     @tot_curr_val = display_items.where.not(classification: 'fallen_out').map { |di| di.curr_portfolio }.compact.sum
     @tot_adj_val = display_items.map { |di| di.net_portfolio }.compact.sum

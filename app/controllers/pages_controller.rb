@@ -48,7 +48,7 @@ class PagesController < ApplicationController
     @option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.last * pi.quantity * 100 }.sum.to_f
     @shorts_val = portfolio_items.where(pos_type: "stock", position: "short").map { |pi| pi.last * pi.quantity }.sum.to_f
     @cash = Cash.last.amount
-    @total_portfolio_value = @option_val + @shorts_val + @longs_val
+    @total_portfolio_value = @option_val + @shorts_val + @longs_val + @cash
     @revised_portfolio_value = @total_portfolio_value - @option_val - @cash
     
     @net_investable = @revised_portfolio_value + @fallen_out_val + @close_val + @cash

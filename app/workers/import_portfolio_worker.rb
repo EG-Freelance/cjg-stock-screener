@@ -111,10 +111,10 @@ class ImportPortfolioWorker
     RowDatum.destroy_all
     DataSet.destroy_all
     GetScreenMechanizeWorker.perform_async
+    
+    # save CASH information
+    Cash.last.update(amount: spreadsheet[-1][1])
   end
-  
-  # save CASH information
-  Cash.last.update(amount: spreadsheet[-1][1])
   
   #########################
   # Import for old format #

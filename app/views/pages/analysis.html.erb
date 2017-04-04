@@ -33,9 +33,9 @@
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
 							<th class="analysis-header" style="text-align:center">Action</th>
-							<th class="analysis-header" style="text-align:center">Rec Amount</th>
-							<th class="analysis-header" style="text-align:center">Current Amount</th>
-							<th class="analysis-header" style="text-align:center">Change</th>
+							<th class="analysis-header" style="text-align:center">Target Value</th>
+							<th class="analysis-header" style="text-align:center">Current Value</th>
+							<th class="analysis-header" style="text-align:center">Adjustment</th>
 							<th class="analysis-header hidden">Totals</th>
 							<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
 							<th class="analysis-header" style="text-align:center">Dist > 7<br>or > 8</th>
@@ -141,9 +141,9 @@
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
 							<th class="analysis-header" style="text-align:center">Action</th>
-							<th class="analysis-header" style="text-align:center">Rec Amount</th>
-							<th class="analysis-header" style="text-align:center">Current Amount</th>
-							<th class="analysis-header" style="text-align:center">Change</th>
+							<th class="analysis-header" style="text-align:center">Target Value</th>
+							<th class="analysis-header" style="text-align:center">Current Value</th>
+							<th class="analysis-header" style="text-align:center">Adjustment\</th>
 							<th class="analysis-header hidden">Totals</th>
 							<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
 							<th class="analysis-header" style="text-align:center">Dist > 7<br>or > 8</th>
@@ -345,14 +345,45 @@
 		  <!-- Summary tab -->
 		  <div role="tabpanel" class="tab-pane" id="summary" style="margin-top:20px">
 		  	<ul style="list-style: none">
-		  		<li><b>Funds to Return from Closes</b>: <%= number_with_precision(@return_funds, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>Non-Screen Portfolio</b>: <%= number_with_precision(@fallen_out_val, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>Net Allocatable Funds</b>: <%=number_with_precision(@alloc_funds, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>Funds Allocated to Shorts</b>: <%=number_with_precision(@tot_short, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>Funds Allocated to Longs</b>: <%= number_with_precision(@tot_long, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>Net Funds Allocated</b>: <%= number_with_precision(@net_allocate, :precision => 0, :delimiter => ',') %></li>
-		  		<!--<li><b></b>: </li>-->
-		  		<!--<li><b></b>: </li>-->
+		  		<li><b>Long stocks</b>: <%= number_with_precision(@longs_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Options</b>: <%= number_with_precision(@option_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Shorts</b>: <%=number_with_precision(@shorts_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>+ Cash</b>: <%=number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>
+		  		<li><b>Total Portfolio Value</b>: <%= number_with_precision(@total_portfolio_value, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>- Options</b>: <%= number_with_precision(@option_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>- Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>
+		  		<li><b>Revised Portfolio Value</b>: <%= number_with_precision(@revised_portfolio_value, :precision => 0, :delimiter => ',') %></li>
+		  		<li></li>
+		  		<li><b>Revised Portfolio Value</b>: <%= number_with_precision(@revised_portfolio_value, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>- Non-Screen Holds</b>: <%= number_with_precision(@fallen_out_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Closes</b>: <%= number_with_precision(@close_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>+ Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>
+		  		<li><b>Net Investable</b>: <%= number_with_precision(@net_investable, :precision => 0, :delimiter => ',') %></li>
+		  		<li></li>
+		  		<li><b>Total Market Cap Buys</b>: <%= number_with_precision(@long_mkt_cap, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Total Market Cap Holds</b>: <%= number_with_precision(@hold_mkt_cap, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>+ Total Market Cap Shorts</b>: <%= number_with_precision(@short_mkt_cap, :precision => 0, :delimiter => ',') %></u></li>
+		  		<li><b>Screen Total Market Caps</b>: <%= number_with_precision(@tot_mkt_cap, :precision => 0, :delimiter => ',') %></li>
+		  		<li></li>
+		  		<li><b>Shares for Buys</b>: <%= number_to_percentage(@long_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Shares for Holds</b>: <%= number_to_percentage(@hold_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Shares for Shorts</b>: <%= number_to_percentage(@short_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Shares for Closes</b>: <%= number_to_percentage(0 * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>+ Shares for No Earnings</b>: <%= number_to_percentage(0 * 100, :precision => 0, :delimiter => ',') %></u></li>
+		  		<li><b>Total Shares</b>: <%= number_to_percentage(@total_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li></li>
+		  		<li><b>Total Target for Buys</b>: <%= number_with_precision(@long_targets, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Total Target for Shorts</b>: <%= number_with_precision(@short_targets, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Total Target for Closes</b>: <%= number_with_precision(0, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>+ Total Target for No Earnings</b>: <%= number_with_precision(0, :precision => 0, :delimiter => ',') %></u></li>
+		  		<li><b>Total Targets</b>: <%= number_with_precision(@tot_targets, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>- Net Investable</b>: <%= number_with_precision(@net_investable, :precision => 0, :delimiter => ',') %></u></li>
+		  		<li><b>Remainder</b>: <%= number_with_precision(@remainder, :precision => 0, :delimiter => ',') %></li>
+		  		<li></li>
+		  		<li><b>Total Targets</b>: <%= number_with_precision(@tot_targets, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>- Total Current Values</b>: <%= number_with_precision(@tot_curr_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>- Total Adjustments</b>: <%= number_with_precision(@tot_adj_val, :precision => 0, :delimiter => ',') %></u></li>
+		  		<li><b>Remainder 2</b>: <%= number_with_precision(@remainder_2, :precision => 0, :delimiter => ',') %></li>
 		  	</ul>
 		  </div>
 		</div>

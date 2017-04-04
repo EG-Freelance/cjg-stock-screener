@@ -4,7 +4,7 @@ class PortfolioItem < ActiveRecord::Base
 	#########################
 	# Import for new format #
 	#########################
-	def self.import_pi(file)
+  def self.import_pi(file)
 	  data_set = DataSet.create()
 	  
 	  spreadsheet = open_spreadsheet(file)
@@ -12,9 +12,11 @@ class PortfolioItem < ActiveRecord::Base
 	  # header is in 11th row
 	  header = spreadsheet.row(7)
 	  
+	  last_row = spreadsheet.last_row
+	  
     RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "portfolio")
 	  # data start on 13th row and end 3 before last row (last row is cash summary)
-    (8..(spreadsheet.last_row - 5)).each do |i|
+    (8..(last_row - 5)).each do |i|
       data = spreadsheet.row(i)
       data[1] = data[1].strip
       data[2] = data[2].strip
@@ -22,6 +24,8 @@ class PortfolioItem < ActiveRecord::Base
       data[4] = data[4].strip
       RowDatum.create(data_set_id: data_set.id, data: data.to_s, row_number: i - 6, data_type: "portfolio")
     end
+    
+    RowDatum.create(data_set_id: data_set.id, data: spreadsheet.row(last_row - 4).compact.to_s, row_number: last_row - 5)
      
     ImportPortfolioWorker.perform_async(data_set.id)
   end

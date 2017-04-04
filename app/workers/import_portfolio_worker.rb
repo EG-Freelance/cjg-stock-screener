@@ -8,7 +8,7 @@ class ImportPortfolioWorker
     
     set = DataSet.find(data_set_id)
   	
-  	last_row = set.row_data.map { |rd| rd.row_number }.max
+  	last_row = set.row_data.map { |rd| rd.row_number }.max - 1
   	
     spreadsheet = set.row_data.sort_by { |rd| rd.row_number }.map { |rd| eval(rd.data) }
     
@@ -112,6 +112,9 @@ class ImportPortfolioWorker
     DataSet.destroy_all
     GetScreenMechanizeWorker.perform_async
   end
+  
+  # save CASH information
+  Cash.last.update(amount: spreadsheet[-1][1])
   
   #########################
   # Import for old format #

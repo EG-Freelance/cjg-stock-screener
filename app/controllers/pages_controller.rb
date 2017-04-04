@@ -35,16 +35,51 @@ class PagesController < ApplicationController
     #@fallen_out_val = portfolio_items.map { |pi| pi.last * pi.quantity if pi.stock.screen_items.empty? && pi.pos_type == "stock" }.compact.sum.to_f ####more intensive search
     @fallen_out_val = display_items.where(classification: "fallen out").map { |di| di.curr_portfolio.abs }.compact.sum
     if Rails.env == "production"
-      @return_funds = display_items.where('rec_action ~* ?', 'CLOSE').map { |di| di.curr_portfolio.abs }.compact.sum
+      @close_val = display_items.where('rec_action ~* ?', 'CLOSE').map { |di| di.curr_portfolio.abs }.compact.sum
     else
-      @return_funds = display_items.where('rec_action LIKE ?', 'CLOSE').map { |di| di.curr_portfolio.abs }.compact.sum
+      @close_val = display_items.where('rec_action LIKE ?', 'CLOSE').map { |di| di.curr_portfolio.abs }.compact.sum
     end
-    @alloc_funds = 2800000 + @return_funds - @fallen_out_val
+    @alloc_funds = 2800000 + @close_val - @fallen_out_val
     @tot_short = display_items.map { |di| di.rec_portfolio if di.rec_portfolio.to_f < 0 }.compact.sum.abs
     @tot_long = display_items.map { |di| di.rec_portfolio if di.rec_portfolio.to_f > 0 }.compact.sum.abs
     @net_allocate = @tot_short + @tot_long
     
-
+    @longs_val = portfolio_items.where(pos_type: "stock", position: "long").map { |pi| pi.last * pi.quantity }.sum.to_f
+    @option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.last * pi.quantity * 100 }.sum.to_f
+    @shorts_val = portfolio_items.where(pos_type: "stock", position: "short").map { |pi| pi.last * pi.quantity }.sum.to_f
+    @cash = Cash.last.amount
+    (@total_portfolio_value = @option_val + @shorts_val + @longs_val)
+    (@revised_portfolio_value = total_portfolio_value - @option_val - @cash)
+    
+    @net_investable = @revised_portfolio_value + @fallen_out_val + @close_val + @cash
+    
+    if Rails.env == "production"
+      longs = display_items.where('rec_action ~* ?', 'BUY')
+      shorts = display_items.where('rec_action ~* ?', 'SHORT')
+      @long_mkt_cap = longs.map { |di| di.stock.market_cap }.sum.to_f
+      @short_mkt_cap = shorts.map { |di| di.stock.market_cap }.sum.to_f
+    else
+      longs = display_items.where('rec_action LIKE ?', 'BUY')
+      shorts = display_items.where('rec_action LIKE ?', 'SHORT')
+      @long_mkt_cap = longs.map { |di| di.stock.market_cap }.sum.to_f
+      @short_mkt_cap = shorts.map { |di| di.stock.market_cap }.sum.to_f
+    end
+    @hold_mkt_cap = display_items.where('rec_action = ? AND classification != ?', 'HOLD', 'fallen out').map { |di| di.stock.market_cap }.sum.to_f
+    @tot_mkt_cap = @long_mkt_cap + @short_mkt_cap + @hold_mkt_cap
+    
+    @long_share = @long_mkt_cap / @tot_mkt_cap
+    @short_share = @short_mkt_cap / @tot_mkt_cap
+    @hold_share = @hold_mkt_cap / @tot_mkt_cap
+    @total_share = @long_share + @short_share + @hold_share
+    
+    @long_targets = longs.map { |di| di.rec_portfolio }.sum
+    @short_targets = shorts.map { |di| di.rec_portfolio }.sum.abs
+    @tot_targets = @long_targets - @short_targets
+    @remainder = @net_investable - @tot_targets
+    
+    @tot_curr_val = display_items.where.not(classification: 'fallen_out').map { |di| di.curr_portfolio }.compact.sum
+    @tot_adj_val = display_items.map { |di| di.net_portfolio }.compact.sum
+    @remainder_2 = @tot_targets - @tot_curr_val - @tot_adj_val
   end
   
   def update_action

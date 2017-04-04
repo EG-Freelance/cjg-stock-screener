@@ -79,7 +79,7 @@ class PagesController < ApplicationController
     
     @tot_curr_val = display_items.where.not(classification: 'fallen_out').map { |di| di.curr_portfolio }.compact.sum
     @tot_adj_val = display_items.map { |di| di.net_portfolio }.compact.sum
-    @remainder_2 = @tot_targets - @tot_curr_val - @tot_adj_val
+    @remainder_2 = @long_targets - @short_targets - @tot_curr_val - @tot_adj_val
   end
   
   def update_action

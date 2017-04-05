@@ -540,7 +540,8 @@ class SetDisplayItemsWorker
     display_items.each { |di| di.stock = stocks.find_by(symbol: di.symbol, exchange: di.exchange) }
     # destroy any display items that don't have an associated stock as a fail-safe (WBT/MFS pointed this error out)
     display_items.includes(:stock).where(stocks: {id: nil}).destroy_all
-    funds_for_alloc = 2800000 + return_funds - fallen_out_val
+    portfolio_value = portfolio_items.map { |pi| pi.market_val.abs }.compact.sum + Cash.first.amount
+    funds_for_alloc = portfolio_value - fallen_out_val - portfolio_items.where(pos_type: 'option').map { |pi| pi.market_val.abs }.compact.sum
     display_items = DisplayItem.where('rec_action != ? AND classification != ?', "(n/a)", "fallen out")
     display_items.each do |di| 
       di.prev_ed == "N/A" ? prev_earn = 365 : prev_earn = di.prev_ed.to_i

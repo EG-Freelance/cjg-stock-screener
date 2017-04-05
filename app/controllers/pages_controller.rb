@@ -39,15 +39,18 @@ class PagesController < ApplicationController
     else
       @close_val = display_items.where('rec_action LIKE ?', 'CLOSE').map { |di| di.curr_portfolio.abs }.compact.sum
     end
-    @alloc_funds = 2800000 + @close_val - @fallen_out_val
-    @tot_short = display_items.map { |di| di.rec_portfolio if di.rec_portfolio.to_f < 0 }.compact.sum.abs
-    @tot_long = display_items.map { |di| di.rec_portfolio if di.rec_portfolio.to_f > 0 }.compact.sum.abs
+    @cash = Cash.last.amount
+    @longs_val = portfolio_items.where(pos_type: "stock", position: "long").map { |pi| pi.market_val.abs }.sum.to_f
+    @option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.market_val.abs }.sum.to_f
+    @shorts_val = portfolio_items.where(pos_type: "stock", position: "short").map { |pi| pi.market_val.abs }.sum.to_f
+    
+    portfolio_val = portfolio_items.map { |pi| pi.market_val.abs }.compact.sum + Cash.first.amount
+    
+    @alloc_funds = portfolio_val - @fallen_out_val - @option_val
+    @tot_short = display_items.map { |di| di.rec_portfolio if di.rec_portfolio < 0 }.compact.sum.abs
+    @tot_long = display_items.map { |di| di.rec_portfolio if di.rec_portfolio > 0 }.compact.sum.abs
     @net_allocate = @tot_short + @tot_long
     
-    @longs_val = portfolio_items.where(pos_type: "stock", position: "long").map { |pi| pi.last * pi.quantity }.sum.to_f
-    @option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.last * pi.quantity * 100 }.sum.to_f
-    @shorts_val = portfolio_items.where(pos_type: "stock", position: "short").map { |pi| pi.last * pi.quantity }.sum.to_f
-    @cash = Cash.last.amount
     @total_portfolio_value = @option_val + @shorts_val + @longs_val + @cash
     @revised_portfolio_value = @total_portfolio_value - @option_val - @cash
     

@@ -356,7 +356,7 @@
 		  		<li><br></li>
 		  		<li><b>Revised Portfolio Value</b>: <%= number_with_precision(@revised_portfolio_value, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>- Non-Screen Holds</b>: <%= number_with_precision(@fallen_out_val, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Closes</b>: <%= number_with_precision(@close_val, :precision => 0, :delimiter => ',') %></li>
+		  		<!--<li><b>+ Closes</b>: <%= number_with_precision(@close_val, :precision => 0, :delimiter => ',') %></li> ## don't include closes in this calc for now (double-counted?) -->
 		  		<li><u><b>+ Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>
 		  		<li><b>Net Investable</b>: <%= number_with_precision(@net_investable, :precision => 0, :delimiter => ',') %></li>
 		  		<li><br></li>

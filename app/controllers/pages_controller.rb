@@ -54,7 +54,7 @@ class PagesController < ApplicationController
     @total_portfolio_value = @option_val + @shorts_val + @longs_val + @cash
     @revised_portfolio_value = @total_portfolio_value - @option_val - @cash
     
-    @net_investable = @revised_portfolio_value - @fallen_out_val + @close_val + @cash
+    @net_investable = @revised_portfolio_value - @fallen_out_val + @cash # + @close_val ### remove @close_val for now (double-counted?)
     
     if Rails.env == "production"
       longs = display_items.where('rec_action ~* ?', 'BUY')

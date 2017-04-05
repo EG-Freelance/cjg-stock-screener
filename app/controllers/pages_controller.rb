@@ -47,8 +47,8 @@ class PagesController < ApplicationController
     portfolio_val = portfolio_items.map { |pi| pi.market_val.abs }.compact.sum + Cash.first.amount
     
     @alloc_funds = portfolio_val - @fallen_out_val - @option_val
-    @tot_short = display_items.map { |di| di.rec_portfolio if di.rec_portfolio < 0 }.compact.sum.abs
-    @tot_long = display_items.map { |di| di.rec_portfolio if di.rec_portfolio > 0 }.compact.sum.abs
+    @tot_short = display_items.where.not(rec_portfolio: nil).map { |di| di.rec_portfolio if di.rec_portfolio < 0 }.compact.sum.abs
+    @tot_long = display_items.where.not(rec_portfolio: nil).map { |di| di.rec_portfolio if di.rec_portfolio > 0 }.compact.sum.abs
     @net_allocate = @tot_short + @tot_long
     
     @total_portfolio_value = @option_val + @shorts_val + @longs_val + @cash

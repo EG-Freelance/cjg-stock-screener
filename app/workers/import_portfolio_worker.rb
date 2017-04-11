@@ -18,7 +18,7 @@ class ImportPortfolioWorker
     # set common timestamp for all entries
     set_created_at = DateTime.now
     
-    # loop through all items
+    # loop through all items except cash
     (1..(last_row - 1)).each do |i|
       
       # pairing up header column with data

@@ -25,7 +25,7 @@ class PortfolioItem < ActiveRecord::Base
       RowDatum.create(data_set_id: data_set.id, data: data.to_s, row_number: i - 6, data_type: "portfolio")
     end
     
-    RowDatum.create(data_set_id: data_set.id, data: spreadsheet.row(last_row - 4).compact.to_s, row_number: last_row - 5)
+    RowDatum.create(data_set_id: data_set.id, data: spreadsheet.row(last_row - 4).compact.to_s, row_number: last_row - 10)
      
     ImportPortfolioWorker.perform_async(data_set.id)
   end

@@ -15,7 +15,7 @@ class PortfolioItem < ActiveRecord::Base
 	  last_row = spreadsheet.last_row
 	  
 	  # set marginal security amount
-	  MarginalSecurity.first.update(amount: spreadsheet.row(3)[9])
+	  MarginableSecurity.first.update(amount: spreadsheet.row(3)[9])
 	  
     RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "portfolio")
 	  # data start on 13th row and end 3 before last row (last row is cash summary)

@@ -35,12 +35,13 @@ class SetDisplayItemsWorker
     si_pool_sm = si_pool.where(classification: "small")
     
     # accumulate data as code runs
-    mkt_cap_pool = 0
+    long_mkt_cap_pool = 0
+    short_mkt_cap_pool = 0
     buy_val = 0
     return_funds = 0
     
     # market value of PI that have no SI (fallen out)
-    fallen_out_val = PortfolioItem.all.includes(:stock).map { |pi| pi.last * pi.quantity if pi.stock.screen_items.empty? && pi.pos_type == "stock" }.compact.sum.to_f
+    fallen_out_val = portfolio_items.map { |pi| pi.last * pi.quantity if pi.stock.screen_items.empty? && pi.pos_type == "stock" }.compact.sum.to_f
     
     ##########################
     # Get large cap listings #
@@ -168,11 +169,11 @@ class SetDisplayItemsWorker
             when si[7] >= 0.9 && prev_earn <= rec_earn
               si[4] = "CLOSE AND BUY"
               return_funds = return_funds + si[22].abs
-              mkt_cap_pool = mkt_cap_pool + stock.market_cap
+              long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap
             # in bottom 15%
             when si[7] <= 0.15 || prev_earn > rec_earn
               si[4] = "HOLD"
-              mkt_cap_pool = mkt_cap_pool + stock.market_cap
+              short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -184,12 +185,12 @@ class SetDisplayItemsWorker
             # in top 15%
             when si[7] >= 0.85 || prev_earn > rec_earn
               si[4] = "HOLD"
-              mkt_cap_pool = mkt_cap_pool + stock.market_cap
+              long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap
             # in bottom 10%
             when si[7] <= 0.1 && prev_earn <= rec_earn
               si[4] = "CLOSE AND SHORT"
               return_funds = return_funds + si[22].abs
-              mkt_cap_pool = mkt_cap_pool + stock.market_cap
+              short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -206,11 +207,11 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
-          mkt_cap_pool = mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
+          long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
-          mkt_cap_pool = mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
+          short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
         # if in middle 80%
         else
           si[4] = "(n/a)"
@@ -376,11 +377,11 @@ class SetDisplayItemsWorker
             when si[7] >= 0.9
               si[4] = "CLOSE AND BUY" && prev_earn <= rec_earn
               return_funds = return_funds + si[22].abs
-              mkt_cap_pool = mkt_cap_pool + stock.market_cap
+              long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap
             # in bottom 15%
             when si[7] <= 0.15
               si[4] = "HOLD" || prev_earn > rec_earn
-              mkt_cap_pool = mkt_cap_pool + stock.market_cap
+              short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -392,12 +393,12 @@ class SetDisplayItemsWorker
             # in top 15%
             when si[7] >= 0.85
               si[4] = "HOLD" || prev_earn > rec_earn
-              mkt_cap_pool = mkt_cap_pool + stock.market_cap
+              long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap
             # in bottom 10%
             when si[7] <= 0.1
               si[4] = "CLOSE AND SHORT" && prev_earn <= rec_earn
               return_funds = return_funds + si[22].abs
-              mkt_cap_pool = mkt_cap_pool + stock.market_cap
+              short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -414,11 +415,11 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
-          mkt_cap_pool = mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
+          long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
-          mkt_cap_pool = mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
+          short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
         # if in middle 80%
         else
           si[4] = "(n/a)"
@@ -540,8 +541,16 @@ class SetDisplayItemsWorker
     display_items.each { |di| di.stock = stocks.find_by(symbol: di.symbol, exchange: di.exchange) }
     # destroy any display items that don't have an associated stock as a fail-safe (WBT/MFS pointed this error out)
     display_items.includes(:stock).where(stocks: {id: nil}).destroy_all
-    portfolio_value = portfolio_items.map { |pi| pi.market_val.abs }.compact.sum + Cash.first.amount
-    funds_for_alloc = portfolio_value - fallen_out_val - portfolio_items.where(pos_type: 'option').map { |pi| pi.market_val.abs }.compact.sum
+    
+    # set allocations; assume Cash is "gross cash"
+    long_val = portfolio_items.where(pos_type: "stock", position: "long").map { |pi| pi.market_val }
+    short_val = portfolio_items.where(pos_type: "stock", position: "short").map { |pi| pi.market_val.abs }
+    option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.market_val.abs }
+    #portfolio_value = portfolio_items.map { |pi| pi.market_val.abs }.compact.sum + Cash.first.amount
+    #funds_for_alloc = portfolio_value - fallen_out_val - portfolio_items.where(pos_type: 'option').map { |pi| pi.market_val.abs }.compact.sum
+    capacity = 2 * (long_val + (Cash.first.amount - short_val - 200000) - option_val - fallen_out_val
+    # halve allocation funds to split between long and short
+    funds_for_alloc = capacity / 2
     display_items = DisplayItem.where('rec_action != ? AND classification != ?', "(n/a)", "fallen out")
     display_items.each do |di| 
       di.prev_ed == "N/A" ? prev_earn = 365 : prev_earn = di.prev_ed.to_i
@@ -551,13 +560,15 @@ class SetDisplayItemsWorker
         # indicate whether total should be negative
         if (di.rec_action == "HOLD" && di.curr_portfolio < 0) || di.rec_action["SHORT"]
           sign = -1
+          mkt_cap_base = short_mkt_cap_pool
         else
           sign = 1
+          mkt_cap_base = long_mkt_cap_pool
         end
         if (prev_earn > rec_earn) && (di.rec_action == "BUY" || di.rec_action == "SHORT")
           rec = 0
         else
-          rec = (di.mkt_cap.to_f / mkt_cap_pool) * funds_for_alloc * sign
+          rec = (di.mkt_cap.to_f / mkt_cap_base) * funds_for_alloc * sign
         end
       end
       change = rec - di.curr_portfolio

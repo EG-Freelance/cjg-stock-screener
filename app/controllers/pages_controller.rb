@@ -25,13 +25,16 @@ class PagesController < ApplicationController
     
     @si_sm = si_pool_sm.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, si.rec_portfolio, si.curr_portfolio, si.net_portfolio] }.sort_by { |si| si[7] }.reverse!
     
-    # for development, just replicate lg pool (so there are multiple tabs of data0)
+    # for development, just replicate lg pool (so there are multiple tabs of data)
     if Rails.env == "development"
       @si_lg = @si_sm
     end
     @po = po_pool.map { |pi| [pi.symbol, pi.exchange, pi.company, pi.in_pf, pi.rec_action, pi.action, pi.total_score, pi.total_score_pct, pi.dist_status, pi.mkt_cap, pi.nsi_score, pi.ra_score, pi.noas_score, pi.ag_score, pi.aita_score, pi.l52wp_score, pi.pp_score, pi.rq_score, pi.dt2_score, pi.prev_ed, pi.next_ed, pi.lq_revenue, pi.stock.portfolio_items] }.sort_by { |pi| pi[7] }.reverse!
     
-    # summary statistics
+    ######################
+    # SUMMARY STATISTICS #
+    ######################
+    
     #@fallen_out_val = portfolio_items.map { |pi| pi.last * pi.quantity if pi.stock.screen_items.empty? && pi.pos_type == "stock" }.compact.sum.to_f ####more intensive search
     @fallen_out_val = display_items.where(classification: "fallen out").map { |di| di.curr_portfolio.abs }.compact.sum
     if Rails.env == "production"
@@ -43,12 +46,23 @@ class PagesController < ApplicationController
     @longs_val = portfolio_items.where(pos_type: "stock", position: "long").map { |pi| pi.market_val.abs }.sum.to_f
     @option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.market_val.abs }.sum.to_f
     @shorts_val = portfolio_items.where(pos_type: "stock", position: "short").map { |pi| pi.market_val.abs }.sum.to_f
+    @reserve_val = 200000
     
     portfolio_val = portfolio_items.map { |pi| pi.market_val.abs }.compact.sum + Cash.first.amount
     
     @alloc_funds = portfolio_val - @fallen_out_val - @option_val
-    @tot_short = display_items.where.not(rec_portfolio: nil).map { |di| di.rec_portfolio if di.rec_portfolio < 0 }.compact.sum.abs
-    @tot_long = display_items.where.not(rec_portfolio: nil).map { |di| di.rec_portfolio if di.rec_portfolio > 0 }.compact.sum.abs
+    # funds to allocate:  2 * (Longs + (Cash - Shorts) - 200k) - Opt - NSH
+    @purchasing_capacity = 2 * (@longs_val + ((@cash - @shorts_val) - @reserve_val) - @options_val - @fallen_out_val
+    @capacity_per_type = @purchasing_capacity / 2
+    
+    # current recommended portfolio balance (excluding reserve, NSH, and options)
+    rec_long = display_items.where('rec_portfolio > ?', 0).map { |di| di.rec_portfolio }.sum
+    rec_short = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum
+    @rec_total_inv = rec_long + rec_short
+    
+    
+    @tot_short = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum.abs
+    @tot_short = display_items.where('rec_portfolio > ?', 0).map { |di| di.rec_portfolio }.sum.abs
     @net_allocate = @tot_short + @tot_long
     
     @total_portfolio_value = @option_val + @shorts_val + @longs_val + @cash

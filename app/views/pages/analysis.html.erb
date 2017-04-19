@@ -345,10 +345,18 @@
 		  <!-- Summary tab -->
 		  <div role="tabpanel" class="tab-pane" id="summary" style="margin-top:20px">
 		  	<ul style="list-style: none">
+		  		<li><u>New Calc:</u></li>
+		  		<li><b>Purchasing Capacity = 2 x ([Long Stocks] + [Gross Cash] - [Short Stocks] - [Reserve]) - [Options] - [NSH]</b></li>
+		  		<li><b>Purchasing Capacity</b>: <%= number_with_precision(@purchasing_capacity, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>Capacity Per Type = Purchasing Capacity / 2</b></li>
+		  		<li><b>Capacity Per Type</b>: <%= number_with_precision(@capacity_per_type, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>Total Recommended Investment = [Recommended Longs]  + [abs([Recommended Shorts])</b></li>
+		  		<li><b>Total Recommended Investment</b>: <%= number_with_precision(@rec_total_inv, :precision => 0, :delimiter => ',') %></li>
+					<li><br></li>
 		  		<li><b>Long stocks</b>: <%= number_with_precision(@longs_val, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Options</b>: <%= number_with_precision(@option_val, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Shorts</b>: <%=number_with_precision(@shorts_val, :precision => 0, :delimiter => ',') %></li>
-		  		<li><u><b>+ Cash</b>: <%=number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>
+		  		<li><b>+ Shorts</b>: <%= number_with_precision(@shorts_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>+ Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>
 		  		<li><b>Total Portfolio Value</b>: <%= number_with_precision(@total_portfolio_value, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>- Options</b>: <%= number_with_precision(@option_val, :precision => 0, :delimiter => ',') %></li>
 		  		<li><u><b>- Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>

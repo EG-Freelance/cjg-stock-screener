@@ -548,7 +548,7 @@ class SetDisplayItemsWorker
     option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.market_val.abs }
     #portfolio_value = portfolio_items.map { |pi| pi.market_val.abs }.compact.sum + Cash.first.amount
     #funds_for_alloc = portfolio_value - fallen_out_val - portfolio_items.where(pos_type: 'option').map { |pi| pi.market_val.abs }.compact.sum
-    capacity = 2 * (long_val + (Cash.first.amount - short_val - 200000) - option_val - fallen_out_val
+    capacity = 2 * (long_val + (Cash.first.amount - short_val) - 200000) - option_val - fallen_out_val
     # halve allocation funds to split between long and short
     funds_for_alloc = capacity / 2
     display_items = DisplayItem.where('rec_action != ? AND classification != ?', "(n/a)", "fallen out")

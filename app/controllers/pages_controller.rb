@@ -58,7 +58,7 @@ class PagesController < ApplicationController
     # current recommended portfolio balance (excluding reserve, NSH, and options)
     rec_long = display_items.where('rec_portfolio > ?', 0).map { |di| di.rec_portfolio }.sum
     rec_short = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum
-    @rec_total_inv = rec_long + rec_short
+    @rec_total_inv = rec_long + rec_short.abs
     
     
     @tot_short = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum.abs

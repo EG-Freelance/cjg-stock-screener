@@ -207,11 +207,11 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
-          long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
+          long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap unless si[19] == "N/A" || si[19].to_i > rec_earn
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
-          short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
+          short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap unless si[19] == "N/A" || si[19].to_i > rec_earn
         # if in middle 80%
         else
           si[4] = "(n/a)"
@@ -415,11 +415,11 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
-          long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
+          long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap unless si[19] == "N/A" || si[19].to_i > rec_earn
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
-          short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap unless si[19] == "N/A"
+          short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap unless si[19] == "N/A" || si[19].to_i > rec_earn
         # if in middle 80%
         else
           si[4] = "(n/a)"
@@ -565,7 +565,7 @@ class SetDisplayItemsWorker
           sign = 1
           mkt_cap_base = long_mkt_cap_pool
         end
-        if (prev_earn > rec_earn) && (di.rec_action["BUY"] || di.rec_action["SHORT"])
+        if (prev_earn > rec_earn) && (di.rec_action == "BUY" || di.rec_action == "SHORT")
           rec = 0
         else
           rec = (di.mkt_cap.to_f / mkt_cap_base) * funds_for_alloc * sign

@@ -52,7 +52,7 @@ class PagesController < ApplicationController
     
     @alloc_funds = portfolio_val - @fallen_out_val - @option_val
     # funds to allocate:  2 * (Longs + (Cash - Shorts) - 200k) - Opt - NSH
-    @purchasing_capacity = 2 * (@longs_val + (@cash - @shorts_val) - @reserve_val) - @options_val - @fallen_out_val
+    @purchasing_capacity = 2 * (@longs_val + (@cash - @shorts_val) - @reserve_val) - @option_val - @fallen_out_val
     @capacity_per_type = @purchasing_capacity / 2
     
     # current recommended portfolio balance (excluding reserve, NSH, and options)
@@ -62,7 +62,7 @@ class PagesController < ApplicationController
     
     
     @tot_short = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum.abs
-    @tot_short = display_items.where('rec_portfolio > ?', 0).map { |di| di.rec_portfolio }.sum.abs
+    @tot_long = display_items.where('rec_portfolio > ?', 0).map { |di| di.rec_portfolio }.sum.abs
     @net_allocate = @tot_short + @tot_long
     
     @total_portfolio_value = @option_val + @shorts_val + @longs_val + @cash
@@ -94,7 +94,7 @@ class PagesController < ApplicationController
     @tot_targets = @long_targets + @short_targets
     @remainder = @tot_targets - @net_investable
     
-    @tot_curr_val = display_items.where.not(classification: 'fallen_out').map { |di| di.curr_portfolio.abs }.compact.sum
+    @tot_curr_val = display_items.where.not(classification: 'fallen_out').map { |di| di.curr_portfolio.abs unless di.curr_portfolio.nil? }.compact.sum
     @tot_adj_val = display_items.map { |di| di.rec_portfolio - di.curr_portfolio unless di.rec_portfolio.nil? || di.curr_portfolio.nil? }.compact.sum
     @remainder_2 = @long_targets + @short_targets - @tot_curr_val - @tot_adj_val
   end

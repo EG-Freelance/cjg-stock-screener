@@ -543,9 +543,9 @@ class SetDisplayItemsWorker
     display_items.includes(:stock).where(stocks: {id: nil}).destroy_all
     
     # set allocations; assume Cash is "gross cash"
-    long_val = portfolio_items.where(pos_type: "stock", position: "long").map { |pi| pi.market_val }
-    short_val = portfolio_items.where(pos_type: "stock", position: "short").map { |pi| pi.market_val.abs }
-    option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.market_val.abs }
+    long_val = portfolio_items.where(pos_type: "stock", position: "long").map { |pi| pi.market_val }.sum
+    short_val = portfolio_items.where(pos_type: "stock", position: "short").map { |pi| pi.market_val.abs }.sum
+    option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.market_val.abs }.sum
     #portfolio_value = portfolio_items.map { |pi| pi.market_val.abs }.compact.sum + Cash.first.amount
     #funds_for_alloc = portfolio_value - fallen_out_val - portfolio_items.where(pos_type: 'option').map { |pi| pi.market_val.abs }.compact.sum
     capacity = 2 * (long_val + (Cash.first.amount - short_val) - 200000) - option_val - fallen_out_val

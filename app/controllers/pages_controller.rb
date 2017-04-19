@@ -52,7 +52,7 @@ class PagesController < ApplicationController
     
     @alloc_funds = portfolio_val - @fallen_out_val - @option_val
     # funds to allocate:  2 * (Longs + (Cash - Shorts) - 200k) - Opt - NSH
-    @purchasing_capacity = 2 * (@longs_val + ((@cash - @shorts_val) - @reserve_val) - @options_val - @fallen_out_val
+    @purchasing_capacity = 2 * (@longs_val + (@cash - @shorts_val) - @reserve_val) - @options_val - @fallen_out_val
     @capacity_per_type = @purchasing_capacity / 2
     
     # current recommended portfolio balance (excluding reserve, NSH, and options)

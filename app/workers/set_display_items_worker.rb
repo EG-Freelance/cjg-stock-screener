@@ -565,7 +565,7 @@ class SetDisplayItemsWorker
           sign = 1
           mkt_cap_base = long_mkt_cap_pool
         end
-        if (prev_earn > rec_earn) && (di.rec_action == "BUY" || di.rec_action == "SHORT")
+        if (prev_earn > rec_earn) && (di.rec_action["BUY"] || di.rec_action["SHORT"])
           rec = 0
         else
           rec = (di.mkt_cap.to_f / mkt_cap_base) * funds_for_alloc * sign

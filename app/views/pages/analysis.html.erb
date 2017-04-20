@@ -346,15 +346,29 @@
 		  <div role="tabpanel" class="tab-pane" id="summary" style="margin-top:20px">
 		  	<ul style="list-style: none">
 		  		<li><u>New Calcs:</u></li>
-		  		<li><b>Purchasing Capacity = 2 x ([Long Stocks] + ([Gross Cash] - [Short Stocks]) - [Reserve]) - [Options] - [NSH]</b></li>
-		  		<li><b>Purchasing Capacity</b>: <%= number_with_precision(@purchasing_capacity, :precision => 0, :delimiter => ',') %></li>
-		  		<li><br></li>
-		  		<li><b>Capacity Per Type = Purchasing Capacity / 2</b></li>
+		  		
+		  		<!--CAPACITY-->
+		  		<li><b>Longs</b>: <%= number_with_precision(@longs_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Gross Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>- Shorts</b>: <%= number_with_precision(@shorts_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>- Reserve</b>: <%= number_with_precision(@reserve_val, :precision => 0, :delimiter => ',') %></u></li>
+		  		<li><b>Non-Margin Investable</b>: <%= number_with_precision(@non_margin_investable, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b><u>x 2</u></b></li>
+		  		<li><b>Total Investable</b>: <%= number_with_precision(@total_investable, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>- Options</b>: <%= number_with_precision(@option_val, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>- NSH</b>: <%= number_with_precision(@fallen_out_val, :precision => 0, :delimiter => ',') %></u></li>
+					<li><b>Purchasing Capacity</b>: <%= number_with_precision(@purchasing_capacity, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b><u>/ 2</u></b></li>
 		  		<li><b>Capacity Per Type</b>: <%= number_with_precision(@capacity_per_type, :precision => 0, :delimiter => ',') %></li>
 		  		<li><br></li>
-		  		<li><b>Total Recommended Investment = [Recommended Longs]  + [abs([Recommended Shorts])</b></li>
-		  		<li><b>Total Recommended Investment</b>: <%= number_with_precision(@rec_total_inv, :precision => 0, :delimiter => ',') %></li>
+					
+					<!--INVESTMENTS-->
+		  		<li><b>Recommended Longs</b>: <%= number_with_precision(@rec_long, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>+ Recommended Shorts (abs)</b>: <%= number_with_precision(@rec_short.abs, :precision => 0, :delimiter => ',') %></u></li>
+		  		<li><b>Total Investments Recommended</b>: <%= number_with_precision(@rec_total_inv, :precision => 0, :delimiter => ',') %></li>
 		  		<li><br></li>
+		  		
+		  		<!--MARKET CAP SHARES-->
 		  		<li><u><b>Shares (by Market Cap)</b></u></li>
 		  		<li><b>Longs</b>: <%= number_to_percentage(@long_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Shorts</b>: <%= number_to_percentage(@short_share * 100, :precision => 0, :delimiter => ',') %></li>
@@ -364,6 +378,8 @@
 		  		<li><u><b>+ Shares for No Earnings</b>: <%= number_to_percentage(0 * 100, :precision => 0, :delimiter => ',') %></u></li>
 		  		<li><b>Total Shares</b>: <%= number_to_percentage(@total_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><br></li>
+		  		
+		  		<!--TARGET SHARES-->
 		  		<li><u><b>Shares (by Target)</b></u></li>
 		  		<li><b>Longs</b>: <%= number_to_percentage(@long_target_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Shorts</b>: <%= number_to_percentage(@short_target_share * 100, :precision => 0, :delimiter => ',') %></li>

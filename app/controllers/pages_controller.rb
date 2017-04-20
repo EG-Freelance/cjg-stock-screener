@@ -42,11 +42,15 @@ class PagesController < ApplicationController
     else
       @close_val = display_items.where('rec_action LIKE ?', 'CLOSE').map { |di| di.curr_portfolio.abs }.compact.sum
     end
-    @cash = Cash.last.amount
     @longs_val = portfolio_items.where(pos_type: "stock", position: "long").map { |pi| pi.market_val.abs }.sum.to_f
-    @option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.market_val.abs }.sum.to_f
+    @cash = Cash.last.amount
     @shorts_val = portfolio_items.where(pos_type: "stock", position: "short").map { |pi| pi.market_val.abs }.sum.to_f
     @reserve_val = 200000
+    
+    @non_margin_investable = @longs_val + @cash - @shorts_val - @reserve_val
+    @total_investable = @non_margin_investable * 2
+    
+    @option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.market_val.abs }.sum.to_f
     
     portfolio_val = portfolio_items.map { |pi| pi.market_val.abs }.compact.sum + Cash.first.amount
     
@@ -56,9 +60,9 @@ class PagesController < ApplicationController
     @capacity_per_type = @purchasing_capacity / 2
     
     # current recommended portfolio balance (excluding reserve, NSH, and options)
-    rec_long = display_items.where('rec_portfolio > ?', 0).map { |di| di.rec_portfolio }.sum
-    rec_short = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum
-    @rec_total_inv = rec_long + rec_short.abs
+    @rec_long = display_items.where('rec_portfolio > ?', 0).map { |di| di.rec_portfolio }.sum
+    @rec_short = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum
+    @rec_total_inv = @rec_long + @rec_short.abs
     
     ##################
     # MKT CAP SHARES #

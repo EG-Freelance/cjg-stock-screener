@@ -23,7 +23,7 @@ class SetDisplayItemsWorker
     po_pool = portfolio_only.select { |po| po.set_created_at == pi_period }
     
     # array of portfolio symbols
-    portfolio_securities = pi_pool.pluck(:'stocks.symbol')
+    portfolio_securities = pi_pool.where(pos_type: "stock").pluck(:'stocks.symbol').uniq
     
     # screen item variables and arrays
     si_set_date_array = screen_items.pluck(:set_created_at).uniq.sort
@@ -576,5 +576,3 @@ class SetDisplayItemsWorker
     end
   end
 end
-
-DisplayItem.all.map { |di| di.rec_portfolio.abs unless di.rec_portfolio.nil? }.compact.sum

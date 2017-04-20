@@ -70,28 +70,54 @@ class PagesController < ApplicationController
     
     @net_investable = @revised_portfolio_value - @fallen_out_val + @cash # + @close_val ### remove @close_val for now (double-counted?)
     
+    ##################
+    # Mkt Cap Shares #
+    ##################
     if Rails.env == "production"
-      longs = display_items.where('rec_action ~* ?', 'BUY')
-      shorts = display_items.where('rec_action ~* ?', 'SHORT')
-      @long_mkt_cap = longs.map { |di| di.stock.market_cap }.sum.to_f
-      @short_mkt_cap = shorts.map { |di| di.stock.market_cap }.sum.to_f
+      longs = display_items.where('rec_action ~* ? AND rec_portfolio > ?', "BUY", 0)
+      shorts = display_items.where('rec_action ~* ? AND rec_portfolio < ?', "SHORT", 0)
     else
-      longs = display_items.where('rec_action LIKE ?', 'BUY')
-      shorts = display_items.where('rec_action LIKE ?', 'SHORT')
-      @long_mkt_cap = longs.map { |di| di.stock.market_cap }.sum.to_f
-      @short_mkt_cap = shorts.map { |di| di.stock.market_cap }.sum.to_f
+      longs = display_items.where('rec_action LIKE ? AND rec_portfolio > ?', "BUY", 0)
+      shorts = display_items.where('rec_action LIKE ? AND rec_portfolio < ?', "SHORT", 0)
     end
+    @long_mkt_cap = longs.map { |di| di.stock.market_cap }.sum.to_f
+    @short_mkt_cap = shorts.map { |di| di.stock.market_cap }.sum.to_f
+    
     @hold_mkt_cap = display_items.where('rec_action = ? AND classification != ?', 'HOLD', 'fallen out').map { |di| di.stock.market_cap }.sum.to_f
-    @tot_mkt_cap = @long_mkt_cap + @short_mkt_cap + @hold_mkt_cap
+    @long_hold_mkt_cap = display_items.where('rec_action = ? AND rec_portfolio > ? AND classification != ?', 'HOLD', 0, 'fallen out').map { |di| di.stock.market_cap }.sum.to_f
+    @short_hold_mkt_cap = display_items.where('rec_action = ? AND rec_portfolio < ? AND classification != ?', 'HOLD', 0, 'fallen out').map { |di| di.stock.market_cap }.sum.to_f
+    @tot_mkt_cap = @long_mkt_cap + @short_mkt_cap + @long_hold_mkt_cap + @short_hold_mkt_cap
     
     @long_share = @long_mkt_cap / @tot_mkt_cap
     @short_share = @short_mkt_cap / @tot_mkt_cap
-    @hold_share = @hold_mkt_cap / @tot_mkt_cap
-    @total_share = @long_share + @short_share + @hold_share
+    @long_hold_share = @long_hold_mkt_cap / @tot_mkt_cap
+    @short_hold_share = @short_hold_mkt_cap / @tot_mkt_cap
+    @tot_hold_share = @hold_mkt_cap / @tot_mkt_cap
+    @total_share = @long_share + @short_share + @long_hold_share + @short_hold_share
     
-    @long_targets = display_items.where('rec_portfolio > ?', 0).map { |di| di.rec_portfolio }.sum
-    @short_targets = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum.abs
-    @tot_targets = @long_targets + @short_targets
+    #################
+    # Target Shares #
+    #################
+    
+    @long_targets = longs.map { |di| di.rec_portfolio }.sum.to_f
+    @short_targets = shorts.map { |di| di.rec_portfolio.abs }.sum.to_f
+    @hold_targets = display_items.where('rec_action = ? AND classification != ?', 'HOLD', 'fallen out').map { |di| di.rec_portfolio.abs }.sum.to_f
+    @long_hold_targets = display_items.where('rec_action = ? AND rec_portfolio > ? AND classification != ?', 'HOLD', 0, 'fallen out').map { |di| di.rec_portfolio }.sum.to_f
+    @short_hold_targets = display_items.where('rec_action = ? AND rec_portfolio < ? AND classification != ?', 'HOLD', 0, 'fallen out').map { |di| di.rec_portfolio.abs }.sum.to_f
+    @tot_targets = @long_targets + @short_targets + @long_hold_targets + @short_hold_targets
+
+    @long_target_share = @long_targets / @tot_targets
+    @short_target_share = @short_targets / @tot_targets
+    @long_hold_target_share = @long_hold_targets / @tot_targets
+    @short_hold_target_share = @short_hold_targets / @tot_targets
+    @tot_hold_target_share = @hold_targets / @tot_targets
+    @total_target_share = @long_target_share + @short_target_share + @long_hold_target_share + @short_hold_target_share
+    
+
+    
+    # @long_targets = display_items.where('rec_portfolio > ?', 0).map { |di| di.rec_portfolio }.sum
+    # @short_targets = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum.abs
+    # @tot_targets = @long_targets + @short_targets
     @remainder = @tot_targets - @net_investable
     
     @tot_curr_val = display_items.where.not(classification: 'fallen_out').map { |di| di.curr_portfolio.abs unless di.curr_portfolio.nil? }.compact.sum

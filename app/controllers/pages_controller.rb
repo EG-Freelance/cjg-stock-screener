@@ -60,19 +60,10 @@ class PagesController < ApplicationController
     rec_short = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum
     @rec_total_inv = rec_long + rec_short.abs
     
-    
-    @tot_short = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum.abs
-    @tot_long = display_items.where('rec_portfolio > ?', 0).map { |di| di.rec_portfolio }.sum.abs
-    @net_allocate = @tot_short + @tot_long
-    
-    @total_portfolio_value = @option_val + @shorts_val + @longs_val + @cash
-    @revised_portfolio_value = @total_portfolio_value - @option_val - @cash
-    
-    @net_investable = @revised_portfolio_value - @fallen_out_val + @cash # + @close_val ### remove @close_val for now (double-counted?)
-    
     ##################
-    # Mkt Cap Shares #
+    # MKT CAP SHARES #
     ##################
+    
     if Rails.env == "production"
       longs = display_items.where('rec_action ~* ? AND rec_portfolio > ?', "BUY", 0)
       shorts = display_items.where('rec_action ~* ? AND rec_portfolio < ?', "SHORT", 0)
@@ -96,7 +87,7 @@ class PagesController < ApplicationController
     @total_share = @long_share + @short_share + @long_hold_share + @short_hold_share
     
     #################
-    # Target Shares #
+    # TARGET SHARES #
     #################
     
     @long_targets = longs.map { |di| di.rec_portfolio }.sum.to_f
@@ -112,6 +103,19 @@ class PagesController < ApplicationController
     @short_hold_target_share = @short_hold_targets / @tot_targets
     @tot_hold_target_share = @hold_targets / @tot_targets
     @total_target_share = @long_target_share + @short_target_share + @long_hold_target_share + @short_hold_target_share
+    
+    #############
+    # OLD CALCS #
+    #############
+    
+    @tot_short = display_items.where('rec_portfolio < ?', 0).map { |di| di.rec_portfolio }.sum.abs
+    @tot_long = display_items.where('rec_portfolio > ?', 0).map { |di| di.rec_portfolio }.sum.abs
+    @net_allocate = @tot_short + @tot_long
+    
+    @total_portfolio_value = @option_val + @shorts_val + @longs_val + @cash
+    @revised_portfolio_value = @total_portfolio_value - @option_val - @cash
+    
+    @net_investable = @revised_portfolio_value - @fallen_out_val + @cash # + @close_val ### remove @close_val for now (double-counted?)
     
 
     

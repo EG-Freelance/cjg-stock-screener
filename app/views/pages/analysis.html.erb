@@ -352,26 +352,6 @@
 		  		<li><b>Capacity Per Type</b>: <%= number_with_precision(@capacity_per_type, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>Total Recommended Investment = [Recommended Longs]  + [abs([Recommended Shorts])</b></li>
 		  		<li><b>Total Recommended Investment</b>: <%= number_with_precision(@rec_total_inv, :precision => 0, :delimiter => ',') %></li>
-					<li><br></li>
-		  		<li><b>Long stocks</b>: <%= number_with_precision(@longs_val, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Options</b>: <%= number_with_precision(@option_val, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Shorts</b>: <%= number_with_precision(@shorts_val, :precision => 0, :delimiter => ',') %></li>
-		  		<li><u><b>+ Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>
-		  		<li><b>Total Portfolio Value</b>: <%= number_with_precision(@total_portfolio_value, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>- Options</b>: <%= number_with_precision(@option_val, :precision => 0, :delimiter => ',') %></li>
-		  		<li><u><b>- Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>
-		  		<li><b>Revised Portfolio Value</b>: <%= number_with_precision(@revised_portfolio_value, :precision => 0, :delimiter => ',') %></li>
-		  		<li><br></li>
-		  		<li><b>Revised Portfolio Value</b>: <%= number_with_precision(@revised_portfolio_value, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>- Non-Screen Holds</b>: <%= number_with_precision(@fallen_out_val, :precision => 0, :delimiter => ',') %></li>
-		  		<!--<li><b>+ Closes</b>: <%= number_with_precision(@close_val, :precision => 0, :delimiter => ',') %></li> ## don't include closes in this calc for now (double-counted?) -->
-		  		<li><u><b>+ Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>
-		  		<li><b>Net Investable</b>: <%= number_with_precision(@net_investable, :precision => 0, :delimiter => ',') %></li>
-		  		<li><br></li>
-		  		<li><b>Total Market Cap Buys</b>: <%= number_with_precision(@long_mkt_cap, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Total Market Cap Holds</b>: <%= number_with_precision(@hold_mkt_cap, :precision => 0, :delimiter => ',') %></li>
-		  		<li><u><b>+ Total Market Cap Shorts</b>: <%= number_with_precision(@short_mkt_cap, :precision => 0, :delimiter => ',') %></u></li>
-		  		<li><b>Screen Total Market Caps</b>: <%= number_with_precision(@tot_mkt_cap, :precision => 0, :delimiter => ',') %></li>
 		  		<li><br></li>
 		  		<li><u><b>Shares (by Market Cap)</b></u></li>
 		  		<li><b>Longs</b>: <%= number_to_percentage(@long_share * 100, :precision => 0, :delimiter => ',') %></li>
@@ -390,19 +370,39 @@
 		  		<li><b>+ Shares for Closes</b>: <%= number_to_percentage(0 * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><u><b>+ Shares for No Earnings</b>: <%= number_to_percentage(0 * 100, :precision => 0, :delimiter => ',') %></u></li>
 		  		<li><b>Total Shares</b>: <%= number_to_percentage(@total_target_share * 100, :precision => 0, :delimiter => ',') %></li>
-		  		<li><br></li>
-		  		<li><b>Total Target for Longs</b>: <%= number_with_precision(@long_targets, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Total Target for Shorts</b>: <%= number_with_precision(@short_targets, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Total Target for Closes</b>: <%= number_with_precision(0, :precision => 0, :delimiter => ',') %></li>
-		  		<li><u><b>+ Total Target for No Earnings</b>: <%= number_with_precision(0, :precision => 0, :delimiter => ',') %></u></li>
-		  		<li><b>Total Targets</b>: <%= number_with_precision(@tot_targets, :precision => 0, :delimiter => ',') %></li>
-		  		<li><u><b>- Net Investable</b>: <%= number_with_precision(@net_investable, :precision => 0, :delimiter => ',') %></u></li>
-		  		<li><b>Overage</b>: <%= number_with_precision(@remainder, :precision => 0, :delimiter => ',') %></li>
-		  		<li><br></li>
-		  		<li><b>Total Targets</b>: <%= number_with_precision(@tot_targets, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>- Total Current Values</b>: <%= number_with_precision(@tot_curr_val, :precision => 0, :delimiter => ',') %></li>
-		  		<li><u><b>- Total Adjustments</b>: <%= number_with_precision(@tot_adj_val, :precision => 0, :delimiter => ',') %></u></li>
-		  		<li><b>Remainder</b>: <%= number_with_precision(@remainder_2, :precision => 0, :delimiter => ',') %></li>
+					<!--<li><br></li>-->
+		  	<!--	<li><b>Long stocks</b>: <%= number_with_precision(@longs_val, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><b>+ Options</b>: <%= number_with_precision(@option_val, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><b>+ Shorts</b>: <%= number_with_precision(@shorts_val, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><u><b>+ Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>-->
+		  	<!--	<li><b>Total Portfolio Value</b>: <%= number_with_precision(@total_portfolio_value, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><b>- Options</b>: <%= number_with_precision(@option_val, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><u><b>- Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>-->
+		  	<!--	<li><b>Revised Portfolio Value</b>: <%= number_with_precision(@revised_portfolio_value, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><br></li>-->
+		  	<!--	<li><b>Revised Portfolio Value</b>: <%= number_with_precision(@revised_portfolio_value, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><b>- Non-Screen Holds</b>: <%= number_with_precision(@fallen_out_val, :precision => 0, :delimiter => ',') %></li>-->
+		  		<!--<li><b>+ Closes</b>: <%= number_with_precision(@close_val, :precision => 0, :delimiter => ',') %></li> ## don't include closes in this calc for now (double-counted?) -->
+		  	<!--	<li><u><b>+ Cash</b>: <%= number_with_precision(@cash, :precision => 0, :delimiter => ',') %></u></li>-->
+		  	<!--	<li><b>Net Investable</b>: <%= number_with_precision(@net_investable, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><br></li>-->
+		  	<!--	<li><b>Total Market Cap Buys</b>: <%= number_with_precision(@long_mkt_cap, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><b>+ Total Market Cap Holds</b>: <%= number_with_precision(@hold_mkt_cap, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><u><b>+ Total Market Cap Shorts</b>: <%= number_with_precision(@short_mkt_cap, :precision => 0, :delimiter => ',') %></u></li>-->
+		  	<!--	<li><b>Screen Total Market Caps</b>: <%= number_with_precision(@tot_mkt_cap, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><br></li>-->
+		  	<!--	<li><b>Total Target for Longs</b>: <%= number_with_precision(@long_targets, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><b>+ Total Target for Shorts</b>: <%= number_with_precision(@short_targets, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><b>+ Total Target for Closes</b>: <%= number_with_precision(0, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><u><b>+ Total Target for No Earnings</b>: <%= number_with_precision(0, :precision => 0, :delimiter => ',') %></u></li>-->
+		  	<!--	<li><b>Total Targets</b>: <%= number_with_precision(@tot_targets, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><u><b>- Net Investable</b>: <%= number_with_precision(@net_investable, :precision => 0, :delimiter => ',') %></u></li>-->
+		  	<!--	<li><b>Overage</b>: <%= number_with_precision(@remainder, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><br></li>-->
+		  	<!--	<li><b>Total Targets</b>: <%= number_with_precision(@tot_targets, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><b>- Total Current Values</b>: <%= number_with_precision(@tot_curr_val, :precision => 0, :delimiter => ',') %></li>-->
+		  	<!--	<li><u><b>- Total Adjustments</b>: <%= number_with_precision(@tot_adj_val, :precision => 0, :delimiter => ',') %></u></li>-->
+		  	<!--	<li><b>Remainder</b>: <%= number_with_precision(@remainder_2, :precision => 0, :delimiter => ',') %></li>-->
 		  	</ul>
 		  </div>
 		</div>

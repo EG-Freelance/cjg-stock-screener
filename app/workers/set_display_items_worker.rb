@@ -542,7 +542,7 @@ class SetDisplayItemsWorker
     # destroy any display items that don't have an associated stock as a fail-safe (WBT/MFS pointed this error out)
     display_items.includes(:stock).where(stocks: {id: nil}).destroy_all
     
-    # set allocations; assume Cash is "gross cash"
+    # set allocations
     long_val = portfolio_items.where(pos_type: "stock", position: "long").map { |pi| pi.market_val }.sum
     short_val = portfolio_items.where(pos_type: "stock", position: "short").map { |pi| pi.market_val.abs }.sum
     option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.market_val.abs }.sum

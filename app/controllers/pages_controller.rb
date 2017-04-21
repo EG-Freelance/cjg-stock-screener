@@ -47,7 +47,7 @@ class PagesController < ApplicationController
     @shorts_val = portfolio_items.where(pos_type: "stock", position: "short").map { |pi| pi.market_val.abs }.sum.to_f
     @reserve_val = 200000
     
-    @non_margin_investable = @longs_val + @cash - @shorts_val - @reserve_val
+    @non_margin_investable = @longs_val + @close_val + @cash - @shorts_val - @reserve_val
     @total_investable = @non_margin_investable * 2
     
     @option_val = portfolio_items.where(pos_type: "option").map { |pi| pi.market_val.abs }.sum.to_f

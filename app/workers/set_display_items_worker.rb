@@ -568,7 +568,7 @@ class SetDisplayItemsWorker
         if (prev_earn > rec_earn) && (di.rec_action == "BUY" || di.rec_action == "SHORT")
           rec = 0
         else
-          rec = (di.mkt_cap.to_f / mkt_cap_base) * funds_for_alloc * sign
+          rec = (Math.log(di.mkt_cap.to_f) / mkt_cap_base) * funds_for_alloc * sign
         end
       end
       change = rec - di.curr_portfolio

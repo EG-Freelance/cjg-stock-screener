@@ -169,11 +169,11 @@ class SetDisplayItemsWorker
             when si[7] >= 0.9 && prev_earn <= rec_earn
               si[4] = "CLOSE AND BUY"
               return_funds = return_funds + si[22].abs
-              long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap
+              long_mkt_cap_pool = long_mkt_cap_pool + Math.log(stock.market_cap)
             # in bottom 15%
             when si[7] <= 0.15 || prev_earn > rec_earn
               si[4] = "HOLD"
-              short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap
+              short_mkt_cap_pool = short_mkt_cap_pool + Math.log(stock.market_cap)
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -185,12 +185,12 @@ class SetDisplayItemsWorker
             # in top 15%
             when si[7] >= 0.85 || prev_earn > rec_earn
               si[4] = "HOLD"
-              long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap
+              long_mkt_cap_pool = long_mkt_cap_pool + Math.log(stock.market_cap)
             # in bottom 10%
             when si[7] <= 0.1 && prev_earn <= rec_earn
               si[4] = "CLOSE AND SHORT"
               return_funds = return_funds + si[22].abs
-              short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap
+              short_mkt_cap_pool = short_mkt_cap_pool + Math.log(stock.market_cap)
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -207,11 +207,11 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
-          long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap unless si[19] == "N/A" || si[19].to_i > rec_earn
+          long_mkt_cap_pool = long_mkt_cap_pool + Math.log(stock.market_cap) unless si[19] == "N/A" || si[19].to_i > rec_earn
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
-          short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap unless si[19] == "N/A" || si[19].to_i > rec_earn
+          short_mkt_cap_pool = short_mkt_cap_pool + Math.log(stock.market_cap) unless si[19] == "N/A" || si[19].to_i > rec_earn
         # if in middle 80%
         else
           si[4] = "(n/a)"
@@ -377,11 +377,11 @@ class SetDisplayItemsWorker
             when si[7] >= 0.9
               si[4] = "CLOSE AND BUY" && prev_earn <= rec_earn
               return_funds = return_funds + si[22].abs
-              long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap
+              long_mkt_cap_pool = long_mkt_cap_pool + Math.log(stock.market_cap)
             # in bottom 15%
             when si[7] <= 0.15
               si[4] = "HOLD" || prev_earn > rec_earn
-              short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap
+              short_mkt_cap_pool = short_mkt_cap_pool + Math.log(stock.market_cap)
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -393,12 +393,12 @@ class SetDisplayItemsWorker
             # in top 15%
             when si[7] >= 0.85
               si[4] = "HOLD" || prev_earn > rec_earn
-              long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap
+              long_mkt_cap_pool = long_mkt_cap_pool + Math.log(stock.market_cap)
             # in bottom 10%
             when si[7] <= 0.1
               si[4] = "CLOSE AND SHORT" && prev_earn <= rec_earn
               return_funds = return_funds + si[22].abs
-              short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap
+              short_mkt_cap_pool = short_mkt_cap_pool + Math.log(stock.market_cap)
             # in middle 75%
             else
               si[4] = "CLOSE"
@@ -415,11 +415,11 @@ class SetDisplayItemsWorker
         # if in top 10%
         when si[7] >= 0.9
           si[4] = "BUY"
-          long_mkt_cap_pool = long_mkt_cap_pool + stock.market_cap unless si[19] == "N/A" || si[19].to_i > rec_earn
+          long_mkt_cap_pool = long_mkt_cap_pool + Math.log(stock.market_cap) unless si[19] == "N/A" || si[19].to_i > rec_earn
         # if in bottom 10%
         when si[7] <= 0.1
           si[4] = "SHORT"
-          short_mkt_cap_pool = short_mkt_cap_pool + stock.market_cap unless si[19] == "N/A" || si[19].to_i > rec_earn
+          short_mkt_cap_pool = short_mkt_cap_pool + Math.log(stock.market_cap) unless si[19] == "N/A" || si[19].to_i > rec_earn
         # if in middle 80%
         else
           si[4] = "(n/a)"

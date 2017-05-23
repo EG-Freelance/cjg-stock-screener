@@ -439,7 +439,7 @@
 		  		<li><b>Current Long Holdings</b>: <%= number_with_precision(@lg_current_holdings_long, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Buys</b>: <%= number_with_precision(@lg_buys, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>- Closes</b>: <%= number_with_precision(@lg_closes, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Upward Adjustments</b>: <%= number_with_precision(@lg_adj_up * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Upward Adjustments</b>: <%= number_with_precision(@lg_adj_up, :precision => 0, :delimiter => ',') %></li>
 		  		<li><u><b>- Downward Adjustments</b>: <%= number_with_precision(-@lg_adj_dn, :precision => 0, :delimiter => ',') %></u></li>
 		  		<li><b>Large Cap Target</b>: <%= number_with_precision(@lg_total_after_adj, :precision => 0, :delimiter => ',') %></li>
 		  		<li><br></li>
@@ -449,7 +449,7 @@
 		  		<li><b>Current Long Holdings</b>: <%= number_with_precision(@sm_current_holdings_long, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Buys</b>: <%= number_with_precision(@sm_buys, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>- Closes</b>: <%= number_with_precision(@sm_closes, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Upward Adjustments</b>: <%= number_with_precision(@sm_adj_up * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Upward Adjustments</b>: <%= number_with_precision(@sm_adj_up, :precision => 0, :delimiter => ',') %></li>
 		  		<li><u><b>- Downward Adjustments</b>: <%= number_with_precision(-@sm_adj_dn, :precision => 0, :delimiter => ',') %></u></li>
 		  		<li><b>Small Cap Target</b>: <%= number_with_precision(@sm_total_after_adj, :precision => 0, :delimiter => ',') %></li>
 		  		<li><br></li>
@@ -459,7 +459,7 @@
 		  		<li><b>Current Long Holdings</b>: <%= number_with_precision(@tot_current_holdings_long, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Buys</b>: <%= number_with_precision(@tot_buys, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>- Closes</b>: <%= number_with_precision(@tot_closes, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Upward Adjustments</b>: <%= number_with_precision(@tot_adj_up * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Upward Adjustments</b>: <%= number_with_precision(@tot_adj_up, :precision => 0, :delimiter => ',') %></li>
 		  		<li><u><b>- Downward Adjustments</b>: <%= number_with_precision(-@tot_adj_dn, :precision => 0, :delimiter => ',') %></u></li>
 		  		<li><b>Total Target</b>: <%= number_with_precision(@tot_total_after_adj, :precision => 0, :delimiter => ',') %></li>
 		  		<li><br></li>

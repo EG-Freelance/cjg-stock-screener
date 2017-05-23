@@ -70,11 +70,21 @@ class PagesController < ApplicationController
     
     if Rails.env == "production"
       longs = display_items.where('rec_action ~* ? AND rec_portfolio > ?', "BUY", 0)
+      lg_longs = display_items.where('rec_action ~* ? AND rec_portfolio > ? AND classification = ?', "BUY", 0, "large")
+      sm_longs = display_items.where('rec_action ~* ? AND rec_portfolio > ? AND classification = ?', "BUY", 0, "small")
       shorts = display_items.where('rec_action ~* ? AND rec_portfolio < ?', "SHORT", 0)
+      lg_shorts = display_items.where('rec_action ~* ? AND rec_portfolio < ? AND classification = ?', "SHORT", 0, "large")
+      sm_shorts = display_items.where('rec_action ~* ? AND rec_portfolio < ? AND classification = ?', "SHORT", 0, "small")
     else
       longs = display_items.where('rec_action LIKE ? AND rec_portfolio > ?', "BUY", 0)
+      lg_longs = display_items.where('rec_action LIKE ? AND rec_portfolio > ? AND classification = ?', "BUY", 0, "large")
+      sm_longs = display_items.where('rec_action LIKE ? AND rec_portfolio > ? AND classification = ?', "BUY", 0, "small")
       shorts = display_items.where('rec_action LIKE ? AND rec_portfolio < ?', "SHORT", 0)
+      lg_shorts = display_items.where('rec_action LIKE ? AND rec_portfolio < ? AND classification = ?', "SHORT", 0, "large")
+      sm_shorts = display_items.where('rec_action LIKE ? AND rec_portfolio < ? AND classification = ?', "SHORT", 0, "small")
     end
+    
+    # TOTAL #
     @long_mkt_cap = longs.map { |di| di.stock.market_cap }.sum.to_f
     @short_mkt_cap = shorts.map { |di| di.stock.market_cap }.sum.to_f
     
@@ -90,10 +100,43 @@ class PagesController < ApplicationController
     @tot_hold_share = @hold_mkt_cap / @tot_mkt_cap
     @total_share = @long_share + @short_share + @long_hold_share + @short_hold_share
     
+    # LARGE #
+    @lg_long_mkt_cap = lg_longs.map { |di| di.stock.market_cap }.sum.to_f
+    @lg_short_mkt_cap = lg_shorts.map { |di| di.stock.market_cap }.sum.to_f
+    
+    @lg_hold_mkt_cap = display_items.where('rec_action = ? AND classification = ?', 'HOLD', 'large').map { |di| di.stock.market_cap }.sum.to_f
+    @lg_long_hold_mkt_cap = display_items.where('rec_action = ? AND rec_portfolio > ? AND classification = ?', 'HOLD', 0, 'large').map { |di| di.stock.market_cap }.sum.to_f
+    @lg_short_hold_mkt_cap = display_items.where('rec_action = ? AND rec_portfolio < ? AND classification = ?', 'HOLD', 0, 'large').map { |di| di.stock.market_cap }.sum.to_f
+    @lg_tot_mkt_cap = @long_mkt_cap + @short_mkt_cap + @long_hold_mkt_cap + @short_hold_mkt_cap
+
+    @lg_long_share = @lg_long_mkt_cap / @tot_mkt_cap
+    @lg_short_share = @lg_short_mkt_cap / @tot_mkt_cap
+    @lg_long_hold_share = @lg_long_hold_mkt_cap / @tot_mkt_cap
+    @lg_short_hold_share = @lg_short_hold_mkt_cap / @tot_mkt_cap
+    @lg_tot_hold_share = @lg_hold_mkt_cap / @tot_mkt_cap
+    @lg_total_share = @lg_long_share + @lg_short_share + @lg_long_hold_share + @lg_short_hold_share
+    
+    # SMALL #
+    @sm_long_mkt_cap = sm_longs.map { |di| di.stock.market_cap }.sum.to_f
+    @sm_short_mkt_cap = sm_shorts.map { |di| di.stock.market_cap }.sum.to_f
+    
+    @sm_hold_mkt_cap = display_items.where('rec_action = ? AND classification = ?', 'HOLD', 'small').map { |di| di.stock.market_cap }.sum.to_f
+    @sm_long_hold_mkt_cap = display_items.where('rec_action = ? AND rec_portfolio > ? AND classification = ?', 'HOLD', 0, 'small').map { |di| di.stock.market_cap }.sum.to_f
+    @sm_short_hold_mkt_cap = display_items.where('rec_action = ? AND rec_portfolio < ? AND classification = ?', 'HOLD', 0, 'small').map { |di| di.stock.market_cap }.sum.to_f
+    @sm_tot_mkt_cap = @long_mkt_cap + @short_mkt_cap + @long_hold_mkt_cap + @short_hold_mkt_cap
+
+    @sm_long_share = @sm_long_mkt_cap / @tot_mkt_cap
+    @sm_short_share = @sm_short_mkt_cap / @tot_mkt_cap
+    @sm_long_hold_share = @sm_long_hold_mkt_cap / @tot_mkt_cap
+    @sm_short_hold_share = @sm_short_hold_mkt_cap / @tot_mkt_cap
+    @sm_tot_hold_share = @sm_hold_mkt_cap / @tot_mkt_cap
+    @sm_total_share = @sm_long_share + @sm_short_share + @sm_long_hold_share + @sm_short_hold_share
+    
     #################
     # TARGET SHARES #
     #################
     
+    # TOTAL #
     @long_targets = longs.map { |di| di.rec_portfolio }.sum.to_f
     @short_targets = shorts.map { |di| di.rec_portfolio.abs }.sum.to_f
     @hold_targets = display_items.where('rec_action = ? AND classification != ?', 'HOLD', 'fallen out').map { |di| di.rec_portfolio.abs }.sum.to_f
@@ -107,6 +150,36 @@ class PagesController < ApplicationController
     @short_hold_target_share = @short_hold_targets / @tot_targets
     @tot_hold_target_share = @hold_targets / @tot_targets
     @total_target_share = @long_target_share + @short_target_share + @long_hold_target_share + @short_hold_target_share
+    
+    # LARGE #
+    @lg_long_targets = lg_longs.map { |di| di.rec_portfolio }.sum.to_f
+    @lg_short_targets = lg_shorts.map { |di| di.rec_portfolio.abs }.sum.to_f
+    @lg_hold_targets = display_items.where('rec_action = ? AND classification = ?', 'HOLD', 'large').map { |di| di.rec_portfolio.abs }.sum.to_f
+    @lg_long_hold_targets = display_items.where('rec_action = ? AND rec_portfolio > ? AND classification = ?', 'HOLD', 0, 'large').map { |di| di.rec_portfolio }.sum.to_f
+    @lg_short_hold_targets = display_items.where('rec_action = ? AND rec_portfolio < ? AND classification = ?', 'HOLD', 0, 'large').map { |di| di.rec_portfolio.abs }.sum.to_f
+    @lg_tot_targets = @lg_long_targets + @lg_short_targets + @lg_long_hold_targets + @lg_short_hold_targets
+
+    @lg_long_target_share = @lg_long_targets / @tot_targets
+    @lg_short_target_share = @lg_short_targets / @tot_targets
+    @lg_long_hold_target_share = @lg_long_hold_targets / @tot_targets
+    @lg_short_hold_target_share = @lg_short_hold_targets / @tot_targets
+    @lg_tot_hold_target_share = @lg_hold_targets / @tot_targets
+    @lg_total_target_share = @lg_long_target_share + @lg_short_target_share + @lg_long_hold_target_share + @lg_short_hold_target_share
+    
+    # SMALL #
+    @sm_long_targets = sm_longs.map { |di| di.rec_portfolio }.sum.to_f
+    @sm_short_targets = sm_shorts.map { |di| di.rec_portfolio.abs }.sum.to_f
+    @sm_hold_targets = display_items.where('rec_action = ? AND classification = ?', 'HOLD', 'small').map { |di| di.rec_portfolio.abs }.sum.to_f
+    @sm_long_hold_targets = display_items.where('rec_action = ? AND rec_portfolio > ? AND classification = ?', 'HOLD', 0, 'small').map { |di| di.rec_portfolio }.sum.to_f
+    @sm_short_hold_targets = display_items.where('rec_action = ? AND rec_portfolio < ? AND classification = ?', 'HOLD', 0, 'small').map { |di| di.rec_portfolio.abs }.sum.to_f
+    @sm_tot_targets = @sm_long_targets + @sm_short_targets + @sm_long_hold_targets + @sm_short_hold_targets
+
+    @sm_long_target_share = @sm_long_targets / @tot_targets
+    @sm_short_target_share = @sm_short_targets / @tot_targets
+    @sm_long_hold_target_share = @sm_long_hold_targets / @tot_targets
+    @sm_short_hold_target_share = @sm_short_hold_targets / @tot_targets
+    @sm_tot_hold_target_share = @sm_hold_targets / @tot_targets
+    @sm_total_target_share = @sm_long_target_share + @sm_short_target_share + @sm_long_hold_target_share + @sm_short_hold_target_share
     
     #############
     # OLD CALCS #

@@ -572,9 +572,6 @@ class SetDisplayItemsWorker
         end
       end
       change = rec - di.curr_portfolio
-      ####
-      h2 = { 'funds_for_alloc' => funds_for_alloc.to_f, 'mkt_cap' => di.mkt_cap, 'mkt_cap_base' => mkt_cap_base, 'log_mkt_cap' => Math.log(di.mkt_cap), 'mkt_cap_pct' => Math.log(di.mkt_cap)/mkt_cap_base, 'rec_portfolio' => di.rec_portfolio }
-      ####
       di.update(rec_portfolio: rec, net_portfolio: change)
     end
   end

@@ -188,31 +188,31 @@ class PagesController < ApplicationController
     # Present holdings + buys - close long + adj up -adj down (each 4 subs)
 
     # Large #
-    @lg_current_holdings_long = DisplayItem.where('classification = ? AND curr_portfolio > ?', 'large', 0).map { |di| di.curr_portfolio }.sum.to_f
+    @lg_current_holdings_long = display_items.where('classification = ? AND curr_portfolio > ?', 'large', 0).map { |di| di.curr_portfolio }.sum.to_f
     if Rails.env == "production"
-      @lg_buys = DisplayItem.where('classification = ? AND rec_action ~* ?', 'large', 'BUY').map { |di| di.curr_portfolio }.sum.to_f
-      @lg_closes = DisplayItem.where('classification = ? AND rec_action ~* ? AND curr_portfolio > ?', 'large', 'CLOSE', 0).map { |di| di.curr_portfolio }.sum.to_f
+      @lg_buys = display_items.where('classification = ? AND rec_action ~* ?', 'large', 'BUY').map { |di| di.rec_portfolio }.sum.to_f
+      @lg_closes = display_items.where('classification = ? AND rec_action ~* ? AND curr_portfolio > ?', 'large', 'CLOSE', 0).map { |di| di.curr_portfolio }.sum.to_f
     else
-      @lg_buys = DisplayItem.where('classification = ? AND rec_action LIKE ?', 'large', 'BUY').map { |di| di.curr_portfolio }.sum.to_f
-      @lg_closes = DisplayItem.where('classification = ? AND rec_action LIKE ? AND curr_portfolio > ?', 'large', 'CLOSE', 0).map { |di| di.curr_portfolio }.sum.to_f
+      @lg_buys = display_items.where('classification = ? AND rec_action LIKE ?', 'large', 'BUY').map { |di| di.rec_portfolio }.sum.to_f
+      @lg_closes = display_items.where('classification = ? AND rec_action LIKE ? AND curr_portfolio > ?', 'large', 'CLOSE', 0).map { |di| di.curr_portfolio }.sum.to_f
     end
-    @lg_adj_up = DisplayItem.where('classification = ? AND curr_portfolio > ? AND net_portfolio > ?', 'large', 0, 0).map { |di| di.net_portfolio }.sum.to_f
-    @lg_adj_dn = DisplayItem.where('classification = ? AND curr_portfolio > ? AND net_portfolio < ?', 'large', 0, 0).map { |di| di.net_portfolio }.sum.to_f
+    @lg_adj_up = display_items.where('classification = ? AND curr_portfolio > ? AND net_portfolio > ?', 'large', 0, 0).map { |di| di.net_portfolio }.sum.to_f
+    @lg_adj_dn = display_items.where('classification = ? AND curr_portfolio > ? AND net_portfolio < ?', 'large', 0, 0).map { |di| di.net_portfolio }.sum.to_f
     #@lg_current_holdings_short = DisplayItem.where('classification = ? AND curr_portfolio < ?', 'large', 0).map { |di| di.curr_portfolio.abs }.sum.to_f
     
     @lg_total_after_adj = @lg_current_holdings_long + @lg_buys - @lg_closes + @lg_adj_up + @lg_adj_dn
     
     # Small #
-    @sm_current_holdings_long = DisplayItem.where('classification = ? AND curr_portfolio > ?', 'small', 0).map { |di| di.curr_portfolio }.sum.to_f
+    @sm_current_holdings_long = display_items.where('classification = ? AND curr_portfolio > ?', 'small', 0).map { |di| di.curr_portfolio }.sum.to_f
     if Rails.env == "production"
-      @sm_buys = DisplayItem.where('classification = ? AND rec_action ~* ?', 'small', 'BUY').map { |di| di.curr_portfolio }.sum.to_f
-      @sm_closes = DisplayItem.where('classification = ? AND rec_action ~* ? AND curr_portfolio > ?', 'small', 'CLOSE', 0).map { |di| di.curr_portfolio }.sum.to_f
+      @sm_buys = display_items.where('classification = ? AND rec_action ~* ?', 'small', 'BUY').map { |di| di.rec_portfolio }.sum.to_f
+      @sm_closes = display_items.where('classification = ? AND rec_action ~* ? AND curr_portfolio > ?', 'small', 'CLOSE', 0).map { |di| di.curr_portfolio }.sum.to_f
     else
-      @sm_buys = DisplayItem.where('classification = ? AND rec_action LIKE ?', 'small', 'BUY').map { |di| di.curr_portfolio }.sum.to_f
-      @sm_closes = DisplayItem.where('classification = ? AND rec_action LIKE ? AND curr_portfolio > ?', 'small', 'CLOSE', 0).map { |di| di.curr_portfolio }.sum.to_f
+      @sm_buys = display_items.where('classification = ? AND rec_action LIKE ?', 'small', 'BUY').map { |di| di.rec_portfolio }.sum.to_f
+      @sm_closes = display_items.where('classification = ? AND rec_action LIKE ? AND curr_portfolio > ?', 'small', 'CLOSE', 0).map { |di| di.curr_portfolio }.sum.to_f
     end
-    @sm_adj_up = DisplayItem.where('classification = ? AND curr_portfolio > ? AND net_portfolio > ?', 'small', 0, 0).map { |di| di.net_portfolio }.sum.to_f
-    @sm_adj_dn = DisplayItem.where('classification = ? AND curr_portfolio > ? AND net_portfolio < ?', 'small', 0, 0).map { |di| di.net_portfolio }.sum.to_f
+    @sm_adj_up = display_items.where('classification = ? AND curr_portfolio > ? AND net_portfolio > ?', 'small', 0, 0).map { |di| di.net_portfolio }.sum.to_f
+    @sm_adj_dn = display_items.where('classification = ? AND curr_portfolio > ? AND net_portfolio < ?', 'small', 0, 0).map { |di| di.net_portfolio }.sum.to_f
     #@sm_current_holdings_short = DisplayItem.where('classification = ? AND curr_portfolio < ?', 'small', 0).map { |di| di.curr_portfolio.abs }.sum.to_f
     
     @sm_total_after_adj = @sm_current_holdings_long + @sm_buys - @sm_closes + @sm_adj_up + @sm_adj_dn

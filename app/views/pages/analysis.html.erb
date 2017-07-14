@@ -89,7 +89,7 @@
 			            </div> <!-- Portfolio ownership -->
 		            </td> <!-- Company Name -->
 								<td style="text-align:center"><%= !si[22].empty? ? number_to_percentage(si[22][0].tot_gain_p, :precision => 2) : "N/A" %></td> <!-- Total Gain (%) -->
-								<td style="text-align:center"><%= !si[22].empty? ? number_with_precision(si[22][0].tot_gain, :precision => 2) : "N/A" %></td> <!-- Total Gain ($) -->
+								<td style="text-align:center"><%= !si[22].empty? ? number_with_precision(si[22][0].tot_gain, :precision => 2, :delimiter => "," ) : "N/A" %></td> <!-- Total Gain ($) -->
 								<td style="text-align:center"><%= !si[22].empty? ? ((Date.today - 1.year) > si[22][0].date_acq ? "LT" : "ST") : "N/A" %></td> <!-- Long/Short Term -->
 								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Earnings -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
@@ -204,7 +204,7 @@
 			            </div> <!-- Portfolio ownership -->
 		            </td> <!-- Company Name -->
 								<td style="text-align:center"><%= !si[22].empty? ? number_to_percentage(si[22][0].tot_gain_p, :precision => 2) : "N/A" %></td> <!-- Total Gain (%) -->
-								<td style="text-align:center"><%= !si[22].empty? ? number_with_precision(si[22][0].tot_gain, :precision => 2) : "N/A" %></td> <!-- Total Gain ($) -->
+								<td style="text-align:center"><%= !si[22].empty? ? number_with_precision(si[22][0].tot_gain, :precision => 2, :delimiter => "," ) : "N/A" %></td> <!-- Total Gain ($) -->
 								<td style="text-align:center"><%= !si[22].empty? ? ((Date.today - 1.year) > si[22][0].date_acq ? "LT" : "ST") : "N/A" %></td> <!-- Long/Short Term -->
 								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->

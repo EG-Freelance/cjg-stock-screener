@@ -90,7 +90,7 @@
 		            </td> <!-- Company Name -->
 								<td style="text-align:center"><%= !si[22].empty? ? number_to_percentage(si[22][0].tot_gain_p, :precision => 2) : "N/A" %></td> <!-- Total Gain (%) -->
 								<td style="text-align:center"><%= !si[22].empty? ? number_with_precision(si[22][0].tot_gain, :precision => 2) : "N/A" %></td> <!-- Total Gain ($) -->
-								<td style="text-align:center"><%= !si[22].empty? ? ((Date.today - 1.year) > si[22][0].date_acq ? "Long" : "Short") : "N/A" %></td> <!-- Long/Short Term -->
+								<td style="text-align:center"><%= !si[22].empty? ? ((Date.today - 1.year) > si[22][0].date_acq ? "LT" : "ST") : "N/A" %></td> <!-- Long/Short Term -->
 								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Earnings -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
@@ -205,7 +205,7 @@
 		            </td> <!-- Company Name -->
 								<td style="text-align:center"><%= !si[22].empty? ? number_to_percentage(si[22][0].tot_gain_p, :precision => 2) : "N/A" %></td> <!-- Total Gain (%) -->
 								<td style="text-align:center"><%= !si[22].empty? ? number_with_precision(si[22][0].tot_gain, :precision => 2) : "N/A" %></td> <!-- Total Gain ($) -->
-								<td style="text-align:center"><%= !si[22].empty? ? ((Date.today - 1.year) > si[22][0].date_acq ? "Long" : "Short") : "N/A" %></td> <!-- Long/Short Term -->
+								<td style="text-align:center"><%= !si[22].empty? ? ((Date.today - 1.year) > si[22][0].date_acq ? "LT" : "ST") : "N/A" %></td> <!-- Long/Short Term -->
 								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
@@ -316,8 +316,8 @@
 			            </div> <!-- Portfolio ownership -->
 		            </td> <!-- Company Name -->
 								<td style="text-align:center"><%= !pi[22].empty? ? number_to_percentage(pi[22][0].tot_gain_p, :precision => 2) : "N/A" %></td> <!-- Total Gain (%) -->
-								<td style="text-align:center"><%= !pi[22].empty? ? number_with_precision(pi[22][0].tot_gain, :precision => 2) : "N/A" %></td> <!-- Total Gain ($) -->
-								<td style="text-align:center"><%= !pi[22].empty? ? ((Date.today - 1.year) > pi[22][0].date_acq ? "Long" : "Short") : "N/A" %></td> <!-- Long/Short Term -->
+								<td style="text-align:center"><%= !pi[22].empty? ? number_with_precision(pi[22][0].tot_gain, :precision => 2, :delimiter => ',' ) : "N/A" %></td> <!-- Total Gain ($) -->
+								<td style="text-align:center"><%= !pi[22].empty? ? ((Date.today - 1.year) > pi[22][0].date_acq ? "LT" : "ST") : "N/A" %></td> <!-- Long/Short Term -->
 								<td><%= pi[19] != "N/A" ? pi[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= pi[20] != "N/A" ? pi[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 								<td style="text-align:center"><%= pi[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= pi[4] %></td> <!-- Rec Action -->

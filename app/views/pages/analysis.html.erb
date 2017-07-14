@@ -29,6 +29,9 @@
 							<th class="analysis-header" style='width:65px; padding-left:10px'>Sym</th>
 							<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
+							<th class="analysis-header" style="text-align:center">% Gain</th>
+							<th class="analysis-header" style="text-align:center">$ Gain</th>
+							<th class="analysis-header" style="text-align:center">Term</th>
 							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
@@ -85,6 +88,9 @@
 			              </div>
 			            </div> <!-- Portfolio ownership -->
 		            </td> <!-- Company Name -->
+								<td style="text-align:center"><%= !si[22].empty? ? number_to_percentage(si[22][0].tot_gain_p, :precision => 2) : "N/A" %></td> <!-- Total Gain (%) -->
+								<td style="text-align:center"><%= !si[22].empty? ? number_with_precision(si[22][0].tot_gain, :precision => 2) : "N/A" %></td> <!-- Total Gain ($) -->
+								<td style="text-align:center"><%= !si[22].empty? ? ((Date.today - 1.year) > si[22][0].date_acq ? "Long" : "Short") : "N/A" %></td> <!-- Long/Short Term -->
 								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Earnings -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
@@ -95,7 +101,7 @@
 								<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 								<td style="text-align:center"><%= number_to_percentage(si[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
 								<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
-								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000, :precision => 0, :delimiter => ',') %></td> <!-- Market Cap -->
+								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000000, :precision => 1, :delimiter => ',') %></td> <!-- Market Cap -->
 								<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
 								<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
 								<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
@@ -137,6 +143,9 @@
 							<th class="analysis-header" style='width:65px; padding-left: 10px'>Sym</th>
 							<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
+							<th class="analysis-header" style="text-align:center">% Gain</th>
+							<th class="analysis-header" style="text-align:center">$ Gain</th>
+							<th class="analysis-header" style="text-align:center">Term</th>
 							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
@@ -194,6 +203,9 @@
 			              </div>
 			            </div> <!-- Portfolio ownership -->
 		            </td> <!-- Company Name -->
+								<td style="text-align:center"><%= !si[22].empty? ? number_to_percentage(si[22][0].tot_gain_p, :precision => 2) : "N/A" %></td> <!-- Total Gain (%) -->
+								<td style="text-align:center"><%= !si[22].empty? ? number_with_precision(si[22][0].tot_gain, :precision => 2) : "N/A" %></td> <!-- Total Gain ($) -->
+								<td style="text-align:center"><%= !si[22].empty? ? ((Date.today - 1.year) > si[22][0].date_acq ? "Long" : "Short") : "N/A" %></td> <!-- Long/Short Term -->
 								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
@@ -204,7 +216,7 @@
 								<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 								<td style="text-align:center"><%= number_to_percentage(si[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
 								<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
-								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000, :precision => 0, :delimiter => ',') %></td> <!-- Market Cap -->
+								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[9]/1000000000, :precision => 1, :delimiter => ',') %></td> <!-- Market Cap -->
 								<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
 								<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
 								<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
@@ -247,6 +259,9 @@
 							<th class="analysis-header" style='width:65px; padding-left: 10px'>Sym</th>
 							<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
+							<th class="analysis-header" style="text-align:center">% Gain</th>
+							<th class="analysis-header" style="text-align:center">$ Gain</th>
+							<th class="analysis-header" style="text-align:center">Term</th>
 							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
@@ -300,6 +315,9 @@
 			              </div>
 			            </div> <!-- Portfolio ownership -->
 		            </td> <!-- Company Name -->
+								<td style="text-align:center"><%= !pi[22].empty? ? number_to_percentage(pi[22][0].tot_gain_p, :precision => 2) : "N/A" %></td> <!-- Total Gain (%) -->
+								<td style="text-align:center"><%= !pi[22].empty? ? number_with_precision(pi[22][0].tot_gain, :precision => 2) : "N/A" %></td> <!-- Total Gain ($) -->
+								<td style="text-align:center"><%= !pi[22].empty? ? ((Date.today - 1.year) > pi[22][0].date_acq ? "Long" : "Short") : "N/A" %></td> <!-- Long/Short Term -->
 								<td><%= pi[19] != "N/A" ? pi[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= pi[20] != "N/A" ? pi[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 								<td style="text-align:center"><%= pi[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= pi[4] %></td> <!-- Rec Action -->
@@ -307,7 +325,7 @@
 								<td class="hidden"><%= pi[6] %></td> <!-- Totals -->
 								<td style="text-align:center"><%= number_to_percentage(pi[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
 								<td style='text-align:center'><%= pi[8] %></td> <!-- Dist > 7 or > 8 -->
-								<td style="text-align:right; padding-right:2px"><%= !pi[9].nil? ? number_with_precision(pi[9]/1000000, :precision => 0, :delimiter => ',') : "N/A" %></td> <!-- Market Cap -->
+								<td style="text-align:right; padding-right:2px"><%= !pi[9].nil? ? number_with_precision(pi[9]/1000000000, :precision => 1, :delimiter => ',') : "N/A" %></td> <!-- Market Cap -->
 								<td style="text-align:right; padding-right:2px"><%= !pi[21].nil? ? number_with_precision(pi[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
 								<td class="hidden"><%= pi[10] %></td> <!-- Net Stock Issues Score -->
 								<td class="hidden"><%= pi[11] %></td> <!-- RelAccruals Score -->

@@ -571,7 +571,7 @@ class SetDisplayItemsWorker
           # Change to using new rule:
           # target = max(min(round_up(market_cap/1,000,000,000) * 1,000, 3,000), 25,000)
           # rec = (Math.log(di.mkt_cap.to_f) / mkt_cap_base) * funds_for_alloc * sign
-          rec_base = ceil(di.mkt_cap / 1000000000.0)
+          rec_base = (di.mkt_cap / 1000000000.0).ceil
           rec_ranged_base = [[rec_base, 3].max, 25].min
           rec = rec_ranged_base * sign * 1000
         end

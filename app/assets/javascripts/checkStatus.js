@@ -17,7 +17,7 @@ function checkBackground() {
 				sum = parseInt($('#import-workers').text()) + parseInt($('#screen-workers').text()) + parseInt($('#display-workers').text()) + parseInt($('#earnings-workers').text());
 				$('#check-bg').trigger('click');
 				i++;
-			},5000);
+			},1000);
 		},500);
 	});
 	

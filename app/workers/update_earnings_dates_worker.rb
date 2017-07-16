@@ -47,10 +47,10 @@ class UpdateEarningsDatesWorker
       data = rows.map { |r| r.search('td').map { |c| c.text } }
       
       # don't use symbols with decimal points (foreign exchanges)
-      data.delete_if { |d| d[0].match(/\./) }
+      data.delete_if { |d| d[1].match(/\./) }
       
       # remove data for stocks that aren't in the system
-      data.delete_if { |d| !sym_array.include?(d[0]) }
+      data.delete_if { |d| !sym_array.include?(d[1]) }
       
       # remove earnings dates that no longer appear on this page
       ed_delete_array = ed_today_array.delete_if { |ed| data.map { |d| d[0] }.include?(ed.stock.symbol) }
@@ -58,9 +58,9 @@ class UpdateEarningsDatesWorker
       
       data.each do |d|
         # select the stock in the system
-        stock = stocks.find_by(symbol: d[0])
+        stock = stocks.find_by(symbol: d[1])
         # save the current date as an entry with the provided time
-        stock.earnings_dates.where(date: date, time: d[5]).first_or_create   
+        stock.earnings_dates.where(date: date, time: d[3]).first_or_create   
         
         # delete unneeded old earnings dates (all except most recent and upcoming) to maintain DB size
         if stock.earnings_dates.count >= 3

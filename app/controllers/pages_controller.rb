@@ -374,7 +374,7 @@ class PagesController < ApplicationController
   end
   
   def auto_import_ed
-    Stock.get_earnings_by_date
+    Stock.get_earnings_by_date(false)
     redirect_to root_url, notice: "Gathering next two weeks of earnings dates; this will take a few seconds."
   end
   

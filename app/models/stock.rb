@@ -35,7 +35,7 @@ class Stock < ActiveRecord::Base
     if full == true
       b_date = Date.today - 4.weeks
     else
-      b_date = Date.today
+      b_date = Date.today - 2.days
     end
     e_date = Date.today + 2.weeks
     # set range to extend two weeks into future

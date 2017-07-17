@@ -377,7 +377,7 @@
 		  		<li><u><b>- NSH</b>: <%= number_with_precision(@fallen_out_val, :precision => 0, :delimiter => ',') %></u></li>
 					<li><b>Purchasing Capacity</b>: <%= number_with_precision(@purchasing_capacity, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></b></li>
-		  		<li><b>Capacity Per Type</b>: <%= number_with_precision(@capacity_per_type, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>Capacity for Longs and Shorts (each)</b>: <%= number_with_precision(@capacity_per_type, :precision => 0, :delimiter => ',') %></li>
 		  		<li><br></li>
 					
 					<!--INVESTMENTS-->
@@ -388,8 +388,8 @@
 		  		
 		  		<!--ALL MARKET CAP SHARES-->
 		  		<li><u><b>All Shares (by Market Cap)</b></u></li>
-		  		<li><b>Longs</b>: <%= number_to_percentage(@long_share * 100, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Shorts</b>: <%= number_to_percentage(@short_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>Long Buys</b>: <%= number_to_percentage(@long_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Short Sells</b>: <%= number_to_percentage(@short_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Long Holds</b>: <%= number_to_percentage(@long_hold_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Short Holds</b>: <%= number_to_percentage(@short_hold_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Shares for Closes</b>: <%= number_to_percentage(0 * 100, :precision => 0, :delimiter => ',') %></li>
@@ -399,8 +399,8 @@
 		  		
 		  		<!--LG CAP MARKET CAP SHARES-->
 		  		<li><u><b>Large Cap Shares (by Market Cap)</b></u></li>
-		  		<li><b>Longs</b>: <%= number_to_percentage(@lg_long_share * 100, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Shorts</b>: <%= number_to_percentage(@lg_short_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>Long Buys</b>: <%= number_to_percentage(@lg_long_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Short Sells</b>: <%= number_to_percentage(@lg_short_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Long Holds</b>: <%= number_to_percentage(@lg_long_hold_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Short Holds</b>: <%= number_to_percentage(@lg_short_hold_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Shares for Closes</b>: <%= number_to_percentage(0 * 100, :precision => 0, :delimiter => ',') %></li>
@@ -410,8 +410,8 @@
 		  		
 		  		<!--SM CAP MARKET CAP SHARES-->
 		  		<li><u><b>Small Cap Shares (by Market Cap)</b></u></li>
-		  		<li><b>Longs</b>: <%= number_to_percentage(@sm_long_share * 100, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Shorts</b>: <%= number_to_percentage(@sm_short_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>Long Buys</b>: <%= number_to_percentage(@sm_long_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Short Sells</b>: <%= number_to_percentage(@sm_short_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Long Holds</b>: <%= number_to_percentage(@sm_long_hold_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Short Holds</b>: <%= number_to_percentage(@sm_short_hold_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Shares for Closes</b>: <%= number_to_percentage(0 * 100, :precision => 0, :delimiter => ',') %></li>
@@ -420,9 +420,9 @@
 		  		<li><br></li>
 		  		
 		  		<!--ALL TARGET SHARES-->
-		  		<li><u><b>All Shares (by Target)</b></u></li>
-		  		<li><b>Longs</b>: <%= number_to_percentage(@long_target_share * 100, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Shorts</b>: <%= number_to_percentage(@short_target_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>All Shares (by Target [ABSV Dollar Totals])</b></u></li>
+		  		<li><b>Long Buys</b>: <%= number_to_percentage(@long_target_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Short Sells</b>: <%= number_to_percentage(@short_target_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Long Holds</b>: <%= number_to_percentage(@long_hold_target_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Short Holds</b>: <%= number_to_percentage(@short_hold_target_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Shares for Closes</b>: <%= number_to_percentage(0 * 100, :precision => 0, :delimiter => ',') %></li>
@@ -431,9 +431,9 @@
 					<li><br></li>
 		  		
 		  		<!--LG CAP TARGET SHARES-->
-		  		<li><u><b>Large Cap Shares (by Target)</b></u></li>
-		  		<li><b>Longs</b>: <%= number_to_percentage(@lg_long_target_share * 100, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Shorts</b>: <%= number_to_percentage(@lg_short_target_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>Large Cap Shares (by Target [ABSV Dollar Totals])</b></u></li>
+		  		<li><b>Long Buys</b>: <%= number_to_percentage(@lg_long_target_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Short Sells</b>: <%= number_to_percentage(@lg_short_target_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Long Holds</b>: <%= number_to_percentage(@lg_long_hold_target_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Short Holds</b>: <%= number_to_percentage(@lg_short_hold_target_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Shares for Closes</b>: <%= number_to_percentage(0 * 100, :precision => 0, :delimiter => ',') %></li>
@@ -442,9 +442,9 @@
 		  		<li><br></li>
 		  		
 		  		<!--SM CAP TARGET SHARES-->
-		  		<li><u><b>Small Cap Shares (by Target)</b></u></li>
-		  		<li><b>Longs</b>: <%= number_to_percentage(@sm_long_target_share * 100, :precision => 0, :delimiter => ',') %></li>
-		  		<li><b>+ Shorts</b>: <%= number_to_percentage(@sm_short_target_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><u><b>Small Cap Shares (by Target [ABSV Dollar Totals])</b></u></li>
+		  		<li><b>Long Buys</b>: <%= number_to_percentage(@sm_long_target_share * 100, :precision => 0, :delimiter => ',') %></li>
+		  		<li><b>+ Short Sells</b>: <%= number_to_percentage(@sm_short_target_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Long Holds</b>: <%= number_to_percentage(@sm_long_hold_target_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Short Holds</b>: <%= number_to_percentage(@sm_short_hold_target_share * 100, :precision => 0, :delimiter => ',') %></li>
 		  		<li><b>+ Shares for Closes</b>: <%= number_to_percentage(0 * 100, :precision => 0, :delimiter => ',') %></li>

@@ -18,7 +18,7 @@ class GetScreenMechanizeWorker
     response = agent.post('https://stock.screener.co/subscribe/getdate.php?username=erikwgibbons')
     
     # load screen info
-    response = agent.post("https://stock.screener.co/screenerinclude.php?token=#{token}&asset=stocks&type=loadScreen&name=Mispricing8")
+    response = agent.post("https://stock.screener.co/screenerinclude.php?token=#{token}&asset=stocks&type=loadScreen&name=Mispricing8d")
     # load data from screen
     # set header row
     results = [["Symbol", "Company Name", "NetStockIssues", "RelAccruals", "NetOpAssets Scaled", "Assets Growth", "InvestToAssets", "Price-52 week price percent change", "Market capitalization", "Gross Profit Premium", "ROA Quarterly", "DistTotal2", "Revenue-Last Quarter"]]

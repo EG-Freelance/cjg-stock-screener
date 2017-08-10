@@ -46,16 +46,6 @@ class UpdateEarningsDatesWorker
           
           # array of usable data arrays
           data = rows.map { |r| r.search('td').map { |c| c.text } }
-          # financial calendar table
-          # don't use symbols with decimal points (foreign exchanges)
-          data.delete_if { |d| d[1].match(/\./) }
-          
-          # remove data for stocks that aren't in the system
-          data.delete_if { |d| !sym_array.include?(d[1]) }
-          
-          # remove earnings dates that no longer appear on this page
-          ed_delete_array = ed_today_array.delete_if { |ed| data.map { |d| d[0] }.include?(ed.stock.symbol) }
-          ed_delete_array.each { |ed| ed.destroy }
           
         rescue
           if j < 100
@@ -64,9 +54,20 @@ class UpdateEarningsDatesWorker
             retry
           else
             puts "failed 100 pagination attempts: page #{i}, attempt #{j}"
+            return false
           end
         end
       end
+      # financial calendar table
+      # don't use symbols with decimal points (foreign exchanges)
+      data.delete_if { |d| d[1].match(/\./) }
+      
+      # remove data for stocks that aren't in the system
+      data.delete_if { |d| !sym_array.include?(d[1]) }
+      
+      # remove earnings dates that no longer appear on this page
+      ed_delete_array = ed_today_array.delete_if { |ed| data.map { |d| d[0] }.include?(ed.stock.symbol) }
+      ed_delete_array.each { |ed| ed.destroy }
       
       data.each do |d|
         # select the stock in the system

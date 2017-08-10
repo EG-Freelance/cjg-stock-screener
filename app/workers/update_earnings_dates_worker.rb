@@ -34,11 +34,21 @@ class UpdateEarningsDatesWorker
     
     pages.times do |i|
       puts i
-      unless i == 0
+      if i == 0
+        # financial calendar table
+        table = response.at "#fin-cal-table"
+        
+        # rows of usable data
+        rows = table.search('tr')[1..-1]
+        
+        # array of usable data arrays
+        data = rows.map { |r| r.search('td').map { |c| c.text } }
+      else
         paginated_url = url + "&offset=#{i * 100}&size=100"
         j = 0
         begin
           response = agent.get(paginated_url)
+          # financial calendar table
           table = response.at "#fin-cal-table"
           
           # rows of usable data
@@ -46,7 +56,6 @@ class UpdateEarningsDatesWorker
           
           # array of usable data arrays
           data = rows.map { |r| r.search('td').map { |c| c.text } }
-          
         rescue
           if j < 100
             puts "failed pagination attempt: page #{i}, attempt #{j}"
@@ -58,6 +67,7 @@ class UpdateEarningsDatesWorker
           end
         end
       end
+      
       # financial calendar table
       # don't use symbols with decimal points (foreign exchanges)
       data.delete_if { |d| d[1].match(/\./) }

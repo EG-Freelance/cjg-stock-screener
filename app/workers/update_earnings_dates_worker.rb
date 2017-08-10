@@ -27,7 +27,7 @@ class UpdateEarningsDatesWorker
       results = response.search('span').find { |s| s.text.match(/d*\sresults/) }.text.match(/\d*\-\d*\sof\s(\d*)\sresults/)[1].to_i
     rescue
       puts "No earnings or date error for #{date}"
-      return false
+      return true
     end
     
     pages = (results/100.0).ceil
@@ -35,7 +35,18 @@ class UpdateEarningsDatesWorker
     pages.times do |i|
       unless i == 0
         paginated_url = url + "&offset=#{i * 100}&size=100"
-        response = agent.get(paginated_url)
+        j = 0
+        begin
+          response = agent.get(paginated_url)
+        rescue
+          if j < 100
+            puts "failed pagination attempt: page #{i}, attempt #{j}"
+            j += 1
+            retry
+          else
+            puts "failed 100 pagination attempts: page #{i}, attempt #{j}"
+          end
+        end
       end
       # financial calendar table
       table = response.at "#fin-cal-table"
@@ -67,6 +78,7 @@ class UpdateEarningsDatesWorker
           stock.earnings_dates[0..-3].each { |e| e.destroy }
         end
       end # end data
+      sleep(1)
     end # end pages.times loop
   end # end process
 end

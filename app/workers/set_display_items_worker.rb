@@ -641,10 +641,13 @@ class SetDisplayItemsWorker
           :next_ed_c => di.next_ed,
           :mkt_cap_c => di.mkt_cap,
           :lq_revenue_c => di.lq_revenue,
-          :date_sold => Date.today
+          :date_sold => Date.today,
+          :active => true
         })
         ti.update(update_params)
       end
+      # flag items that are listed as active but haven't been updated in the last 6 hours (and hence weren't touched in this process) as inactive
+      TransactionItem.where('active = ? and updated_at < ?', true, Time.now - 6.hours).each { |ti| ti.update(active: false) }
     end
   end
 end

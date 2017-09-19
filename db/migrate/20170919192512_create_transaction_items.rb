@@ -46,6 +46,8 @@ class CreateTransactionItems < ActiveRecord::Migration
       t.string :op_type
       t.decimal :op_strike
       t.string :op_expiration
+      
+      t.boolean :active
 
       t.timestamps null: false
     end

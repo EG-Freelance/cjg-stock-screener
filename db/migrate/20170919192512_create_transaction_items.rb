@@ -37,10 +37,10 @@ class CreateTransactionItems < ActiveRecord::Migration
       t.integer :prev_ed_c
       t.float :next_ed_o
       t.float :next_ed_c
-      t.integer :mkt_cap_o
-      t.integer :mkt_cap_c
-      t.integer :lq_revenue_o
-      t.integer :lq_revenue_c
+      t.integer :mkt_cap_o, limit: 8
+      t.integer :mkt_cap_c, limit: 8
+      t.integer :lq_revenue_o, limit: 8
+      t.integer :lq_revenue_c, limit: 8
       t.string :position
       t.string :pos_type
       t.string :op_type

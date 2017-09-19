@@ -41,7 +41,7 @@
 							<th class="analysis-header" style="text-align:center">Adjustment</th>
 							<th class="analysis-header hidden">Totals</th>
 							<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
-							<th class="analysis-header" style="text-align:center">Dist > 7<br>or > 8</th>
+							<th class="analysis-header" style="text-align:center">Dist Rk</th>
 							<th class="analysis-header" style="text-align:center; width:110px">Market Cap (in B)</th>
 							<th class="analysis-header" style="text-align:center; width:110px">Last Q Rev (in K)</th>
 							<th class="analysis-header hidden">Net Stock Issues Score</th>
@@ -52,12 +52,11 @@
 							<th class="analysis-header hidden">52 Week Price Score</th>
 							<th class="analysis-header hidden">Profit Premium Score</th>
 							<th class="analysis-header hidden">ROA Quarterly Score</th>
-							<th class="analysis-header hidden">DistTotal2 Score</th>
 							<th colspan=2 class="analysis-header" style="text-align:center">Update</th>
 						</tr>
 					</thead>
 					<tbody>
-				    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LQ Rev, 22. Portfolio Items, 23. Recommended Total, 24. Current Portfolio, 25. Net Change -->
+				    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. nil, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LQ Rev, 22. Portfolio Items, 23. Recommended Total, 24. Current Portfolio, 25. Net Change -->
 				
 						<% @si_sm.each do |si| %>
 							<tr>
@@ -100,7 +99,7 @@
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[25], :precision => 0, :delimiter => ',') %></td> <!-- Change Amount -->
 								<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 								<td style="text-align:center"><%= number_to_percentage(si[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
-								<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
+								<td style='text-align:center'><%= si[18] %></td> <!-- DistTotal2 Rank -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision((si[9] / 1000000000.0 > 0.4 ? si[9] / 1000000000.0 : "< 0.4" ), :precision => 1, :delimiter => ',') %></td> <!-- Market Cap -->
 								<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
 								<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
@@ -111,7 +110,6 @@
 								<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
 								<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
 								<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
-								<td class="hidden"><%= si[18] %></td> <!-- DistTotal2 Score -->
 								<!-- Split submits by commit type -->
 								<td>
 									<%= form_tag(update_action_path, :remote => true) do %>
@@ -155,7 +153,7 @@
 							<th class="analysis-header" style="text-align:center">Adjustment</th>
 							<th class="analysis-header hidden">Totals</th>
 							<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
-							<th class="analysis-header" style="text-align:center">Dist > 7<br>or > 8</th>
+							<th class="analysis-header" style="text-align:center">Dist Rk</th>
 							<th class="analysis-header" style="text-align:center; width:110px">Market Cap (in B)</th>
 							<th class="analysis-header" style="text-align:center; width:110px">Last Q Rev (in K)</th>
 							<th class="analysis-header hidden">Net Stock Issues Score</th>
@@ -166,13 +164,12 @@
 							<th class="analysis-header hidden">52 Week Price Score</th>
 							<th class="analysis-header hidden">Profit Premium Score</th>
 							<th class="analysis-header hidden">ROA Quarterly Score</th>
-							<th class="analysis-header hidden">DistTotal2 Score</th>
 							<th colspan=2 class="analysis-header" style="text-align:center">Update</th>
 							
 						</tr>
 					</thead>
 					<tbody>
-				    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LQ Rev, 22. Portfolio Items, 23. Recommended Total, 24. Current Portfolio, 25. Net Change -->
+				    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. nil, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LQ Rev, 22. Portfolio Items, 23. Recommended Total, 24. Current Portfolio, 25. Net Change -->
 				
 						<% @si_lg.each do |si| %>
 							<tr>
@@ -215,7 +212,7 @@
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[25], :precision => 0, :delimiter => ',') %></td> <!-- Change Amount -->
 								<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 								<td style="text-align:center"><%= number_to_percentage(si[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
-								<td style='text-align:center'><%= si[8] %></td> <!-- Dist > 7 or > 8 -->
+								<td style='text-align:center'><%= si[18] %></td> <!-- DistTotal2 Rank -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision((si[9] / 1000000000.0 > 0.4 ? si[9] / 1000000000.0 : "< 0.4" ), :precision => 1, :delimiter => ',') %></td> <!-- Market Cap -->
 								<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
 								<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
@@ -226,7 +223,6 @@
 								<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
 								<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
 								<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
-								<td class="hidden"><%= si[18] %></td> <!-- DistTotal2 Score -->
 								<!-- Split submits by commit type -->
 								<td>
 									<%= form_tag(update_action_path, :remote => true) do %>
@@ -279,12 +275,11 @@
 							<th class="analysis-header hidden">52 Week Price Score</th>
 							<th class="analysis-header hidden">Profit Premium Score</th>
 							<th class="analysis-header hidden">ROA Quarterly Score</th>
-							<th class="analysis-header hidden">DistTotal2 Score</th>
 							<th colspan=2 class="analysis-header" style="text-align:center">Update</th>
 						</tr>
 					</thead>
 					<tbody>
-				    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LQ Revenue, 22. Portfolio Items -->
+				    <!--# 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. nil, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Prev Earn, 20. Next Earn, 21. LQ Revenue, 22. Portfolio Items -->
 				
 						<% @po.each do |pi| %>
 							<tr>
@@ -324,7 +319,7 @@
 								<td id="id-<%= pi[0] %><%= pi[1] %>-action", class: 'action-field'><%= pi[5] %></td> <!-- Action -->
 								<td class="hidden"><%= pi[6] %></td> <!-- Totals -->
 								<td style="text-align:center"><%= number_to_percentage(pi[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
-								<td style='text-align:center'><%= pi[8] %></td> <!-- Dist > 7 or > 8 -->
+								<td style='text-align:center'><%= pi[18] %></td> <!-- DistTotal2 Rank -->
 								<td style="text-align:right; padding-right:2px"><%= !pi[9].nil? ? number_with_precision((pi[9] / 1000000000.0 > 0.4 ? pi[9] / 1000000000.0 : "< 0.4" ), :precision => 1, :delimiter => ',') : "N/A" %></td> <!-- Market Cap -->
 								<td style="text-align:right; padding-right:2px"><%= !pi[21].nil? ? number_with_precision(pi[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
 								<td class="hidden"><%= pi[10] %></td> <!-- Net Stock Issues Score -->
@@ -335,7 +330,6 @@
 								<td class="hidden"><%= pi[15] %></td> <!-- 52 Week Price Score -->
 								<td class="hidden"><%= pi[16] %></td> <!-- Profit Premium Score -->
 								<td class="hidden"><%= pi[17] %></td> <!-- ROA Quarterly Score -->
-								<td class="hidden"><%= pi[18] %></td> <!-- DistTotal2 Score -->
 								<!-- Split submits by commit type -->
 								<td>
 									<%= form_tag(update_action_path, :remote => true) do %>

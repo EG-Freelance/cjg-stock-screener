@@ -33,7 +33,6 @@ class UpdateEarningsDatesWorker
     pages = (results/100.0).ceil
     
     pages.times do |i|
-      puts i
       if i == 0
         # financial calendar table
         table = response.at "#fin-cal-table"
@@ -90,7 +89,6 @@ class UpdateEarningsDatesWorker
           stock.earnings_dates[0..-3].each { |e| e.destroy }
         end
       end # end data
-      sleep(1)
     end # end pages.times loop
   end # end process
 end

@@ -107,7 +107,7 @@ class SetDisplayItemsWorker
       
       portfolio = si.stock.portfolio_items.find_by(pos_type: "stock")
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. nil, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position
       si_lg << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -141,14 +141,15 @@ class SetDisplayItemsWorker
       positions = stock.portfolio_items.map { |pi| pi.op_type.nil? ? pi.position : pi.op_type == "Put" ? "short" : "long" }.uniq
       si[7] = 1 - ((ts_array.index(si[6]) + 1)/ts_array.length.to_f)
       # set dist
-      if si[7] >= 0.9
-        si[8] = si[18] > 7 ? "Yes" : "No"
-      elsif si[7] <= 0.1
-        # set dist
-        si[8] = si[18] > 8 ? "Yes" : "No"
-      else
-        si[8] = "N/A"
-      end
+      ### No longer setting dist comparison -- showing actual rank
+      # if si[7] >= 0.9
+      #   si[8] = si[18] > 7 ? "Yes" : "No"
+      # elsif si[7] <= 0.1
+      #   # set dist
+      #   si[8] = si[18] > 8 ? "Yes" : "No"
+      # else
+      #   si[8] = "N/A"
+      # end
       
       # set programmatic actions
       # si[3] - in portfolio
@@ -229,7 +230,7 @@ class SetDisplayItemsWorker
         action: si[5],
         total_score: si[6],
         total_score_pct: si[7],
-        dist_status: si[8],
+        dist_status: nil,
         mkt_cap: si[9],
         nsi_score: si[10],
         ra_score: si[11],
@@ -316,7 +317,7 @@ class SetDisplayItemsWorker
       
       portfolio = si.stock.portfolio_items.find_by(pos_type: 'stock')
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. nil, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position
       si_sm << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -350,13 +351,14 @@ class SetDisplayItemsWorker
       positions = stock.portfolio_items.map { |pi| pi.op_type.nil? ? pi.position : pi.op_type == "Put" ? "short" : "long" }.uniq
       si[7] = 1 - ((ts_array.index(si[6]) + 1)/ts_array.length.to_f)
       # set dist
-      if si[7] >= 0.9
-        si[8] = si[18] > 7 ? "Yes" : "No"
-      elsif si[7] <= 0.1
-        si[8] = si[18] > 8 ? "Yes" : "No"
-      else
-        si[8] = "N/A"
-      end
+      ### No longer setting dist comparison -- showing actual rank
+      # if si[7] >= 0.9
+      #   si[8] = si[18] > 7 ? "Yes" : "No"
+      # elsif si[7] <= 0.1
+      #   si[8] = si[18] > 8 ? "Yes" : "No"
+      # else
+      #   si[8] = "N/A"
+      # end
       
       # set programmatic actions
       # si[3] - in portfolio
@@ -437,7 +439,7 @@ class SetDisplayItemsWorker
         action: si[5],
         total_score: si[6],
         total_score_pct: si[7],
-        dist_status: si[8],
+        dist_status: nil,
         mkt_cap: si[9],
         nsi_score: si[10],
         ra_score: si[11],
@@ -471,7 +473,7 @@ class SetDisplayItemsWorker
       prev_ed = pi.stock.earnings_dates.where('date < ?', Date.today)
       next_ed = pi.stock.earnings_dates.where('date >= ?', Date.today)
 
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. Dist >7/8, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. nil, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position
       po << [
         pi.stock.symbol, 
         pi.stock.exchange,

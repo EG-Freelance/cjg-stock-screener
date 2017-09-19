@@ -3,6 +3,8 @@ class SetDisplayItemsWorker
   include Sidekiq::Worker
   sidekiq_options queue: 'high', unique: :until_executed
   
+  # update transaction items every day with "closeout" data; include trigger to say that sale has happened
+  
   def perform
     # clear out current DisplayItem set
     DisplayItem.destroy_all
@@ -580,6 +582,69 @@ class SetDisplayItemsWorker
       end
       change = rec - di.curr_portfolio
       di.update(rec_portfolio: rec, net_portfolio: change)
+    end
+    
+    # save all portfolio display_items as transaction_items (and update stats for existing)
+    DisplayItem.includes(:portfolio_items).joins(:portfolio_items).each do |di|
+      di.portfolio_items.each do |pi|
+        ti = TransactionItem.where(
+          symbol: di.symbol, 
+          exchange: di.exchange, 
+          date_acq: pi.date_acq.to_date, 
+          position: pi.position, 
+          pos_type: pi.pos_type, 
+          op_type: pi.op_type, 
+          op_strike: pi.op_strike
+        ).first_or_create
+        update_params = {}
+        if ti.paid.nil?
+          # this is a new entry, so needs entry stats
+          update_params.merge!({
+            :date_sold => Date.today, 
+            :company => di.company, 
+            :quantity => pi.quantity, 
+            :paid => pi.paid, 
+            :last => pi.last, 
+            :rec_action_o => di.rec_action, 
+            :total_score_o => di.total_score, 
+            :total_score_pct_o => di.total_score_pct, 
+            :nsi_score_o => di.nsi_score,
+            :ra_score_o => di.ra_score,
+            :noas_score_o => di.noas_score,
+            :ag_score_o => di.ag_score,
+            :aita_score_o => di.aita_score,
+            :l52wp_score_o => di.l52wp_score,
+            :pp_score_o => di.pp_score,
+            :rq_score_o => di.rq_score,
+            :dt2_score_o => di.dt2_score,
+            :prev_ed_o => di.prev_ed,
+            :next_ed_o => di.next_ed,
+            :mkt_cap_o => di.mkt_cap,
+            :lq_revenue_o => di.lq_revenue,
+            :op_expiration => pi.op_expiration
+          })
+        end
+        update_params.merge!({
+          :rec_action_c => di.rec_action, 
+          :total_score_c => di.total_score, 
+          :total_score_pct_c => di.total_score_pct, 
+          :nsi_score_c => di.nsi_score,
+          :ra_score_c => di.ra_score,
+          :noas_score_c => di.noas_score,
+          :ag_score_c => di.ag_score,
+          :aita_score_c => di.aita_score,
+          :l52wp_score_c => di.l52wp_score,
+          :pp_score_c => di.pp_score,
+          :rq_score_c => di.rq_score,
+          :dt2_score_c => di.dt2_score,
+          :prev_ed_c => di.prev_ed,
+          :next_ed_c => di.next_ed,
+          :mkt_cap_c => di.mkt_cap,
+          :lq_revenue_c => di.lq_revenue,
+          :date_sold => Date.today
+        })
+        ti.update(update_params)
+      end
     end
   end
 end

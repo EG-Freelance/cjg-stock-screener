@@ -448,7 +448,7 @@ class PagesController < ApplicationController
     end
     
     transaction_items = TransactionItem.all
-    transaction_tiems.each_with_index do |ti, i|
+    transaction_items.each_with_index do |ti, i|
       page.row(i+2).push ti.date_acq, ti.company, ti.symbol, ti.exchange, ti.position, ti.pos_type, ti.op_type, ti.op_strike, ti.op_expiration, ti.quantity, ti.active, "", ti.paid, ti.rec_action_o, ti.total_score_o, ti.total_score_pct_o, ti.nsi_score_o, ti.ra_score_o, ti.noas_score_o, ti.ag_score_o, ti.aita_score_o, ti.l52wp_score_o, ti.pp_score_o, ti.rq_score_o, ti.dt2_score_o, ti.prev_ed_o, ti.next_ed_o, ti.mkt_cap_o, ti.lq_revenue_o, "", ti.date_sold, ti.last, ti.rec_action_c, ti.total_score_c, ti.total_score_pct_c, ti.nsi_score_c, ti.ra_score_c, ti.noas_score_c, ti.ag_score_c, ti.aita_score_c, ti.l52wp_score_c, ti.pp_score_c, ti.rq_score_c, ti.dt2_score_c, ti.prev_ed_c, ti.next_ed_c, ti.mkt_cap_c, ti.lq_revenue_c
     end
     

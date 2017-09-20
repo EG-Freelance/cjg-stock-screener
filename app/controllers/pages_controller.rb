@@ -444,7 +444,7 @@ class PagesController < ApplicationController
     # set headers
     page.row(0).push "Position Information", "", "", "", "", "", "", "", "", "", "", "Acquisition Information", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "Close/Current Information", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
     page.row(1).push "Symbol", "Exchange", "Company", "Position", "Position Type", "Opt Type", "Opt Strike", "Opt Exp", "Quantity", "In PF", "", "Date Acquired", "Unit Price", "Screen Rec", "Total Score", "Total Score %", "NSI Score", "RA Score", "NOAS Score", "AG Score", "AITA Score", "L52WP Score", "PP Score", "RQ Score", "DT2 Score", "Prev Earnings", "Next Earnings", "Mkt Cap", "Last Q Rev", "", "Date Closed", "Last Price", "Screen Rec", "Total Score", "Total Score %", "NSI Score", "RA Score", "NOAS Score", "AG Score", "AITA Score", "L52WP Score", "PP Score", "RQ Score", "DT2 Score", "Prev Earnings", "Next Earnings", "Mkt Cap", "Last Q Rev"
-    49.times do |i|
+    48.times do |i|
       page.row(1).set_format(i, header_format)
     end
     

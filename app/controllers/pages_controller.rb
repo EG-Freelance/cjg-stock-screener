@@ -394,9 +394,16 @@ class PagesController < ApplicationController
       self.create_spreadsheet
     end
   end
+
+  def export_transactions_to_excel
+    if Rails.env == "production" && Sidekiq::Stats.new.workers_size > 0
+      redirect_to root_url, alert: "Data are still being processed.  Please try again momentarily."
+    else
+      self.transactions_spreadsheet
+    end
+  end
   
   def create_spreadsheet
-    
     spreadsheet = Spreadsheet::Workbook.new
     
     page = spreadsheet.create_worksheet :name => "Screen Results"
@@ -421,6 +428,33 @@ class PagesController < ApplicationController
     summary = StringIO.new
     spreadsheet.write summary
     file = "Screen Summary #{Date.today.strftime("%Y.%m.%d")}.xls"
+    send_data summary.string, :filename => "#{file}", :type=>"application/excel", :disposition=>'attachment'
+  end
+  
+  def transactions_spreadsheet
+    spreadsheet = Spreadsheet::Workbook.new
+    
+    page = spreadsheet.create_worksheet :name => "Transaction Log"
+    
+    ####### ROW/CELL FORMATS ########
+    header_format = Spreadsheet::Format.new :weight => :bold, :border => :thin, :horizontal_align => :center, :pattern_fg_color => :lime, :pattern => 1, :size => 9, :text_wrap => true, :vertical_align => :top
+    default_format = Spreadsheet::Format.new :border => :thin, :horizontal_align => :center, :size => 9, :text_wrap => true, :vertical_align => :top
+
+    # set headers
+    page.row(0).push "Position Information", "", "", "", "", "", "", "", "", "", "", "", "Acquisition Information", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "Close/Current Information", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+    page.row(1).push "Date Acquired", "Company", "Symbol", "Exchange", "Position", "Position Type", "Opt Type", "Opt Strike", "Opt Exp", "Quantity", "In PF", "", "Unit Price", "Screen Rec", "Total Score", "Total Score %", "NSI Score", "RA Score", "NOAS Score", "AG Score", "AITA Score", "L52WP Score", "PP Score", "RQ Score", "DT2 Score", "Prev Earnings", "Next Earnings", "Mkt Cap", "Last Q Rev", "", "Date Closed", "Last Price", "Screen Rec", "Total Score", "Total Score %", "NSI Score", "RA Score", "NOAS Score", "AG Score", "AITA Score", "L52WP Score", "PP Score", "RQ Score", "DT2 Score", "Prev Earnings", "Next Earnings", "Mkt Cap", "Last Q Rev"
+    49.times do |i|
+      page.row(1).set_format(i, header_format)
+    end
+    
+    transaction_items = TransactionItem.all
+    transaction_tiems.each_with_index do |ti, i|
+      page.row(i+2).push ti.date_acq, ti.company, ti.symbol, ti.exchange, ti.position, ti.pos_type, ti.op_type, ti.op_strike, ti.op_expiration, ti.quantity, ti.active, "", ti.paid, ti.rec_action_o, ti.total_score_o, ti.total_score_pct_o, ti.nsi_score_o, ti.ra_score_o, ti.noas_score_o, ti.ag_score_o, ti.aita_score_o, ti.l52wp_score_o, ti.pp_score_o, ti.rq_score_o, ti.dt2_score_o, ti.prev_ed_o, ti.next_ed_o, ti.mkt_cap_o, ti.lq_revenue_o, "", ti.date_sold, ti.last, ti.rec_action_c, ti.total_score_c, ti.total_score_pct_c, ti.nsi_score_c, ti.ra_score_c, ti.noas_score_c, ti.ag_score_c, ti.aita_score_c, ti.l52wp_score_c, ti.pp_score_c, ti.rq_score_c, ti.dt2_score_c, ti.prev_ed_c, ti.next_ed_c, ti.mkt_cap_c, ti.lq_revenue_c
+    end
+    
+    summary = StringIO.new
+    spreadsheet.write summary
+    file = "Transactional Summary #{Date.today.strftime("%Y.%m.%d")}.xls"
     send_data summary.string, :filename => "#{file}", :type=>"application/excel", :disposition=>'attachment'
   end
   

@@ -66,7 +66,7 @@
 		    <h2>Export Data to Excel</h2>
 		  </div>
 		  <div style="padding-top:10px">
-		    <button type="submit" name="commit" value="Update" id='update-analysis-page' class='submit-btn'>
+		    <button type="submit" name="commit" value="Update" id='export-screen' class='submit-btn'>
 		      Export
 		    </button>
 		  </div>
@@ -75,58 +75,19 @@
 	<div class="col-md-3"></div>
 </div>
 	
-	<!--The section below is unneeded since there is a fully automated version-->
-	<!--<div class="col-md-6">-->
-	<!--	<%= form_tag import_si_path, multipart: true do %>-->
-	<!--	  <div>-->
-	<!--	    <h2>Import Screen Data</h2>-->
-	<!--	    <p>Select file "Stock Consolidator.xlsx"</p>-->
-	<!--	    <div class='input-field'>-->
-	<!--	      <div class="file-field input-field">-->
-	<!--	        <div>-->
-	<!--	          <span><b><i>Screen Data File</i></b></span>-->
-	<!--	          <%= file_field_tag :file %>-->
-	<!--	        </div>-->
-	<!--	      </div>-->
-	<!--	    </div>-->
-	<!--	  </div>-->
-	<!--	  <div style="padding-top:10px">-->
-	<!--	    <button type="submit" name="commit" value="Import" id='home-submit-page'>-->
-	<!--	      Import-->
-	<!--	    </button>-->
-	<!--	  </div>-->
-	<!--	<% end %>-->
-	<!--</div>-->
-<!--Sections below are unneeded because they are included in the portfolio pull-->
-<!--<div class="row">	-->
-<!--	<div class="col-md-3"></div>-->
-<!--	<div class="col-md-6 home-module">-->
-<!--		<%= form_tag auto_import_si_path do %>-->
-<!--		  <div>-->
-<!--		    <h2>Automatically Import Screen Data</h2>-->
-<!--		  </div>-->
-<!--		  <div style="padding-top:10px">-->
-<!--		    <button type="submit" name="commit" value="Import" id='si-submit-page' class='submit-btn'>-->
-<!--		      Import-->
-<!--		    </button>-->
-<!--		  </div>-->
-<!--		<% end %>-->
-<!--	</div>-->
-<!--	<div class="col-md-3"></div>-->
-<!--</div>-->
-<!--<div class="row">-->
-<!--	<div class="col-md-3"></div>-->
-<!--	<div class="col-md-6 home-module">-->
-<!--		<%= form_tag update_display_path do %>-->
-<!--		  <div>-->
-<!--		    <h2>Update Analysis Data</h2>-->
-<!--		  </div>-->
-<!--		  <div style="padding-top:10px">-->
-<!--		    <button type="submit" name="commit" value="Update" id='update-analysis-page' class='submit-btn'>-->
-<!--		      Update-->
-<!--		    </button>-->
-<!--		  </div>-->
-<!--		<% end %>-->
-<!--	</div>-->
-<!--	<div class="col-md-3"></div>-->
-<!--</div>-->
+<div class="row">
+	<div class="col-md-3"></div>
+	<div class="col-md-6 home-module">
+		<%= form_tag export_transactions_to_excel_path do %>
+		  <div>
+		    <h2>Export Transaction Data to Excel</h2>
+		  </div>
+		  <div style="padding-top:10px">
+		    <button type="submit" name="commit" value="Update" id='export-transactions' class='submit-btn'>
+		      Export
+		    </button>
+		  </div>
+		<% end %>
+	</div>
+	<div class="col-md-3"></div>
+</div>

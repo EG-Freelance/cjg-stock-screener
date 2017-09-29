@@ -21,8 +21,8 @@ class PortfolioItem < ActiveRecord::Base
 	  # data start on 13th row and end 3 before last row (last row is cash summary)
     (8..(last_row - 5)).each do |i|
       data = spreadsheet.row(i)
-      data[1] = data[1].strip
-      data[2] = data[2].strip
+      data[1] = data[1].to_s.strip
+      data[2] = data[2].to_s.strip
       data[3] == 1 ? data[3] = "long" : data[3] = "short"
       data[4] = data[4].strip
       RowDatum.create(data_set_id: data_set.id, data: data.to_s, row_number: i - 6, data_type: "portfolio")

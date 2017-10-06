@@ -448,7 +448,7 @@ class PagesController < ApplicationController
       page.row(1).set_format(i, header_format)
     end
     
-    transaction_items = TransactionItem.where.not(total_score_pct_o: nil)
+    transaction_items = TransactionItem.where('date_acq > ?', Date.new(2017,9,21))
     transaction_items.each_with_index do |ti, i|
       if ti.active
         page.row(i+2).push ti.symbol, ti.exchange, ti.company, ti.position, ti.pos_type, ti.op_type, ti.op_strike, ti.op_expiration, ti.quantity, ti.active, "", ti.date_acq, ti.paid, ti.rec_action_o, ti.total_score_o, ti.total_score_pct_o, ti.nsi_score_o, ti.ra_score_o, ti.noas_score_o, ti.ag_score_o, ti.aita_score_o, ti.l52wp_score_o, ti.pp_score_o, ti.rq_score_o, ti.dt2_score_o, ti.prev_ed_o, ti.next_ed_o, ti.mkt_cap_o, ti.lq_revenue_o, "", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"

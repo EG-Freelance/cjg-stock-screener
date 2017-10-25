@@ -13,7 +13,7 @@ class PagesController < ApplicationController
     # eager load display_items
     display_items = DisplayItem.all.includes(:portfolio_items)
     @q = display_items.ransack(params[:q])
-    @in_pf_eq = params[:q][:in_pf_eq]
+    params[:q].nil? ? @in_pf_eq = nil : @in_pf_eq = params[:q][:in_pf_eq]
     puts "=======#{params[:q][:in_pf_eq]}"
     portfolio_items = PortfolioItem.all.includes(:stock)
     

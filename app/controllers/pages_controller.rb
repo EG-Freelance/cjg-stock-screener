@@ -12,24 +12,27 @@ class PagesController < ApplicationController
   def analysis
     # eager load display_items
     display_items = DisplayItem.all.includes(:portfolio_items)
+    @q = display_items.ransack(params[:q])
+    @in_pf_eq = params[:q][:in_pf_eq]
+    puts "=======#{params[:q][:in_pf_eq]}"
     portfolio_items = PortfolioItem.all.includes(:stock)
     
     if Rails.env == "production" && Sidekiq::Stats.new.workers_size > 0
       redirect_to :back, alert: "Screen or portfolio data are still being compiled, or analysis data are being processed; please try again momentarily."
     end
     #screen item variables and arrays
-    si_pool_lg = display_items.where(classification: "large")
-    si_pool_sm = display_items.where(classification: "small")
-    po_pool = display_items.where(classification: "fallen out")
-    @si_lg = si_pool_lg.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, si.rec_portfolio, si.curr_portfolio, si.net_portfolio] }.sort_by { |si| si[7] }.reverse!
+    @si_pool_lg = @q.result.where(classification: "large").paginate(:page => params[:page], :per_page => 100)
+    @si_pool_sm = @q.result.where(classification: "small").paginate(:page => params[:page], :per_page => 100)
+    @po_pool = @q.result.where(classification: "fallen out").paginate(:page => params[:page], :per_page => 100)
+    @si_lg = @si_pool_lg.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, si.rec_portfolio, si.curr_portfolio, si.net_portfolio] }.sort_by { |si| si[7] }.reverse!
     
-    @si_sm = si_pool_sm.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, si.rec_portfolio, si.curr_portfolio, si.net_portfolio] }.sort_by { |si| si[7] }.reverse!
+    @si_sm = @si_pool_sm.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, si.rec_portfolio, si.curr_portfolio, si.net_portfolio] }.sort_by { |si| si[7] }.reverse!
     
     # for development, just replicate lg pool (so there are multiple tabs of data)
     if Rails.env == "development"
       @si_lg = @si_sm
     end
-    @po = po_pool.map { |pi| [pi.symbol, pi.exchange, pi.company, pi.in_pf, pi.rec_action, pi.action, pi.total_score, pi.total_score_pct, pi.dist_status, pi.mkt_cap, pi.nsi_score, pi.ra_score, pi.noas_score, pi.ag_score, pi.aita_score, pi.l52wp_score, pi.pp_score, pi.rq_score, pi.dt2_score, pi.prev_ed, pi.next_ed, pi.lq_revenue, pi.stock.portfolio_items] }.sort_by { |pi| pi[7] }.reverse!
+    @po = @po_pool.map { |pi| [pi.symbol, pi.exchange, pi.company, pi.in_pf, pi.rec_action, pi.action, pi.total_score, pi.total_score_pct, pi.dist_status, pi.mkt_cap, pi.nsi_score, pi.ra_score, pi.noas_score, pi.ag_score, pi.aita_score, pi.l52wp_score, pi.pp_score, pi.rq_score, pi.dt2_score, pi.prev_ed, pi.next_ed, pi.lq_revenue, pi.stock.portfolio_items] }.sort_by { |pi| pi[7] }.reverse!
     
     ######################
     # SUMMARY STATISTICS #

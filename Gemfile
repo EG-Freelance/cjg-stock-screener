@@ -16,6 +16,11 @@ group :production do
   gem 'rails_12factor'
 end
 
+# use ransack/will_paginate to make listings searchable and paginated
+gem 'ransack'
+gem 'will_paginate'
+
+# use mechanize to get screen items
 gem 'mechanize'
 
 # use watir and phantomjs to drive the headless browser

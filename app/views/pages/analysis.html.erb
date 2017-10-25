@@ -2,11 +2,66 @@
 
 
 <div class="wrapper" style="text-align:center">
-	Search Text (separate keywords/phrases with || ): <input type="text" id="search-text-2" style="border-radius:5px">
-	<br>
-	Filter N/As <input type="checkbox" id="hide-na" />
-	<br>
-	Filter Holds <input type="checkbox" id="hide-holds" />
+	<!--Search Text (separate keywords/phrases with || ): <input type="text" id="search-text-2" style="border-radius:5px">-->
+	<!--<br>-->
+	<!--Filter N/As <input type="checkbox" id="hide-na" />-->
+	<!--<br>-->
+	<!--Filter Holds <input type="checkbox" id="hide-holds" />-->
+	<%= search_form_for @q, :url => '/analysis' do |f| %>
+		<table class="search-table">
+			<tr>
+				<td>Symbol</td>
+				<td><%= f.search_field :symbol_cont, :class => "full-search-field" %></td>
+				<td>Exchange</td>
+				<td><%= f.search_field :exchange_cont, :class => "full-search-field" %></td>
+			</tr>
+			<tr>
+				<td>Company</td>
+				<td><%= f.search_field :company_cont, :class => "full-search-field" %></td>
+				<td>In Portfolio</td>
+				<td><%= f.select :in_pf_eq, options_for_select([["", nil], "Yes", "No"], :selected => @in_pf_eq), :class => "full-search-field" %></td>
+			</tr>
+			<tr>
+				<td>Recommended Action</td>
+				<td><%= f.search_field :rec_action_cont, :class => "full-search-field" %></td>
+				<td>Action</td>
+				<td><%= f.search_field :action_cont, :class => "full-search-field" %></td>
+			</tr>
+			<tr>
+				<td>Total Score</td>
+				<td><%= f.search_field :total_score_gteq, :class => "small-search-field" %> - <%= f.search_field :total_score_lteq, :class => "small-search-field" %></td>
+				<td>Total Score Percentage</td>
+				<td><%= f.search_field :total_score_pct_gteq, :class => "small-search-field" %> - <%= f.search_field :total_score_pct_lteq, :class => "small-search-field" %></td>
+			</tr>
+			<tr>
+				<td>DistTotal2 Rank</td>
+				<td><%= f.search_field :dt2_score_gteq, :class => "small-search-field" %> - <%= f.search_field :dt2_score_lteq, :class => "small-search-field" %></td>
+				<td>Market Cap</td>
+				<td><%= f.search_field :mkt_cap_gteq, :class => "small-search-field" %> - <%= f.search_field :mkt_cap_lteq, :class => "small-search-field" %></td>
+			</tr>
+			<tr>
+				<td>Last Quarter Revenue</td>
+				<td><%= f.search_field :lq_revenue_gteq, :class => "small-search-field" %> - <%= f.search_field :lq_revenue_lteq, :class => "small-search-field" %></td>
+				<td>Recommended Portfolio Change</td>
+				<td><%= f.search_field :net_portfolio_gteq, :class => "small-search-field" %> - <%= f.search_field :net_portfolio_lteq, :class => "small-search-field" %></td>
+			</tr>
+			<tr>
+				<td>Current Portfolio</td>
+				<td><%= f.search_field :curr_portfolio_gteq, :class => "small-search-field" %> - <%= f.search_field :curr_portfolio_lteq, :class => "small-search-field" %></td>
+				<td>Recommended Portfolio</td>
+				<td><%= f.search_field :rec_portfolio_gteq, :class => "small-search-field" %> - <%= f.search_field :rec_portfolio_lteq, :class => "small-search-field" %></td>
+			</tr>
+			<tr>
+				<td>Previous Earnings Date (Days)</td>
+				<td><%= f.search_field :prev_ed_gteq, :class => "small-search-field" %> - <%= f.search_field :prev_ed_lteq, :class => "small-search-field" %></td>
+				<td>Next Earnings Date (Days)</td>
+				<td><%= f.search_field :next_ed_gteq, :class => "small-search-field" %> - <%= f.search_field :next_ed_lteq, :class => "small-search-field" %></td>
+			</tr>
+			<tr>
+				<td colspan="4"><%= f.submit %></td>
+			</tr>
+		</table>
+	<% end %>
 	<br>
 	<br>
 	
@@ -23,6 +78,7 @@
 		  
 		  <!-- Small cap tab -->
 		  <div role="tabpanel" class="tab-pane active" id="small-cap">
+		  	<%= will_paginate @si_pool_sm %>
 		  	<table class="tablesorter analysis-table" id="small-cap-table">
 					<thead>
 						<tr>
@@ -135,6 +191,7 @@
 		  
 		  <!-- Large cap tab -->
 		  <div role="tabpanel" class="tab-pane" id="large-cap">
+		  	<%= will_paginate @si_pool_lg %>
 		  	<table class="tablesorter analysis-table" id="large-cap-table">
 					<thead>
 						<tr>
@@ -249,6 +306,7 @@
 		  
 		  <!-- Non-screen tab -->
 		  <div role="tabpanel" class="tab-pane" id="non-screen">
+		  	<%= will_paginate @po_pool %>
 		  	<table class="tablesorter analysis-table" id="non-screen-table">
 					<thead>
 						<tr>

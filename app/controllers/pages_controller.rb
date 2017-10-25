@@ -2,6 +2,7 @@ class PagesController < ApplicationController
   before_action :set_page, only: [:show, :edit, :update, :destroy]
   before_action :set_update_times, only: [:index, :analysis]
   before_action :set_workers, only: [:index, :analysis]
+  before_action :set_custom_renderer, only: [:analysis]
 
   # GET /pages
   # GET /pages.json
@@ -503,5 +504,36 @@ class PagesController < ApplicationController
       
       # display items
       @di_period = DisplayItem.last.set_created_at
+    end
+    
+    def set_custom_renderer
+      @custom_renderer = Class.new(WillPaginate::ActionView::LinkRenderer) do
+        def page_number(page)
+          if page == current_page
+            tag(:span, page, class: 'b bg-dark-blue near-white ba b--near-black pa2')
+          else
+            link(page, page, "data-turbolinks": false, rel: rel_value(page))
+          end
+        end
+        
+        def previous_page
+          num = @collection.current_page > 1 && @collection.current_page - 1
+          previous_or_next_page(num, @options[:previous_label], '')
+        end
+      
+        def next_page
+          num = @collection.current_page < total_pages && @collection.current_page + 1
+          previous_or_next_page(num, @options[:next_label], '')
+        end
+      
+        def previous_or_next_page(page, text, classname)
+          if page
+            link(text, page, { :class => classname, "data-turbolinks": false })
+          else
+            tag(:span, text, :class => classname + '')
+          end
+        end
+
+      end
     end
 end

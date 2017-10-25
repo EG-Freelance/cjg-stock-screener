@@ -17,10 +17,7 @@
 
   <%= csrf_meta_tags %>
 </head>
-<body 
-  <% if content_for?(:body_attributes) %>
-    <%= yield(:body_attributes) %> 
-  <% end %>>
+<body>
   <%= render 'layouts/navbar' %>
   
   <div id="container" style="padding-top:75px; padding-left:20px; padding-right:20px; padding-bottom:10px">

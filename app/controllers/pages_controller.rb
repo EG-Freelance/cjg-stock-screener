@@ -13,8 +13,30 @@ class PagesController < ApplicationController
   def analysis
     # eager load display_items
     display_items = DisplayItem.all.includes(:portfolio_items)
+    if params[:q].nil? 
+      @in_pf_eq = nil
+      @rec_action_na_not_eq = nil
+      @rec_action_hold_not_eq = nil
+    else
+      @in_pf_eq = params[:q][:in_pf_eq]
+      @rec_action_na_not_eq = params[:q][:rec_action_na_not_eq]
+      @rec_action_hold_not_eq = params[:q][:rec_action_hold_not_eq]
+      base_params = params[:q].except(:rec_action_na_not_eq, :rec_action_hold_not_eq)
+      if params[:q][:rec_action_na_not_eq] == "1"
+        if params[:q][:rec_action_hold_not_eq] == "1"
+          params[:q] = { 'g' => { '0' => { 'rec_action_not_eq' => '(n/a)' }, '1' => base_params.merge('rec_action_not_eq' => 'HOLD') } }       
+        else
+          params[:q] = base_params.merge(:rec_action_not_eq => "(n/a)")
+        end
+      else
+        if params[:q][:rec_action_hold_not_eq] == "1"
+          params[:q] = base_params.merge(:rec_action_not_eq => "HOLD")
+        else
+          params[:q] = base_params
+        end
+      end
+    end
     @q = display_items.ransack(params[:q])
-    params[:q].nil? ? @in_pf_eq = nil : @in_pf_eq = params[:q][:in_pf_eq]
     portfolio_items = PortfolioItem.all.includes(:stock)
     
     if Rails.env == "production" && Sidekiq::Stats.new.workers_size > 0

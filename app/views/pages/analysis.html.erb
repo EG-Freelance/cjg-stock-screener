@@ -58,6 +58,14 @@
 				<td><%= f.search_field :next_ed_gteq, :class => "small-search-field" %> - <%= f.search_field :next_ed_lteq, :class => "small-search-field" %></td>
 			</tr>
 			<tr>
+				<td>Filter N/As</td>
+				<td class="pull-left"><%= f.check_box :rec_action_na_not_eq, :checked => @rec_action_na_not_eq == "1" %></td>
+			</tr>
+			<tr>
+				<td>Filter Holds</td>
+				<td class="pull-left"><%= f.check_box :rec_action_hold_not_eq, :checked => @rec_action_hold_not_eq == "1" %></td>
+			</tr>
+			<tr>
 				<td colspan="4"><%= f.submit %></td>
 			</tr>
 		</table>

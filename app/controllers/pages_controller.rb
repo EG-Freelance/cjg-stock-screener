@@ -36,7 +36,6 @@ class PagesController < ApplicationController
       # end
     end
     @params_q = params[:q]
-    puts @params_q
     @q = display_items.ransack(params[:q])
     portfolio_items = PortfolioItem.all.includes(:stock)
     

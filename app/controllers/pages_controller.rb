@@ -15,23 +15,28 @@ class PagesController < ApplicationController
     display_items = DisplayItem.all.includes(:portfolio_items)
     if params[:q].nil? 
       # do nothing
+      @params_q = { 'g' => { '0' => nil, '1' => nil } }
     else
       base_params = params[:q].except(:rec_action_na_not_eq, :rec_action_hold_not_eq)
-      if params[:q][:rec_action_na_not_eq] == "1"
-        if params[:q][:rec_action_hold_not_eq] == "1"
-          params[:q] = { 'g' => { '0' => { 'rec_action_not_eq' => '(n/a)' }, '1' => base_params.merge('rec_action_not_eq' => 'HOLD') } }       
-        else
-          params[:q] = base_params.merge(:rec_action_not_eq => "(n/a)")
-        end
-      else
-        if params[:q][:rec_action_hold_not_eq] == "1"
-          params[:q] = base_params.merge(:rec_action_not_eq => "HOLD")
-        else
-          params[:q] = base_params
-        end
-      end
+      params[:q][:rec_action_na_not_eq] == "1" ? na_params = { 'rec_action_not_eq' => "(n/a)" } : na_params = { 'rec_action_not_eq' => nil }
+      params[:q][:rec_action_hold_not_eq] == "1" ? hold_params = { 'rec_action_not_eq' => "HOLD" } : hold_params = { 'rec_action_not_eq' => nil }
+      params[:q] = { 'g' => { '0' => na_params, '1' => base_params.merge(hold_params) } }
+      # if params[:q][:rec_action_na_not_eq] == "1"
+      #   if params[:q][:rec_action_hold_not_eq] == "1"
+      #     params[:q] = { 'g' => { '0' => { 'rec_action_not_eq' => '(n/a)' }, '1' => base_params.merge('rec_action_not_eq' => 'HOLD') } }       
+      #   else
+      #     params[:q] = base_params.merge('g' => { '0' => { 'rec_action_not_eq' => "(n/a)" } })
+      #   end
+      # else
+      #   if params[:q][:rec_action_hold_not_eq] == "1"
+      #     params[:q] = { 'g' => { '1' => base_params.merge('rec_action_not_eq' => 'HOLD') } }       
+      #   else
+      #     params[:q] = base_params
+      #   end
+      # end
     end
     @params_q = params[:q]
+    puts @params_q
     @q = display_items.ransack(params[:q])
     portfolio_items = PortfolioItem.all.includes(:stock)
     

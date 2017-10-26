@@ -11,59 +11,59 @@
 		<table class="search-table">
 			<tr>
 				<td>Symbol</td>
-				<td><%= f.search_field :symbol_cont, :class => "full-search-field" %></td>
+				<td><%= f.search_field :symbol_cont, :class => "full-search-field", :value => @params_q['g']['1']['symbol_cont'] %></td>
 				<td>Exchange</td>
-				<td><%= f.search_field :exchange_cont, :class => "full-search-field" %></td>
+				<td><%= f.search_field :exchange_cont, :class => "full-search-field", :value => @params_q['g']['1']['exchange_cont'] %></td>
 			</tr>
 			<tr>
 				<td>Company</td>
-				<td><%= f.search_field :company_cont, :class => "full-search-field" %></td>
+				<td><%= f.search_field :company_cont, :class => "full-search-field", :value => @params_q['g']['1']['company_cont'] %></td>
 				<td>In Portfolio</td>
-				<td><%= f.select :in_pf_eq, options_for_select([["", nil], "Yes", "No"], :selected => @in_pf_eq), :class => "full-search-field" %></td>
+				<td><%= f.select :in_pf_eq, options_for_select([["", nil], "Yes", "No"], :selected => @params_q['g']['1']['in_pf_eq']), :class => "full-search-field" %></td>
 			</tr>
 			<tr>
 				<td>Recommended Action</td>
-				<td><%= f.search_field :rec_action_cont, :class => "full-search-field" %></td>
+				<td><%= f.search_field :rec_action_cont, :class => "full-search-field", :value => @params_q['g']['1']['rec_action_cont'] %></td>
 				<td>Action</td>
-				<td><%= f.search_field :action_cont, :class => "full-search-field" %></td>
+				<td><%= f.search_field :action_cont, :class => "full-search-field", :value => @params_q['g']['1']['action_cont'] %></td>
 			</tr>
 			<tr>
 				<td>Total Score</td>
-				<td><%= f.search_field :total_score_gteq, :class => "small-search-field" %> - <%= f.search_field :total_score_lteq, :class => "small-search-field" %></td>
+				<td><%= f.search_field :total_score_gteq, :class => "small-search-field", :value => @params_q['g']['1']['total_score_gteq'] %> - <%= f.search_field :total_score_lteq, :class => "small-search-field", :value => @params_q['g']['1']['total_score_lteq'] %></td>
 				<td>Total Score Percentage</td>
-				<td><%= f.search_field :total_score_pct_gteq, :class => "small-search-field" %> - <%= f.search_field :total_score_pct_lteq, :class => "small-search-field" %></td>
+				<td><%= f.search_field :total_score_pct_gteq, :class => "small-search-field", :value => @params_q['g']['1']['total_score_pct_gteq'] %> - <%= f.search_field :total_score_pct_lteq, :class => "small-search-field", :value => @params_q['g']['1']['total_score_pct_lteq'] %></td>
 			</tr>
 			<tr>
 				<td>DistTotal2 Rank</td>
-				<td><%= f.search_field :dt2_score_gteq, :class => "small-search-field" %> - <%= f.search_field :dt2_score_lteq, :class => "small-search-field" %></td>
+				<td><%= f.search_field :dt2_score_gteq, :class => "small-search-field", :value => @params_q['g']['1']['dt2_score_gteq'] %> - <%= f.search_field :dt2_score_lteq, :class => "small-search-field", :value => @params_q['g']['1']['dt2_score_lteq'] %></td>
 				<td>Market Cap</td>
-				<td><%= f.search_field :mkt_cap_gteq, :class => "small-search-field" %> - <%= f.search_field :mkt_cap_lteq, :class => "small-search-field" %></td>
+				<td><%= f.search_field :mkt_cap_gteq, :class => "small-search-field", :value => @params_q['g']['1']['mkt_cap_gteq'] %> - <%= f.search_field :mkt_cap_lteq, :class => "small-search-field", :value => @params_q['g']['1']['mkt_cap_lteq'] %></td>
 			</tr>
 			<tr>
 				<td>Last Quarter Revenue</td>
-				<td><%= f.search_field :lq_revenue_gteq, :class => "small-search-field" %> - <%= f.search_field :lq_revenue_lteq, :class => "small-search-field" %></td>
+				<td><%= f.search_field :lq_revenue_gteq, :class => "small-search-field", :value => @params_q['g']['1']['lq_revenue_gteq'] %> - <%= f.search_field :lq_revenue_lteq, :class => "small-search-field", :value => @params_q['g']['1']['lq_revenue_lteq'] %></td>
 				<td>Recommended Portfolio Change</td>
-				<td><%= f.search_field :net_portfolio_gteq, :class => "small-search-field" %> - <%= f.search_field :net_portfolio_lteq, :class => "small-search-field" %></td>
+				<td><%= f.search_field :net_portfolio_gteq, :class => "small-search-field", :value => @params_q['g']['1']['net_portfolio_gteq'] %> - <%= f.search_field :net_portfolio_lteq, :class => "small-search-field", :value => @params_q['g']['1']['net_portfolio_lteq'] %></td>
 			</tr>
 			<tr>
 				<td>Current Portfolio</td>
-				<td><%= f.search_field :curr_portfolio_gteq, :class => "small-search-field" %> - <%= f.search_field :curr_portfolio_lteq, :class => "small-search-field" %></td>
+				<td><%= f.search_field :curr_portfolio_gteq, :class => "small-search-field", :value => @params_q['g']['1']['curr_portfolio_gteq'] %> - <%= f.search_field :curr_portfolio_lteq, :class => "small-search-field", :value => @params_q['g']['1']['curr_portfolio_lteq'] %></td>
 				<td>Recommended Portfolio</td>
-				<td><%= f.search_field :rec_portfolio_gteq, :class => "small-search-field" %> - <%= f.search_field :rec_portfolio_lteq, :class => "small-search-field" %></td>
+				<td><%= f.search_field :rec_portfolio_gteq, :class => "small-search-field", :value => @params_q['g']['1']['rec_portfolio_gteq'] %> - <%= f.search_field :rec_portfolio_lteq, :class => "small-search-field", :value => @params_q['g']['1']['rec_portfolio_lteq'] %></td>
 			</tr>
 			<tr>
 				<td>Previous Earnings Date (Days)</td>
-				<td><%= f.search_field :prev_ed_gteq, :class => "small-search-field" %> - <%= f.search_field :prev_ed_lteq, :class => "small-search-field" %></td>
+				<td><%= f.search_field :prev_ed_gteq, :class => "small-search-field", :value => @params_q['g']['1']['prev_ed_gteq'] %> - <%= f.search_field :prev_ed_lteq, :class => "small-search-field", :value => @params_q['g']['1']['prev_ed_lteq'] %></td>
 				<td>Next Earnings Date (Days)</td>
-				<td><%= f.search_field :next_ed_gteq, :class => "small-search-field" %> - <%= f.search_field :next_ed_lteq, :class => "small-search-field" %></td>
+				<td><%= f.search_field :next_ed_gteq, :class => "small-search-field", :value => @params_q['g']['1']['next_ed_gteq'] %> - <%= f.search_field :next_ed_lteq, :class => "small-search-field", :value => @params_q['g']['1']['next_ed_lteq'] %></td>
 			</tr>
 			<tr>
 				<td>Filter N/As</td>
-				<td class="pull-left"><%= f.check_box :rec_action_na_not_eq, :checked => @rec_action_na_not_eq == "1" %></td>
+				<td class="pull-left"><%= f.check_box :rec_action_na_not_eq, :checked => @params_q['g']['0']['rec_action_not_eq'] == "(n/a)" %></td>
 			</tr>
 			<tr>
 				<td>Filter Holds</td>
-				<td class="pull-left"><%= f.check_box :rec_action_hold_not_eq, :checked => @rec_action_hold_not_eq == "1" %></td>
+				<td class="pull-left"><%= f.check_box :rec_action_hold_not_eq, :checked => @params_q['g']['1']['rec_action_not_eq'] == "HOLD" %></td>
 			</tr>
 			<tr>
 				<td colspan="4"><%= f.submit %></td>

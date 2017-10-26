@@ -14,13 +14,8 @@ class PagesController < ApplicationController
     # eager load display_items
     display_items = DisplayItem.all.includes(:portfolio_items)
     if params[:q].nil? 
-      @in_pf_eq = nil
-      @rec_action_na_not_eq = nil
-      @rec_action_hold_not_eq = nil
+      # do nothing
     else
-      @in_pf_eq = params[:q][:in_pf_eq]
-      @rec_action_na_not_eq = params[:q][:rec_action_na_not_eq]
-      @rec_action_hold_not_eq = params[:q][:rec_action_hold_not_eq]
       base_params = params[:q].except(:rec_action_na_not_eq, :rec_action_hold_not_eq)
       if params[:q][:rec_action_na_not_eq] == "1"
         if params[:q][:rec_action_hold_not_eq] == "1"
@@ -36,6 +31,7 @@ class PagesController < ApplicationController
         end
       end
     end
+    @params_q = params[:q]
     @q = display_items.ransack(params[:q])
     portfolio_items = PortfolioItem.all.includes(:stock)
     

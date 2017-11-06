@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170919192512) do
+ActiveRecord::Schema.define(version: 20171106143539) do
 
   create_table "actions", force: :cascade do |t|
     t.integer  "stock_id"
@@ -59,6 +59,9 @@ ActiveRecord::Schema.define(version: 20170919192512) do
     t.integer  "rec_portfolio",   limit: 8
     t.integer  "net_portfolio",   limit: 8
     t.integer  "curr_portfolio",  limit: 8
+    t.float    "p_to_b_curr"
+    t.float    "ent_val_ov_focf"
+    t.float    "p_to_b_lyq"
   end
 
   create_table "earnings_dates", force: :cascade do |t|
@@ -125,6 +128,9 @@ ActiveRecord::Schema.define(version: 20170919192512) do
     t.datetime "updated_at",           null: false
     t.datetime "set_created_at"
     t.string   "classification"
+    t.float    "p_to_b_curr"
+    t.float    "ent_val_ov_focf"
+    t.float    "p_to_b_lyq"
   end
 
   create_table "stocks", force: :cascade do |t|
@@ -190,6 +196,12 @@ ActiveRecord::Schema.define(version: 20170919192512) do
     t.boolean  "active"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.float    "p_to_b_curr_o"
+    t.float    "ent_val_ov_focf_o"
+    t.float    "p_to_b_lyq_o"
+    t.float    "p_to_b_curr_c"
+    t.float    "ent_val_ov_focf_c"
+    t.float    "p_to_b_lyq_c"
   end
 
   create_table "users", force: :cascade do |t|

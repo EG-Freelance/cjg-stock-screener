@@ -21,19 +21,6 @@ class PagesController < ApplicationController
       params[:q][:rec_action_na_not_eq] == "1" ? na_params = { 'rec_action_not_eq' => "(n/a)" } : na_params = { 'rec_action_not_eq' => nil }
       params[:q][:rec_action_hold_not_eq] == "1" ? hold_params = { 'rec_action_not_eq' => "HOLD" } : hold_params = { 'rec_action_not_eq' => nil }
       params[:q] = { 'g' => { '0' => na_params, '1' => base_params.merge(hold_params) } }
-      # if params[:q][:rec_action_na_not_eq] == "1"
-      #   if params[:q][:rec_action_hold_not_eq] == "1"
-      #     params[:q] = { 'g' => { '0' => { 'rec_action_not_eq' => '(n/a)' }, '1' => base_params.merge('rec_action_not_eq' => 'HOLD') } }       
-      #   else
-      #     params[:q] = base_params.merge('g' => { '0' => { 'rec_action_not_eq' => "(n/a)" } })
-      #   end
-      # else
-      #   if params[:q][:rec_action_hold_not_eq] == "1"
-      #     params[:q] = { 'g' => { '1' => base_params.merge('rec_action_not_eq' => 'HOLD') } }       
-      #   else
-      #     params[:q] = base_params
-      #   end
-      # end
     end
     @params_q = params[:q]
     @q = display_items.ransack(params[:q])
@@ -46,9 +33,9 @@ class PagesController < ApplicationController
     @si_pool_lg = @q.result.where(classification: "large") #.paginate(:page => params[:page], :per_page => 100)
     @si_pool_sm = @q.result.where(classification: "small") #.paginate(:page => params[:page], :per_page => 100)
     @po_pool = @q.result.where(classification: "fallen out") #.paginate(:page => params[:page], :per_page => 100)
-    @si_lg = @si_pool_lg.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, si.rec_portfolio, si.curr_portfolio, si.net_portfolio] }.sort_by { |si| si[7] }.reverse!
+    @si_lg = @si_pool_lg.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, si.rec_portfolio, si.curr_portfolio, si.net_portfolio, si.p_to_b_curr, si.ent_val_ov_focf, si.p_to_b_lyq] }.sort_by { |si| si[7] }.reverse!
     
-    @si_sm = @si_pool_sm.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, si.rec_portfolio, si.curr_portfolio, si.net_portfolio] }.sort_by { |si| si[7] }.reverse!
+    @si_sm = @si_pool_sm.map { |si| [si.symbol, si.exchange, si.company, si.in_pf, si.rec_action, si.action, si.total_score, si.total_score_pct, si.dist_status, si.mkt_cap, si.nsi_score, si.ra_score, si.noas_score, si.ag_score, si.aita_score, si.l52wp_score, si.pp_score, si.rq_score, si.dt2_score, si.prev_ed, si.next_ed, si.lq_revenue, si.stock.portfolio_items, si.rec_portfolio, si.curr_portfolio, si.net_portfolio, si.p_to_b_curr, si.ent_val_ov_focf, si.p_to_b_lyq] }.sort_by { |si| si[7] }.reverse!
     
     # for development, just replicate lg pool (so there are multiple tabs of data)
     if Rails.env == "development"

@@ -58,6 +58,10 @@ class ImportScreenWorker
       profit_prem = row["Gross Profit Premium"].to_d
       roa_q = row["ROA Quarterly"].to_d
       dist_total_2 = row["DistTotal2"].to_d
+      p_to_b_curr = row["Price to Book Current"] == "n/a" ? nil : row["Price to Book Current"].to_f
+      ent_val_ov_focf = row["Enterprise Value/Free Op Cash Flows"] == "n/a" ? nil : row["Enterprise Value/Free Op Cash Flows"].to_f
+      p_to_b_lyq = row["Price to Book LYQ"] == "n/a" ? nil : row["Price to Book LYQ"].to_f
+      
       
       # create/update security
       stock = Stock.where(
@@ -83,6 +87,9 @@ class ImportScreenWorker
 	      profit_prem: profit_prem,
 	      roa_q: roa_q,
 	      dist_total_2: dist_total_2,
+	      p_to_b_curr: p_to_b_curr,
+	      ent_val_ov_focf: ent_val_ov_focf,
+	      p_to_b_lyq: p_to_b_lyq,
         set_created_at: set_created_at
       ).first_or_create
       si_array << si

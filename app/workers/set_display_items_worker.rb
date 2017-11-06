@@ -109,7 +109,7 @@ class SetDisplayItemsWorker
       
       portfolio = si.stock.portfolio_items.find_by(pos_type: "stock")
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. nil, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. nil, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position, 23. Price to Book Current, 24. Enterprise Value/Free Op Cash Flows, 25. Price to Book LYQ
       si_lg << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -133,7 +133,10 @@ class SetDisplayItemsWorker
         prev_ed.empty? ? "N/A" : (Date.today - prev_ed.last.date).to_i,
         next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? 0.1 : (next_ed.last.date - Date.today).to_i,
         si.stock.lq_revenue,
-        !portfolio.nil? ? portfolio.last * portfolio.quantity * ( portfolio.position == "long" ? 1 : -1 ) : 0
+        !portfolio.nil? ? portfolio.last * portfolio.quantity * ( portfolio.position == "long" ? 1 : -1 ) : 0,
+        si.p_to_b_curr,
+        si.ent_val_ov_focf,
+        si.p_to_b_lyq
       ]
     end
     # calculate programmatic action (si[4]), total score percentile (si[7]) and dist > 7 or 8 (si[8]) after initial setup
@@ -254,7 +257,10 @@ class SetDisplayItemsWorker
         prev_ed: si[19],
         next_ed: si[20],
         lq_revenue: si[21],
-        curr_portfolio: si[22]
+        curr_portfolio: si[22],
+        p_to_b_curr: si[23],
+        ent_val_ov_focf: si[24],
+        p_to_b_lyq: si[25]
       )
       
     end
@@ -327,7 +333,7 @@ class SetDisplayItemsWorker
       
       portfolio = si.stock.portfolio_items.find_by(pos_type: 'stock')
       
-      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. nil, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position
+      # 0. symbol, 1. exchange, 2. company, 3. in pf, 4. rec action, 5. action, 6. total score, 7. total score pct, 8. nil, 9. Mkt Cap, 10. NSI, 11. RA, 12. NOAS, 13. AG, 14. AITA, 15. L52WP, 16. PP, 17. RQ, 18. DT2, 19. Previous Earnings, 20. Next Earnings, 21. LQ Rev, 22. Current Position, 23. Price to Book Current, 24. Enterprise Value/Free Op Cash Flows, 25. Price to Book LYQ
       si_sm << [
         si.stock.symbol, 
         si.stock.exchange,
@@ -351,7 +357,10 @@ class SetDisplayItemsWorker
         prev_ed.empty? ? "N/A" : (Date.today - prev_ed.last.date).to_i,
         next_ed.empty? ? "N/A" : (next_ed.last.date - Date.today).to_i == 0 ? 0.1 : (next_ed.last.date - Date.today).to_i,
         si.stock.lq_revenue,
-        !portfolio.nil? ? portfolio.last * portfolio.quantity * ( portfolio.position == "long" ? 1 : -1 ) : 0
+        !portfolio.nil? ? portfolio.last * portfolio.quantity * ( portfolio.position == "long" ? 1 : -1 ) : 0,
+        si.p_to_b_curr,
+        si.ent_val_ov_focf,
+        si.p_to_b_lyq
       ]
     end
     # calculate programmatic action (si[4]), total score percentile (si[7]), and dist > 7 or 8 (si[8]) after initial setup
@@ -471,7 +480,10 @@ class SetDisplayItemsWorker
         prev_ed: si[19],
         next_ed: si[20],
         lq_revenue: si[21],
-        curr_portfolio: si[22]
+        curr_portfolio: si[22],
+        p_to_b_curr: si[23],
+        ent_val_ov_focf: si[24],
+        p_to_b_lyq: si[25]
       )
     end
     # import sm_cap
@@ -637,7 +649,10 @@ class SetDisplayItemsWorker
             :next_ed_o => di.next_ed,
             :mkt_cap_o => di.mkt_cap,
             :lq_revenue_o => di.lq_revenue,
-            :op_expiration => pi.op_expiration
+            :op_expiration => pi.op_expiration,
+            :p_to_b_curr_o => di.p_to_b_curr,
+            :ent_val_ov_focf_o => di.ent_val_ov_focf,
+            :p_to_b_lyq_o => di.p_to_b_lyq_o
           })
         end
         update_params.merge!({
@@ -658,7 +673,10 @@ class SetDisplayItemsWorker
           :mkt_cap_c => di.mkt_cap,
           :lq_revenue_c => di.lq_revenue,
           :date_sold => Date.today,
-          :active => true
+          :active => true,
+          :p_to_b_curr_c => di.p_to_b_curr,
+          :ent_val_ov_focf_c => di.ent_val_ov_focf,
+          :p_to_b_lyq_c => di.p_to_b_lyq
         })
         ti.update(update_params)
       end

@@ -44,7 +44,7 @@ class GetScreenMechanizeWorker
       # each entry in a company row is separated by a single pipe | (we're creating a nested array here)
       entries = response_array.map { |r| r.split("|") }
       entries2 = response_array2.map { |r| r.split("|") }
-      results += entries.each_with_index { |e,i| e.push(entries2[i][9..11]).flatten! }
+      results += entries.each_with_index { |e,i| e.push(entries2[i][8..11]).flatten! }
  
       counter += 1
     end

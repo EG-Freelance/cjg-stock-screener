@@ -119,9 +119,9 @@
 							<th class="analysis-header hidden">52 Week Price Score</th>
 							<th class="analysis-header hidden">Profit Premium Score</th>
 							<th class="analysis-header hidden">ROA Quarterly Score</th>
-							<th class="analysis-header" style="text-align:center">Price to Book (Current)</th>
-							<th class="analysis-header" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
-							<th class="analysis-header" style="text-align:center">Ent Value/Free Op. CFs</th>
+							<th class="analysis-header hidden" style="text-align:center">Price to Book (Current)</th>
+							<th class="analysis-header hidden" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
+							<th class="analysis-header hidden" style="text-align:center">Ent Value/Free Op. CFs</th>
 							<th colspan=2 class="analysis-header" style="text-align:center">Update</th>
 						</tr>
 					</thead>
@@ -180,9 +180,9 @@
 								<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
 								<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
 								<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
-								<td style="text-align:right; padding-right:2px"><%= si[26].nil? ? "NP" : si[26] %></td> <!-- Price to Book Current -->
-								<td style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[28] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
-								<td style="text-align:right; padding-right:2px"><%= si[27].nil? ? "NP" : si[27] %></td> <!-- Price to Book LYQ -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[26].nil? ? "NP" : si[26] %></td> <!-- Price to Book Current -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[28] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[27].nil? ? "NP" : si[27] %></td> <!-- Price to Book LYQ -->
 								<!-- Split submits by commit type -->
 								<td>
 									<%= form_tag(update_action_path, :remote => true) do %>
@@ -237,9 +237,9 @@
 							<th class="analysis-header hidden">52 Week Price Score</th>
 							<th class="analysis-header hidden">Profit Premium Score</th>
 							<th class="analysis-header hidden">ROA Quarterly Score</th>
-							<th class="analysis-header" style="text-align:center">Price to Book (Current)</th>
-							<th class="analysis-header" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
-							<th class="analysis-header" style="text-align:center">Ent Value/Free Op. CFs</th>
+							<th class="analysis-header hidden" style="text-align:center">Price to Book (Current)</th>
+							<th class="analysis-header hidden" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
+							<th class="analysis-header hidden" style="text-align:center">Ent Value/Free Op. CFs</th>
 							<th colspan=2 class="analysis-header" style="text-align:center">Update</th>
 							
 						</tr>
@@ -283,9 +283,9 @@
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 								<td id="id-<%= si[0] %><%= si[1] %>-action", class: 'action-field'><%= si[5] %></td> <!-- Action -->
-								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[23], :precision => 0, :delimiter => ',') %></td> <!-- Recommended Amount -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[23], :precision => 0, :delimiter => ',') %></td> <!-- Recommended Amount -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[24], :precision => 0, :delimiter => ',') %></td> <!-- Current Amount -->
-								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[25], :precision => 0, :delimiter => ',') %></td> <!-- Change Amount -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[25], :precision => 0, :delimiter => ',') %></td> <!-- Change Amount -->
 								<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 								<td style="text-align:center"><%= number_to_percentage(si[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
 								<td style='text-align:center'><%= si[18] %></td> <!-- DistTotal2 Rank -->
@@ -299,9 +299,9 @@
 								<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
 								<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
 								<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
-								<td style="text-align:right; padding-right:2px"><%= si[26].nil? ? "NP" : si[26] %></td> <!-- Price to Book Current -->
-								<td style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[28] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
-								<td style="text-align:right; padding-right:2px"><%= si[27].nil? ? "NP" : si[27] %></td> <!-- Price to Book LYQ -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[26].nil? ? "NP" : si[26] %></td> <!-- Price to Book Current -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[28] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[27].nil? ? "NP" : si[27] %></td> <!-- Price to Book LYQ -->
 								<!-- Split submits by commit type -->
 								<td>
 									<%= form_tag(update_action_path, :remote => true) do %>

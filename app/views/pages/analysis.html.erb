@@ -354,9 +354,9 @@
 							<th class="analysis-header hidden">52 Week Price Score</th>
 							<th class="analysis-header hidden">Profit Premium Score</th>
 							<th class="analysis-header hidden">ROA Quarterly Score</th>
-							<th class="analysis-header" style="text-align:center">Price to Book (Current)</th>
-							<th class="analysis-header" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
-							<th class="analysis-header" style="text-align:center">Ent Value/Free Op. CFs</th>
+							<th class="analysis-header hidden" style="text-align:center">Price to Book (Current)</th>
+							<th class="analysis-header hidden" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
+							<th class="analysis-header hidden" style="text-align:center">Ent Value/Free Op. CFs</th>
 							<th colspan=2 class="analysis-header hidden" style="text-align:center">Update</th>
 						</tr>
 					</thead>
@@ -403,7 +403,7 @@
 								<td style="text-align:center"><%= number_to_percentage(pi[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
 								<td style='text-align:center'><%= pi[18] %></td> <!-- DistTotal2 Rank -->
 								<td style="text-align:right; padding-right:2px"><%= !pi[9].nil? ? number_with_precision((pi[9] / 1000000000.0 > 0.4 ? pi[9] / 1000000000.0 : "< 0.4" ), :precision => 1, :delimiter => ',') : "N/A" %></td> <!-- Market Cap -->
-								<td style="text-align:right; padding-right:2px"><%= !pi[21].nil? ? number_with_precision(pi[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= !pi[21].nil? ? number_with_precision(pi[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
 								<td class="hidden"><%= pi[10] %></td> <!-- Net Stock Issues Score -->
 								<td class="hidden"><%= pi[11] %></td> <!-- RelAccruals Score -->
 								<td class="hidden"><%= pi[12] %></td> <!-- NetOpAssetsScaled Score -->
@@ -412,9 +412,9 @@
 								<td class="hidden"><%= pi[15] %></td> <!-- 52 Week Price Score -->
 								<td class="hidden"><%= pi[16] %></td> <!-- Profit Premium Score -->
 								<td class="hidden"><%= pi[17] %></td> <!-- ROA Quarterly Score -->
-								<td style="text-align:right; padding-right:2px">NP</td> <!-- Price to Book Current -->
-								<td style="text-align:right; padding-right:2px">NP</td> <!-- Enterprise Value/Free Op. Cash Flows -->
-								<td style="text-align:right; padding-right:2px">NP</td> <!-- Price to Book LYQ -->
+								<td class="hidden" style="text-align:right; padding-right:2px">NP</td> <!-- Price to Book Current -->
+								<td class="hidden" style="text-align:right; padding-right:2px">NP</td> <!-- Enterprise Value/Free Op. Cash Flows -->
+								<td class="hidden" style="text-align:right; padding-right:2px">NP</td> <!-- Price to Book LYQ -->
 								<!-- Split submits by commit type -->
 								<td class="hidden">
 									<%= form_tag(update_action_path, :remote => true) do %>

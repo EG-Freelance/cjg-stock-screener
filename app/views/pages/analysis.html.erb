@@ -290,7 +290,7 @@
 								<td style="text-align:center"><%= number_to_percentage(si[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
 								<td style='text-align:center'><%= si[18] %></td> <!-- DistTotal2 Rank -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision((si[9] / 1000000000.0 > 0.4 ? si[9] / 1000000000.0 : "< 0.4" ), :precision => 1, :delimiter => ',') %></td> <!-- Market Cap -->
-								<td style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
 								<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
 								<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
 								<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->

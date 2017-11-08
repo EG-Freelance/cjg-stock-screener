@@ -122,7 +122,7 @@
 							<th class="analysis-header hidden" style="text-align:center">Price to Book (Current)</th>
 							<th class="analysis-header hidden" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
 							<th class="analysis-header hidden" style="text-align:center">Ent Value/Free Op. CFs</th>
-							<th colspan=2 class="analysis-header" style="text-align:center">Update</th>
+							<th colspan=2 class="analysis-header hidden" style="text-align:center">Update</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -184,7 +184,7 @@
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[28] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[27].nil? ? "NP" : si[27] %></td> <!-- Price to Book LYQ -->
 								<!-- Split submits by commit type -->
-								<td>
+								<td class="hidden">
 									<%= form_tag(update_action_path, :remote => true) do %>
 										<%= hidden_field_tag 'symbol', :value => si[0] %>
 										<%= hidden_field_tag 'exchange', :value => si[1] %>
@@ -192,7 +192,7 @@
 										<%= submit_tag 'Confirm', :class => 'update-btn' %>
 									<% end %>
 								</td>
-								<td>
+								<td class="hidden">
 									<%= form_tag(update_action_path, :remote => true) do %>
 										<%= hidden_field_tag 'symbol', :value => si[0] %>
 										<%= hidden_field_tag 'exchange', :value => si[1] %>
@@ -240,7 +240,7 @@
 							<th class="analysis-header hidden" style="text-align:center">Price to Book (Current)</th>
 							<th class="analysis-header hidden" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
 							<th class="analysis-header hidden" style="text-align:center">Ent Value/Free Op. CFs</th>
-							<th colspan=2 class="analysis-header" style="text-align:center">Update</th>
+							<th colspan=2 class="analysis-header hidden" style="text-align:center">Update</th>
 							
 						</tr>
 					</thead>
@@ -303,7 +303,7 @@
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[28] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[27].nil? ? "NP" : si[27] %></td> <!-- Price to Book LYQ -->
 								<!-- Split submits by commit type -->
-								<td>
+								<td class="hidden">
 									<%= form_tag(update_action_path, :remote => true) do %>
 										<%= hidden_field_tag 'symbol', :value => si[0] %>
 										<%= hidden_field_tag 'exchange', :value => si[1] %>
@@ -311,7 +311,7 @@
 										<%= submit_tag 'Confirm', :class => 'update-btn' %>
 									<% end %>
 								</td>
-								<td>
+								<td class="hidden">
 									<%= form_tag(update_action_path, :remote => true) do %>
 										<%= hidden_field_tag 'symbol', :value => si[0] %>
 										<%= hidden_field_tag 'exchange', :value => si[1] %>
@@ -357,7 +357,7 @@
 							<th class="analysis-header" style="text-align:center">Price to Book (Current)</th>
 							<th class="analysis-header" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
 							<th class="analysis-header" style="text-align:center">Ent Value/Free Op. CFs</th>
-							<th colspan=2 class="analysis-header" style="text-align:center">Update</th>
+							<th colspan=2 class="analysis-header hidden" style="text-align:center">Update</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -416,7 +416,7 @@
 								<td style="text-align:right; padding-right:2px">NP</td> <!-- Enterprise Value/Free Op. Cash Flows -->
 								<td style="text-align:right; padding-right:2px">NP</td> <!-- Price to Book LYQ -->
 								<!-- Split submits by commit type -->
-								<td>
+								<td class="hidden">
 									<%= form_tag(update_action_path, :remote => true) do %>
 										<%= hidden_field_tag 'symbol', :value => pi[0] %>
 										<%= hidden_field_tag 'exchange', :value => pi[1] %>
@@ -424,7 +424,7 @@
 										<%= submit_tag 'Confirm', :class => 'update-btn' %>
 									<% end %>
 								</td>
-								<td>
+								<td class="hidden">
 									<%= form_tag(update_action_path, :remote => true) do %>
 										<%= hidden_field_tag 'symbol', :value => pi[0] %>
 										<%= hidden_field_tag 'exchange', :value => pi[1] %>

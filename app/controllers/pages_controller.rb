@@ -426,7 +426,7 @@ class PagesController < ApplicationController
 
     # set header
     page.row(0).push "Symbol", "Exchange", "Company", "In Portfolio", "Recommended Action", "Action", "Total Score", "Total Score Percentile", "Dist > 7 or 8", "Market Cap", "Net Stock Issues", "Net Stock Issues Rank", "RelAccruals", "RelAccruals Rank", "NetOpAssetsScaled", "NetOpAssetsScaled Rank", "Assets Growth", "Assets Growth Rank", "InvestToAssets", "InvestToAssets Rank", "52 Week Price", "52 Week Price Rank", "Profit Premium", "Profit Premium Rank", "ROA Quarterly", "ROA Quarterly Rank", "DistTotal2", "DistTotal2 Rank", "Days from Previous Earnings", "Days to Next Earnings", "Last Quarter Revenue", "Price to Book (Current)", "Price to Book Last Quarter -1 Yr", "Enterprise Value/Free Op FCs", "Classification"
-    32.times do |i|
+    35.times do |i|
       page.row(0).set_format(i, header_format)
     end
     

@@ -652,7 +652,7 @@ class SetDisplayItemsWorker
             :op_expiration => pi.op_expiration,
             :p_to_b_curr_o => di.p_to_b_curr,
             :ent_val_ov_focf_o => di.ent_val_ov_focf,
-            :p_to_b_lyq_o => di.p_to_b_lyq_o
+            :p_to_b_lyq_o => di.p_to_b_lyq
           })
         end
         update_params.merge!({

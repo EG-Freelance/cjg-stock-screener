@@ -94,7 +94,7 @@
 					<thead>
 						<tr>
 							<th class="analysis-header" style='width:65px; padding-left:10px'>Sym</th>
-							<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
+							<th class="analysis-header hidden" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
 							<th class="analysis-header" style="text-align:center">% Gain</th>
 							<th class="analysis-header" style="text-align:center">$ Gain</th>
@@ -102,7 +102,7 @@
 							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
-							<th class="analysis-header" style="text-align:center">Action</th>
+							<th class="analysis-header hidden" style="text-align:center">Action</th>
 							<th class="analysis-header hidden" style="text-align:center">Target Value</th>
 							<th class="analysis-header" style="text-align:center">Current Value</th>
 							<th class="analysis-header hidden" style="text-align:center">Adjustment</th>
@@ -131,7 +131,7 @@
 						<% @si_sm.each do |si| %>
 							<tr>
 								<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
-								<td><%= si[1] %></td> <!-- Exchange -->
+								<!--<td><%= si[1] %></td> <!-- Exchange -->
 								<td>
 									<%= si[2] %>
 									<div class="relative-wrap">
@@ -163,7 +163,7 @@
 								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Earnings -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
-								<td id="id-<%= si[0] %><%= si[1] %>-action", class: 'action-field'><%= si[5] %></td> <!-- Action -->
+								<!--<td id="id-<%= si[0] %><%= si[1] %>-action", class: 'action-field'><%= si[5] %></td> <!-- Action -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[23], :precision => 0, :delimiter => ',') %></td> <!-- Recommended Amount -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[24], :precision => 0, :delimiter => ',') %></td> <!-- Current Amount -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[25], :precision => 0, :delimiter => ',') %></td> <!-- Change Amount -->
@@ -212,7 +212,7 @@
 					<thead>
 						<tr>
 							<th class="analysis-header" style='width:65px; padding-left: 10px'>Sym</th>
-							<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
+							<th class="analysis-header hidden" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
 							<th class="analysis-header" style="text-align:center">% Gain</th>
 							<th class="analysis-header" style="text-align:center">$ Gain</th>
@@ -220,7 +220,7 @@
 							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
-							<th class="analysis-header" style="text-align:center">Action</th>
+							<th class="analysis-header hidden" style="text-align:center">Action</th>
 							<th class="analysis-header hidden" style="text-align:center">Target Value</th>
 							<th class="analysis-header" style="text-align:center">Current Value</th>
 							<th class="analysis-header hidden" style="text-align:center">Adjustment</th>
@@ -250,7 +250,7 @@
 						<% @si_lg.each do |si| %>
 							<tr>
 								<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
-								<td><%= si[1] %></td> <!-- Exchange -->
+								<!--<td><%= si[1] %></td> <!-- Exchange -->
 								<td>
 									<%= si[2] %>
 									<div class="relative-wrap">
@@ -282,7 +282,7 @@
 								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
-								<td id="id-<%= si[0] %><%= si[1] %>-action", class: 'action-field'><%= si[5] %></td> <!-- Action -->
+								<!--<td id="id-<%= si[0] %><%= si[1] %>-action", class: 'action-field'><%= si[5] %></td> <!-- Action -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[23], :precision => 0, :delimiter => ',') %></td> <!-- Recommended Amount -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[24], :precision => 0, :delimiter => ',') %></td> <!-- Current Amount -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[25], :precision => 0, :delimiter => ',') %></td> <!-- Change Amount -->
@@ -332,7 +332,7 @@
 					<thead>
 						<tr>
 							<th class="analysis-header" style='width:65px; padding-left: 10px'>Sym</th>
-							<th class="analysis-header" style="text-align:center; width:75px">Exchange</th>
+							<th class="analysis-header hidden" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
 							<th class="analysis-header" style="text-align:center">% Gain</th>
 							<th class="analysis-header" style="text-align:center">$ Gain</th>
@@ -340,7 +340,7 @@
 							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
-							<th class="analysis-header" style="text-align:center">Action</th>
+							<th class="analysis-header hidden" style="text-align:center">Action</th>
 							<th class="analysis-header hidden">Totals</th>
 							<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
 							<th class="analysis-header" style="text-align:center">Dist Rk</th>
@@ -366,7 +366,7 @@
 						<% @po.each do |pi| %>
 							<tr>
 								<td style="padding-left:10px"><%= pi[0] %></td> <!-- Symbol -->
-								<td><%= pi[1] %></td> <!-- Exchange -->
+								<!--<td><%= pi[1] %></td> <!-- Exchange -->
 								<td>
 									<%= pi[2] %>
 									<div class="relative-wrap">
@@ -398,7 +398,7 @@
 								<td><%= pi[19] != "N/A" ? pi[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= pi[20] != "N/A" ? pi[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 								<td style="text-align:center"><%= pi[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= pi[4] %></td> <!-- Rec Action -->
-								<td id="id-<%= pi[0] %><%= pi[1] %>-action", class: 'action-field'><%= pi[5] %></td> <!-- Action -->
+								<!--<td id="id-<%= pi[0] %><%= pi[1] %>-action", class: 'action-field'><%= pi[5] %></td> <!-- Action -->
 								<td class="hidden"><%= pi[6] %></td> <!-- Totals -->
 								<td style="text-align:center"><%= number_to_percentage(pi[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
 								<td style='text-align:center'><%= pi[18] %></td> <!-- DistTotal2 Rank -->

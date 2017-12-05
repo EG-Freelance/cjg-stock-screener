@@ -423,10 +423,11 @@ class PagesController < ApplicationController
     ####### ROW/CELL FORMATS ########
     header_format = Spreadsheet::Format.new :weight => :bold, :border => :thin, :horizontal_align => :center, :pattern_fg_color => :lime, :pattern => 1, :size => 9, :text_wrap => true, :vertical_align => :top
     default_format = Spreadsheet::Format.new :border => :thin, :horizontal_align => :center, :size => 9, :text_wrap => true, :vertical_align => :top
+    bold_format = Spreadsheet::Format.new :weight => :bold
 
     # set header
     page.row(0).push "Symbol", "Exchange", "Company", "In Portfolio", "Recommended Action", "Action", "Total Score", "Total Score Percentile", "Market Cap", "Net Stock Issues", "Net Stock Issues Rank", "RelAccruals", "RelAccruals Rank", "NetOpAssetsScaled", "NetOpAssetsScaled Rank", "Assets Growth", "Assets Growth Rank", "InvestToAssets", "InvestToAssets Rank", "52 Week Price", "52 Week Price Rank", "Profit Premium", "Profit Premium Rank", "ROA Quarterly", "ROA Quarterly Rank", "DistTotal2", "DistTotal2 Rank", "Days from Previous Earnings", "Days to Next Earnings", "Last Quarter Revenue", "Price to Book (Current)", "Price to Book Last Quarter -1 Yr", "Enterprise Value/Free Op FCs", "Classification"
-    35.times do |i|
+    34.times do |i|
       page.row(0).set_format(i, header_format)
     end
     
@@ -439,6 +440,13 @@ class PagesController < ApplicationController
       si = screen_items.find_by(:stocks => { :symbol => di.symbol, :exchange => di.exchange })
       page.row(i+3).push di.symbol, di.exchange, di.company, di.in_pf, di.rec_action, di.action, di.total_score, di.total_score_pct, di.mkt_cap, !si.nil? ? si.net_stock_issues.to_f : "N/A", di.nsi_score, !si.nil? ? si.rel_accruals.to_f : "N/A", di.ra_score, !si.nil? ? si.net_op_assets_scaled.to_f : "N/A", di.noas_score, !si.nil? ? si.assets_growth.to_f : "N/A", di.ag_score, !si.nil? ? si.adj_invest_to_assets.to_f : "N/A", di.aita_score, !si.nil? ? si.l_52_wk_price.to_f : "N/A", di.l52wp_score, !si.nil? ? si.profit_prem.to_f : "N/A", di.pp_score, !si.nil? ? si.roa_q.to_f : "N/A", di.rq_score, !si.nil? ? si.dist_total_2.to_f : "N/A", di.dt2_score, di.prev_ed, di.next_ed, di.lq_revenue, di.p_to_b_curr, di.p_to_b_lyq, di.ent_val_ov_focf, di.classification
     end
+    
+    page.row(lr+2).set_format(0, bold_format)
+    3.times do |i|
+      page.row(lr+3).set_format(i, header_format)
+    end
+    page.row(lr+4).set_format(0, bold_format)
+    page.row(lr+5).set_format(0, bold_format)
     
     page.row(lr+2).push "MEDIANS"
     page.row(lr+3).push "Cap Size", "P to B", "EV to FCF"

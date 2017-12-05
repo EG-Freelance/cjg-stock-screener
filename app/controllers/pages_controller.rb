@@ -11,6 +11,10 @@ class PagesController < ApplicationController
   end
   
   def analysis
+    @lg_med_p_to_b = MathStuff.median(display_items.where(classification: "large").collect(&:p_to_b_curr).compact)
+    @lg_med_ev_to_fcf = MathStuff.median(display_items.where(classification: "large").collect(&:ent_val_ov_focf).compact)
+    @sm_med_p_to_b = MathStuff.median(display_items.where(classification: "small").collect(&:p_to_b_curr).compact)
+    @sm_med_ev_to_fcf = MathStuff.median(display_items.where(classification: "small").collect(&:ent_val_ov_focf).compact)
     # eager load display_items
     display_items = DisplayItem.all.includes(:portfolio_items)
     if params[:q].nil? 

@@ -102,6 +102,8 @@
 							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
+							<th class="analysis-header" style="text-align:center">Strong Buy</th>
+							<th class="analysis-header" style="text-align:center">Strong Short</th>
 							<th class="analysis-header hidden" style="text-align:center">Action</th>
 							<th class="analysis-header hidden" style="text-align:center">Target Value</th>
 							<th class="analysis-header" style="text-align:center">Current Value</th>
@@ -163,6 +165,8 @@
 								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Earnings -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
+								<td style="padding-left:10px"><%= si[4] == "BUY" && si[26] < @sm_med_p_to_b && si[28] < @sm_med_ev_to_fcf ? "B" : "" %></td> <!-- Strong Buy -->
+								<td style="padding-left:10px"><%= si[4] == "SHORT" && si[26] > @sm_med_p_to_b && si[28] > @sm_med_ev_to_fcf ? "S" : "" %></td> <!-- Strong Short -->
 								<!--<td id="id-<%= si[0] %><%= si[1] %>-action", class: 'action-field'><%= si[5] %></td> <!-- Action -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[23], :precision => 0, :delimiter => ',') %></td> <!-- Recommended Amount -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[24], :precision => 0, :delimiter => ',') %></td> <!-- Current Amount -->
@@ -220,6 +224,8 @@
 							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
+							<th class="analysis-header" style="text-align:center">Strong Buy</th>
+							<th class="analysis-header" style="text-align:center">Strong Short</th>
 							<th class="analysis-header hidden" style="text-align:center">Action</th>
 							<th class="analysis-header hidden" style="text-align:center">Target Value</th>
 							<th class="analysis-header" style="text-align:center">Current Value</th>
@@ -282,6 +288,8 @@
 								<td><%= si[19] != "N/A" ? si[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= si[20] != "N/A" ? si[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 								<td style="text-align:center"><%= si[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
+								<td style="padding-left:10px"><%= si[4] == "BUY" && si[26] < @lg_med_p_to_b && si[28] < @lg_med_ev_to_fcf ? "B" : "" %></td> <!-- Strong Buy -->
+								<td style="padding-left:10px"><%= si[4] == "SHORT" && si[26] > @lg_med_p_to_b && si[28] > @lg_med_ev_to_fcf ? "S" : "" %></td> <!-- Strong Short -->
 								<!--<td id="id-<%= si[0] %><%= si[1] %>-action", class: 'action-field'><%= si[5] %></td> <!-- Action -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[23], :precision => 0, :delimiter => ',') %></td> <!-- Recommended Amount -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[24], :precision => 0, :delimiter => ',') %></td> <!-- Current Amount -->

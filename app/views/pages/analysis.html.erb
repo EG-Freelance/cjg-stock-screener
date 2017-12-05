@@ -103,27 +103,10 @@
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
 							<th class="analysis-header" style="text-align:center">Strong Buy</th>
 							<th class="analysis-header" style="text-align:center">Strong Short</th>
-							<th class="analysis-header hidden" style="text-align:center">Action</th>
-							<th class="analysis-header hidden" style="text-align:center">Target Value</th>
 							<th class="analysis-header" style="text-align:center">Current Value</th>
-							<th class="analysis-header hidden" style="text-align:center">Adjustment</th>
-							<th class="analysis-header hidden">Totals</th>
 							<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
 							<th class="analysis-header" style="text-align:center">Dist Rk</th>
 							<th class="analysis-header" style="text-align:center; width:110px">Market Cap (in B)</th>
-							<th class="analysis-header hidden" style="text-align:center; width:110px">Last Q Rev (in K)</th>
-							<th class="analysis-header hidden">Net Stock Issues Score</th>
-							<th class="analysis-header hidden">RelAccruals Score</th>
-							<th class="analysis-header hidden">NetOpAssetsScaled Score</th>
-							<th class="analysis-header hidden">Assets Growth Score</th>
-							<th class="analysis-header hidden">InvestToAssets Score</th>
-							<th class="analysis-header hidden">52 Week Price Score</th>
-							<th class="analysis-header hidden">Profit Premium Score</th>
-							<th class="analysis-header hidden">ROA Quarterly Score</th>
-							<th class="analysis-header hidden" style="text-align:center">Price to Book (Current)</th>
-							<th class="analysis-header hidden" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
-							<th class="analysis-header hidden" style="text-align:center">Ent Value/Free Op. CFs</th>
-							<th colspan=2 class="analysis-header hidden" style="text-align:center">Update</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -132,7 +115,6 @@
 						<% @si_sm.each do |si| %>
 							<tr>
 								<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
-								<!--<td><%= si[1] %></td> <!-- Exchange -->
 								<td>
 									<%= si[2] %>
 									<div class="relative-wrap">
@@ -166,26 +148,10 @@
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 								<td style="padding-left:10px"><%= si[4] == "BUY" && !si[26].nil? && !si[27].nil? && si[26] < @sm_med_p_to_b && si[27] < @sm_med_ev_to_fcf ? "B" : "" %></td> <!-- Strong Buy -->
 								<td style="padding-left:10px"><%= si[4] == "SHORT" && !si[26].nil? && !si[27].nil? && si[26] > @sm_med_p_to_b && si[27] > @sm_med_ev_to_fcf ? "S" : "" %></td> <!-- Strong Short -->
-								<!--<td id="id-<%= si[0] %><%= si[1] %>-action", class: 'action-field'><%= si[5] %></td> <!-- Action -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[23], :precision => 0, :delimiter => ',') %></td> <!-- Recommended Amount -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[24], :precision => 0, :delimiter => ',') %></td> <!-- Current Amount -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[25], :precision => 0, :delimiter => ',') %></td> <!-- Change Amount -->
-								<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 								<td style="text-align:center"><%= number_to_percentage(si[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
 								<td style='text-align:center'><%= si[18] %></td> <!-- DistTotal2 Rank -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision((si[9] / 1000000000.0 > 0.4 ? si[9] / 1000000000.0 : "< 0.4" ), :precision => 1, :delimiter => ',') %></td> <!-- Market Cap -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
-								<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
-								<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
-								<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
-								<td class="hidden"><%= si[13] %></td> <!-- Assets Growth Score -->
-								<td class="hidden"><%= si[14] %></td> <!-- InvestToAssets Score -->
-								<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
-								<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
-								<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[26].nil? ? "NP" : si[26] %></td> <!-- Price to Book Current -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[2] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[27].nil? ? "NP" : si[27] %></td> <!-- Price to Book LYQ -->
 								<!-- Split submits by commit type -->
 								<td class="hidden">
 									<%= form_tag(update_action_path, :remote => true) do %>
@@ -224,28 +190,10 @@
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
 							<th class="analysis-header" style="text-align:center">Strong Buy</th>
 							<th class="analysis-header" style="text-align:center">Strong Short</th>
-							<th class="analysis-header hidden" style="text-align:center">Action</th>
-							<th class="analysis-header hidden" style="text-align:center">Target Value</th>
 							<th class="analysis-header" style="text-align:center">Current Value</th>
-							<th class="analysis-header hidden" style="text-align:center">Adjustment</th>
-							<th class="analysis-header hidden">Totals</th>
 							<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
 							<th class="analysis-header" style="text-align:center">Dist Rk</th>
 							<th class="analysis-header" style="text-align:center; width:110px">Market Cap (in B)</th>
-							<th class="analysis-header hidden" style="text-align:center; width:110px">Last Q Rev (in K)</th>
-							<th class="analysis-header hidden">Net Stock Issues Score</th>
-							<th class="analysis-header hidden">RelAccruals Score</th>
-							<th class="analysis-header hidden">NetOpAssetsScaled Score</th>
-							<th class="analysis-header hidden">Assets Growth Score</th>
-							<th class="analysis-header hidden">InvestToAssets Score</th>
-							<th class="analysis-header hidden">52 Week Price Score</th>
-							<th class="analysis-header hidden">Profit Premium Score</th>
-							<th class="analysis-header hidden">ROA Quarterly Score</th>
-							<th class="analysis-header hidden" style="text-align:center">Price to Book (Current)</th>
-							<th class="analysis-header hidden" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
-							<th class="analysis-header hidden" style="text-align:center">Ent Value/Free Op. CFs</th>
-							<th colspan=2 class="analysis-header hidden" style="text-align:center">Update</th>
-							
 						</tr>
 					</thead>
 					<tbody>
@@ -254,7 +202,6 @@
 						<% @si_lg.each do |si| %>
 							<tr>
 								<td style="padding-left:10px"><%= si[0] %></td> <!-- Symbol -->
-								<!--<td><%= si[1] %></td> <!-- Exchange -->
 								<td>
 									<%= si[2] %>
 									<div class="relative-wrap">
@@ -288,26 +235,11 @@
 								<td style="padding-left:10px"><%= si[4] %></td> <!-- Rec Action -->
 								<td style="padding-left:10px"><%= si[4] == "BUY" && !si[26].nil? && !si[27].nil? && si[26] < @lg_med_p_to_b && si[27] < @lg_med_ev_to_fcf ? "B" : "" %></td> <!-- Strong Buy -->
 								<td style="padding-left:10px"><%= si[4] == "SHORT" && !si[26].nil? && !si[27].nil? && si[26] > @lg_med_p_to_b && si[27] > @lg_med_ev_to_fcf ? "S" : "" %></td> <!-- Strong Short -->
-								<!--<td id="id-<%= si[0] %><%= si[1] %>-action", class: 'action-field'><%= si[5] %></td> <!-- Action -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[23], :precision => 0, :delimiter => ',') %></td> <!-- Recommended Amount -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[24], :precision => 0, :delimiter => ',') %></td> <!-- Current Amount -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= number_with_precision(si[25], :precision => 0, :delimiter => ',') %></td> <!-- Change Amount -->
-								<td class="hidden"><%= si[6] %></td> <!-- Totals -->
 								<td style="text-align:center"><%= number_to_percentage(si[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
 								<td style='text-align:center'><%= si[18] %></td> <!-- DistTotal2 Rank -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision((si[9] / 1000000000.0 > 0.4 ? si[9] / 1000000000.0 : "< 0.4" ), :precision => 1, :delimiter => ',') %></td> <!-- Market Cap -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= !si[21].nil? ? number_with_precision(si[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
-								<td class="hidden"><%= si[10] %></td> <!-- Net Stock Issues Score -->
-								<td class="hidden"><%= si[11] %></td> <!-- RelAccruals Score -->
-								<td class="hidden"><%= si[12] %></td> <!-- NetOpAssetsScaled Score -->
-								<td class="hidden"><%= si[13] %></td> <!-- Assets Growth Score -->
-								<td class="hidden"><%= si[14] %></td> <!-- InvestToAssets Score -->
-								<td class="hidden"><%= si[15] %></td> <!-- 52 Week Price Score -->
-								<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
-								<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[26].nil? ? "NP" : si[26] %></td> <!-- Price to Book Current -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[28] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[27].nil? ? "NP" : si[27] %></td> <!-- Price to Book LYQ -->
 								<!-- Split submits by commit type -->
 								<td class="hidden">
 									<%= form_tag(update_action_path, :remote => true) do %>
@@ -345,23 +277,9 @@
 							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
-							<th class="analysis-header hidden">Totals</th>
 							<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
 							<th class="analysis-header" style="text-align:center">Dist Rk</th>
 							<th class="analysis-header" style="text-align:center; width:110px">Market Cap (in B)</th>
-							<th class="analysis-header hidden" style="text-align:center; width:110px">Last Q Rev (in K)</th>
-							<th class="analysis-header hidden">Net Stock Issues Score</th>
-							<th class="analysis-header hidden">RelAccruals Score</th>
-							<th class="analysis-header hidden">NetOpAssetsScaled Score</th>
-							<th class="analysis-header hidden">Assets Growth Score</th>
-							<th class="analysis-header hidden">InvestToAssets Score</th>
-							<th class="analysis-header hidden">52 Week Price Score</th>
-							<th class="analysis-header hidden">Profit Premium Score</th>
-							<th class="analysis-header hidden">ROA Quarterly Score</th>
-							<th class="analysis-header hidden" style="text-align:center">Price to Book (Current)</th>
-							<th class="analysis-header hidden" style="text-align:center">Price to Book (LQ, -1 Yr)</th>
-							<th class="analysis-header hidden" style="text-align:center">Ent Value/Free Op. CFs</th>
-							<th colspan=2 class="analysis-header hidden" style="text-align:center">Update</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -370,7 +288,6 @@
 						<% @po.each do |pi| %>
 							<tr>
 								<td style="padding-left:10px"><%= pi[0] %></td> <!-- Symbol -->
-								<!--<td><%= pi[1] %></td> <!-- Exchange -->
 								<td>
 									<%= pi[2] %>
 									<div class="relative-wrap">
@@ -402,23 +319,9 @@
 								<td><%= pi[19] != "N/A" ? pi[19].to_f + (Date.today - @di_period.to_date).to_i : "N/A" %> - <%= pi[20] != "N/A" ? pi[20].to_f - (Date.today - @di_period.to_date).to_i : "N/A" %></td> <!-- Prev Earn -->
 								<td style="text-align:center"><%= pi[3] %></td>	<!-- In Portfolio -->
 								<td style="padding-left:10px"><%= pi[4] %></td> <!-- Rec Action -->
-								<!--<td id="id-<%= pi[0] %><%= pi[1] %>-action", class: 'action-field'><%= pi[5] %></td> <!-- Action -->
-								<td class="hidden"><%= pi[6] %></td> <!-- Totals -->
 								<td style="text-align:center"><%= number_to_percentage(pi[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
 								<td style='text-align:center'><%= pi[18] %></td> <!-- DistTotal2 Rank -->
 								<td style="text-align:right; padding-right:2px"><%= !pi[9].nil? ? number_with_precision((pi[9] / 1000000000.0 > 0.4 ? pi[9] / 1000000000.0 : "< 0.4" ), :precision => 1, :delimiter => ',') : "N/A" %></td> <!-- Market Cap -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= !pi[21].nil? ? number_with_precision(pi[21]/1000, :precision => 0, :delimiter => ',' ) : "N/A" %></td> <!-- LQ Rev -->
-								<td class="hidden"><%= pi[10] %></td> <!-- Net Stock Issues Score -->
-								<td class="hidden"><%= pi[11] %></td> <!-- RelAccruals Score -->
-								<td class="hidden"><%= pi[12] %></td> <!-- NetOpAssetsScaled Score -->
-								<td class="hidden"><%= pi[13] %></td> <!-- Assets Growth Score -->
-								<td class="hidden"><%= pi[14] %></td> <!-- InvestToAssets Score -->
-								<td class="hidden"><%= pi[15] %></td> <!-- 52 Week Price Score -->
-								<td class="hidden"><%= pi[16] %></td> <!-- Profit Premium Score -->
-								<td class="hidden"><%= pi[17] %></td> <!-- ROA Quarterly Score -->
-								<td class="hidden" style="text-align:right; padding-right:2px">NP</td> <!-- Price to Book Current -->
-								<td class="hidden" style="text-align:right; padding-right:2px">NP</td> <!-- Enterprise Value/Free Op. Cash Flows -->
-								<td class="hidden" style="text-align:right; padding-right:2px">NP</td> <!-- Price to Book LYQ -->
 								<!-- Split submits by commit type -->
 								<td class="hidden">
 									<%= form_tag(update_action_path, :remote => true) do %>
@@ -657,7 +560,7 @@
     // example sortList: [[0,0],[1,0]],
     // [[columnIndex, sortDirection], ... ]
     sortList: [
-      [14, 1]
+      [11, 1]
     ],
     // default sort that is added to the end of the users sort
     // selection.

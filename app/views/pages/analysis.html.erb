@@ -94,7 +94,6 @@
 					<thead>
 						<tr>
 							<th class="analysis-header" style='width:65px; padding-left:10px'>Sym</th>
-							<th class="analysis-header hidden" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
 							<th class="analysis-header" style="text-align:center">% Gain</th>
 							<th class="analysis-header" style="text-align:center">$ Gain</th>
@@ -185,8 +184,8 @@
 								<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
 								<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[26].nil? ? "NP" : si[26] %></td> <!-- Price to Book Current -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[27] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[27].nil? ? "NP" : si[28] %></td> <!-- Price to Book LYQ -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[2] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[27].nil? ? "NP" : si[27] %></td> <!-- Price to Book LYQ -->
 								<!-- Split submits by commit type -->
 								<td class="hidden">
 									<%= form_tag(update_action_path, :remote => true) do %>
@@ -216,7 +215,6 @@
 					<thead>
 						<tr>
 							<th class="analysis-header" style='width:65px; padding-left: 10px'>Sym</th>
-							<th class="analysis-header hidden" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
 							<th class="analysis-header" style="text-align:center">% Gain</th>
 							<th class="analysis-header" style="text-align:center">$ Gain</th>
@@ -308,7 +306,7 @@
 								<td class="hidden"><%= si[16] %></td> <!-- Profit Premium Score -->
 								<td class="hidden"><%= si[17] %></td> <!-- ROA Quarterly Score -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[26].nil? ? "NP" : si[26] %></td> <!-- Price to Book Current -->
-								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[27] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
+								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[28].nil? ? "NP" : si[28] %></td> <!-- Enterprise Value/Free Op. Cash Flows -->
 								<td class="hidden" style="text-align:right; padding-right:2px"><%= si[27].nil? ? "NP" : si[27] %></td> <!-- Price to Book LYQ -->
 								<!-- Split submits by commit type -->
 								<td class="hidden">
@@ -340,7 +338,6 @@
 					<thead>
 						<tr>
 							<th class="analysis-header" style='width:65px; padding-left: 10px'>Sym</th>
-							<th class="analysis-header hidden" style="text-align:center; width:75px">Exchange</th>
 							<th class="analysis-header" style="text-align:center">Company Name</th>
 							<th class="analysis-header" style="text-align:center">% Gain</th>
 							<th class="analysis-header" style="text-align:center">$ Gain</th>
@@ -348,7 +345,6 @@
 							<th class="analysis-header" style="text-align:center">Earnings</th>
 							<th class="analysis-header" style="text-align:center">Current<br>Portfolio</th>
 							<th class="analysis-header" style="width:150px; text-align:center">Recommended<br>Action</th>
-							<th class="analysis-header hidden" style="text-align:center">Action</th>
 							<th class="analysis-header hidden">Totals</th>
 							<th class="analysis-header" style="width:90px; text-align:center">Total<br>Score<br>Percentile</th>
 							<th class="analysis-header" style="text-align:center">Dist Rk</th>

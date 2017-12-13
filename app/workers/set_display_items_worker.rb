@@ -182,7 +182,7 @@ class SetDisplayItemsWorker
               return_funds = return_funds + si[22].abs
             # in bottom 20%
             when si[7] <= 0.2 || prev_earn > rec_earn
-              si[4] = "HOLD"
+              si[4] = "HOLD (S)"
               short_mkt_cap_pool = short_mkt_cap_pool + Math.log(stock.market_cap)
             # in middle 75%
             else
@@ -203,7 +203,7 @@ class SetDisplayItemsWorker
               return_funds = return_funds + si[22].abs
             # in top 20%
             when si[7] >= 0.8 || prev_earn > rec_earn
-              si[4] = "HOLD"
+              si[4] = "HOLD (L)"
               long_mkt_cap_pool = long_mkt_cap_pool + Math.log(stock.market_cap)
             # in middle 75%
             else
@@ -405,7 +405,7 @@ class SetDisplayItemsWorker
               return_funds = return_funds + si[22].abs
             # in bottom 20%
             when si[7] <= 0.2
-              si[4] = "HOLD" || prev_earn > rec_earn
+              si[4] = "HOLD (S)" || prev_earn > rec_earn
               short_mkt_cap_pool = short_mkt_cap_pool + Math.log(stock.market_cap)
             # in middle 75%
             else
@@ -426,7 +426,7 @@ class SetDisplayItemsWorker
               return_funds = return_funds + si[22].abs
             # in top 20%
             when si[7] >= 0.8
-              si[4] = "HOLD" || prev_earn > rec_earn
+              si[4] = "HOLD (L)" || prev_earn > rec_earn
               long_mkt_cap_pool = long_mkt_cap_pool + Math.log(stock.market_cap)
             # in middle 75%
             else
@@ -590,7 +590,7 @@ class SetDisplayItemsWorker
         rec = 0
       else
         # indicate whether total should be negative
-        if (di.rec_action == "HOLD" && di.curr_portfolio < 0) || di.rec_action["SHORT"]
+        if (di.rec_action["HOLD"] && di.curr_portfolio < 0) || di.rec_action["SHORT"]
           sign = -1
           mkt_cap_base = short_mkt_cap_pool
         else

@@ -436,13 +436,13 @@ class PagesController < ApplicationController
       page.row(0).set_format(i, header_format)
     end
     
-    display_items = DisplayItem.all
-    screen_items = ScreenItem.all.includes(:stock)
+    display_items = DisplayItem.all.includes(:stock => :screen_items)
+    # screen_items = ScreenItem.all.includes(:stock)
     # last row index
     lr = 0
     display_items.each_with_index do |di, i|
       lr = i + 3
-      si = screen_items.find_by(:stocks => { :symbol => di.symbol, :exchange => di.exchange })
+      si = di.stock.screen_items.first
       page.row(i+3).push di.symbol, di.exchange, di.company, di.in_pf, di.rec_action, di.action, di.total_score, di.total_score_pct, di.mkt_cap, !si.nil? ? si.net_stock_issues.to_f : "N/A", di.nsi_score, !si.nil? ? si.rel_accruals.to_f : "N/A", di.ra_score, !si.nil? ? si.net_op_assets_scaled.to_f : "N/A", di.noas_score, !si.nil? ? si.assets_growth.to_f : "N/A", di.ag_score, !si.nil? ? si.adj_invest_to_assets.to_f : "N/A", di.aita_score, !si.nil? ? si.l_52_wk_price.to_f : "N/A", di.l52wp_score, !si.nil? ? si.profit_prem.to_f : "N/A", di.pp_score, !si.nil? ? si.roa_q.to_f : "N/A", di.rq_score, !si.nil? ? si.dist_total_2.to_f : "N/A", di.dt2_score, di.prev_ed, di.next_ed, di.lq_revenue, di.p_to_b_curr, di.p_to_b_lyq, di.ent_val_ov_focf, di.classification
     end
     

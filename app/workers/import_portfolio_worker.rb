@@ -60,7 +60,7 @@ class ImportPortfolioWorker
       pi_description = row["Description"]
       position = row["Long or Short"].downcase
       dt = ( row["Date Added"]["-"].nil? ? row["Date Added"].split("/") : row["Date Added"].split("-") )
-      date_acq = DateTime.new(dt[2].to_i, dt[0].to_i, dt[1].to_i)
+      date_acq = DateTime.new(dt[0].to_i, dt[1].to_i, dt[2].to_i)
       quantity = row["Quantity"].abs
       paid = row["Price Paid $"].to_f
       last = row["Last Price $"].to_f

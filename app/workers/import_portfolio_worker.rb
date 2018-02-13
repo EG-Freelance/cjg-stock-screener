@@ -59,7 +59,7 @@ class ImportPortfolioWorker
       market_cap = market_cap_data[1].to_f * (market_cap_data[2] == "B" ? 1000000000 : 1000000)
       pi_description = row["Description"]
       position = row["Long or Short"].downcase
-      dt = row["Date Added"].split("/")
+      dt = ( row["Date Added"]["-"].nil? ? row["Date Added"].split("/") : row["Date Added"].split("-") )
       date_acq = DateTime.new(dt[2].to_i, dt[0].to_i, dt[1].to_i)
       quantity = row["Quantity"].abs
       paid = row["Price Paid $"].to_f

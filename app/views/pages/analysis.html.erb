@@ -149,7 +149,7 @@
 								<!--<td style="padding-left:10px"><%= si[4] == "BUY" && !si[26].nil? && !si[27].nil? && si[26] < @sm_med_p_to_b && si[27] < @sm_med_ev_to_fcf ? "B" : "" %></td> <!-- Strong Buy -->
 								<!--<td style="padding-left:10px"><%= si[4] == "SHORT" && !si[26].nil? && !si[27].nil? && si[26] > @sm_med_p_to_b && si[27] > @sm_med_ev_to_fcf ? "S" : "" %></td> <!-- Strong Short -->
 								<td style="padding-left:10px"><%= (si[4]["BUY"] || si[4] == "HOLD (L)") && !si[26].nil? && !si[27].nil? && si[26] < @sm_med_p_to_b && si[27] < @sm_med_ev_to_fcf ? (si[4]["BUY"] && si[4] != "HOLD (L)" ? "B" : "AB") : "" %></td> <!-- Strong Buy -->
-								<td style="padding-left:10px"><%= (si[4]["SHORT"] || si[4] == "HOLD (S)") && !si[26].nil? && !si[27].nil? && si[26] < @sm_med_p_to_b && si[27] < @sm_med_ev_to_fcf ? (si[4]["SHORT"] && si[4] != "HOLD (S)" ? "S" : "AS") : "" %></td> <!-- Strong Short -->
+								<td style="padding-left:10px"><%= (si[4]["SHORT"] || si[4] == "HOLD (S)") && !si[26].nil? && !si[27].nil? && si[26] > @sm_med_p_to_b && si[27] > @sm_med_ev_to_fcf ? (si[4]["SHORT"] && si[4] != "HOLD (S)" ? "S" : "AS") : "" %></td> <!-- Strong Short -->
 								<td style="text-align:right; padding-right:2px"><%= number_with_precision(si[24], :precision => 0, :delimiter => ',') %></td> <!-- Current Amount -->
 								<td style="text-align:center"><%= number_to_percentage(si[7]*100, :precision => 1) %></td> <!-- Total Score Percentile -->
 								<td style='text-align:center'><%= si[18] %></td> <!-- DistTotal2 Rank -->

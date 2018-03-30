@@ -19,8 +19,13 @@ class PortfolioItem < ActiveRecord::Base
 	  
     RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "portfolio")
 	  # data start on 13th row and end 3 before last row (last row is cash summary)
-    (8..(last_row - 5)).each do |i|
+    (8..(last_row)).each do |i|
       data = spreadsheet.row(i)
+      # break when we come to the "CASH" row
+      if data[0] == "CASH" && data[1].nil?
+        RowDatum.create(data_set_id: data_set.id, data: data.compact.to_s, row_number: i - 6)
+        break
+      end
       data[1] = data[1].to_s.strip
       data[2] = data[2].to_s.strip
       data[3] == 1 ? data[3] = "long" : data[3] = "short"
@@ -28,7 +33,7 @@ class PortfolioItem < ActiveRecord::Base
       RowDatum.create(data_set_id: data_set.id, data: data.to_s, row_number: i - 6, data_type: "portfolio")
     end
     
-    RowDatum.create(data_set_id: data_set.id, data: spreadsheet.row(last_row - 4).compact.to_s, row_number: last_row - 10)
+    #RowDatum.create(data_set_id: data_set.id, data: spreadsheet.row(last_row - 4).compact.to_s, row_number: last_row - 10)
      
     ImportPortfolioWorker.perform_async(data_set.id)
   end

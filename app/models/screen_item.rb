@@ -14,7 +14,6 @@ class ScreenItem < ActiveRecord::Base
     end
     
     ImportScreenMechanizeWorker.perform_async(data_set.id)
-
   end
   
   def self.import_si(file)

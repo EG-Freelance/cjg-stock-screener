@@ -116,7 +116,7 @@ class DisplayItem < ActiveRecord::Base
 
     summary = StringIO.new
     spreadsheet.write summary
-    file = "Screen Summary #{Date.today.strftime("%Y.%m.%d")}.xls"
-    return file
+    # file = "Screen Summary #{Date.today.strftime("%Y.%m.%d")}.xls"
+    return spreadsheet
   end
 end

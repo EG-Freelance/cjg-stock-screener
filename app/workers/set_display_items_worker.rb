@@ -395,8 +395,8 @@ class SetDisplayItemsWorker
           if positions[0] == "short"
             case 
             # in top 10%
-            when si[7] >= 0.9 && si[18] < 8
-              si[4] = "CLOSE AND BUY" && prev_earn <= rec_earn
+            when si[7] >= 0.9 && si[18] < 8 && prev_earn <= rec_earn
+              si[4] = "CLOSE AND BUY"
               return_funds = return_funds + si[22].abs
               long_mkt_cap_pool = long_mkt_cap_pool + Math.log(stock.market_cap)
             # when any current short position has DistTotal2 < 9
@@ -404,8 +404,8 @@ class SetDisplayItemsWorker
               si[4] = "CLOSE"
               return_funds = return_funds + si[22].abs
             # in bottom 20%
-            when si[7] <= 0.2
-              si[4] = "HOLD (S)" || prev_earn > rec_earn
+            when si[7] <= 0.2 || prev_earn > rec_earn
+              si[4] = "HOLD (S)"
               short_mkt_cap_pool = short_mkt_cap_pool + Math.log(stock.market_cap)
             # in middle 75%
             else
@@ -416,8 +416,8 @@ class SetDisplayItemsWorker
           else
             case 
             # in bottom 10%
-            when si[7] <= 0.1 && si[18] > 8
-              si[4] = "CLOSE AND SHORT" && prev_earn <= rec_earn
+            when si[7] <= 0.1 && si[18] > 8 && prev_earn <= rec_earn
+              si[4] = "CLOSE AND SHORT"
               return_funds = return_funds + si[22].abs
               short_mkt_cap_pool = short_mkt_cap_pool + Math.log(stock.market_cap)
             # when any current long position has DistTotal2 > 7
@@ -425,8 +425,8 @@ class SetDisplayItemsWorker
               si[4] = "CLOSE"
               return_funds = return_funds + si[22].abs
             # in top 20%
-            when si[7] >= 0.8
-              si[4] = "HOLD (L)" || prev_earn > rec_earn
+            when si[7] >= 0.8 || prev_earn > rec_earn
+              si[4] = "HOLD (L)"
               long_mkt_cap_pool = long_mkt_cap_pool + Math.log(stock.market_cap)
             # in middle 75%
             else

@@ -10,7 +10,7 @@ class UpdateMailer < ApplicationMailer
     # file.write spreadsheet_file.read
     
     # attachments["Screen Update #{Date.today.strftime('%F')}.xls"] = File.open(file, 'rb'){ |f| f.read }
-    attachments["Screen Update #{Date.today.strftime('%F')}.xls"] = { content: data, mime_type: Mime::XLS }
+    attachments["Screen Update #{Date.today.strftime('%F')}.xls"] = { content: data.read, mime_type: Mime::XLS }
     
     mail(to: "erik.w.gibbons@gmail.com", subject: "Screen Update")
   end

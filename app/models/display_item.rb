@@ -114,8 +114,8 @@ class DisplayItem < ActiveRecord::Base
       page.row(i+1).push di.symbol, di.exchange, di.company, inpf_lng, inpf_shrt, nopf, di.total_score_pct, di.mkt_cap
     end
 
-    summary = StringIO.new
-    spreadsheet.write summary
+    # summary = StringIO.new
+    spreadsheet.write 'temp.xls'
     # file = "Screen Summary #{Date.today.strftime("%Y.%m.%d")}.xls"
     return summary
   end

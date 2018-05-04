@@ -527,13 +527,25 @@ class PagesController < ApplicationController
     portfolio_items = PortfolioItem.all
     screen_items = ScreenItem.all
     # portfolio items
-    @pi_period = portfolio_items.pluck(:set_created_at).uniq.sort.last
+    if !portfolio_items.empty?
+      @pi_period = portfolio_items.pluck(:set_created_at).uniq.sort.last
+    else
+      @pi_period = "N/A"
+    end
     
     # screen items
-    @si_period = screen_items.pluck(:set_created_at).uniq.sort.last
+    if !screen_items.empty?
+      @si_period = screen_items.pluck(:set_created_at).uniq.sort.last
+    else
+      @si_period = "N/A"
+    end
     
     # display items
-    @di_period = DisplayItem.last.set_created_at
+    if !DisplayItem.all.empty?
+      @di_period = DisplayItem.last.set_created_at
+    else
+      @di_period = "N/A"
+    end
   end
   
   def set_custom_renderer

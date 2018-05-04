@@ -1,4 +1,4 @@
-<p class="home-module" style="padding-top:5px; padding-left: 10px; padding-bottom:5px"><b>Last update:</b> <%= @pi_period.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d/%Y") %></p>
+<p class="home-module" style="padding-top:5px; padding-left: 10px; padding-bottom:5px"><b>Last update:</b> <%= @pi_period == "N/A" ? @pi_period : @pi_period.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d/%Y") %></p>
 
 <div class="row">
 	<div class="col-md-3"></div>

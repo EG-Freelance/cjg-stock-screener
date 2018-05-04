@@ -1,4 +1,4 @@
-<p><b>Last update:</b> <%= @pi_period.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d/%Y") %></p>
+<p><b>Last update:</b> <%= @pi_period == "N/A" ? @pi_period : @pi_period.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d/%Y") %></p>
 
 <div class="wrapper" style="text-align:center">
 	<%= search_form_for @q, :url => '/analysis' do |f| %>

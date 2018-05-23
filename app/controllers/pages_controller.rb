@@ -31,7 +31,7 @@ class PagesController < ApplicationController
     @q = display_items.ransack(params[:q])
     portfolio_items = PortfolioItem.all.includes(:stock)
     
-    if Rails.env == "production" && Sidekiq::Stats.new.workers_size > 0
+    if Rails.env == "production" && @worker_hash.values.sum > 0
       redirect_to :back, alert: "Screen or portfolio data are still being compiled, or analysis data are being processed; please try again momentarily."
     end
     #screen item variables and arrays

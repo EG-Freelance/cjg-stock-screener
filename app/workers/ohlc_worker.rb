@@ -11,7 +11,7 @@ class OhlcWorker
     s_array = s_array[1..-1]
     
     # separate rows with populated data [ [empty_data], [populated_data] ]
-    part = s_array.partition { |s| s[1].nil? }
+    part = s_array.partition { |s| s[2].nil? }
     
     # get unique stock symbols (except where data are already provided)
     uniq_sym = part[0].map { |s| s[0] }.uniq
@@ -43,9 +43,9 @@ class OhlcWorker
     # populate output spreadsheet
     s_array.each_with_index do |s,i|
       if s[2].nil?
-        page.row(i+1).push s[0], s[1].strftime("%Y-%m-%d"), ohlc_hash[s]['Time Series (Daily)'][s[1].strftime("%Y-%m-%d")]['1. open'], ohlc_hash[s]['Time Series (Daily)'][s[1].strftime("%Y-%m-%d")]['2. high'], ohlc_hash[s]['Time Series (Daily)'][s[1].strftime("%Y-%m-%d")]['3. low'], ohlc_hash[s]['Time Series (Daily)'][s[1].strftime("%Y-%m-%d")]['4. close']
+        page.row(i+1).push s[0], s[1], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['1. open'], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['2. high'], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['3. low'], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['4. close']
       else
-        page.row(i+1).push s[0], s[1].strftime("%Y-%m-%d"), s[2], s[3], s[4], s[5]
+        page.row(i+1).push s[0], s[1], s[2], s[3], s[4], s[5]
       end
     end
     

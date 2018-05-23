@@ -1,64 +1,79 @@
-# Worker for getting screen CSV
-class OhlcWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: 'high', unique: :until_executed
-  
-  def perform(s_array, email)
-    # set agent
+      response = agent.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=#{s}&apikey=1DX7EJ1TG8NRQLB9")
+    end;0
+        puts s
+s_array[30]
+s_array[60]
+s_array[160]
+s_array[260]
+s_array[560]
+s_array4560]
+s_array[460]
+s_array[500]
+s_array[490]
+s_array[498]
+s_array[495]
+s_array[480]
+s_array[485]
+s_array[482]
+s_array[484]
+ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]
+s = s_array[0]
+ohlc_hash[s[0]]["Information"]
+spreadsheet = Roo::Excelx.new('prices.xlsx')
+s_array = spreadsheet.to_a
+s_array = s_array[1..-1].map { |s| [s[0], s[1].strftime("%F"), s[2]] }
     agent = Mechanize.new
-    
-    # remove unnecessary header 
-    s_array = s_array[1..-1]
-    
-    # separate rows with populated data [ [empty_data], [populated_data] ]
     part = s_array.partition { |s| s[2].nil? }
-    
     # get unique stock symbols (except where data are already provided)
     uniq_sym = part[0].map { |s| s[0] }.uniq
-    
     # create OHLC data container
     ohlc_hash = {}
-    
-    puts "Populating data..."
-    # populate data
-    uniq_sym.each do |s|
+puts Time.now; sleep(0.5); puts Time.now
+puts Time.now; sleep(1); puts Time.now
+uniq_sym[0..100].each do |s|
+ENV = {}
+ENV['AA_KEY'] = "1DX7EJ1TG8NRQLB9"
+ENV['AA_KEY']
+agent.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=ADSK&apikey=1DX7EJ1TG8NRQLB9")
+      response = agent.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=#{s}&apikey=#{ENV['AA_KEY']}")
+      ohlc_hash[s] = JSON.parse(response.body)
+      # sleep 1 second to ensure results
+      sleep(0.25)
+ohlc_hash.count { |o|
+ohlc_hash.count { |o| !o["information"].nil? }
+ohlc_hash.select { |o| !o["information"].nil? }.count
+ohlc_hash.select { |o| !o["information"].nil? }
+ohlc_hash.map { |o| o["Information"] }
+ohlc_hash.to_a
+[3,2].max
+[3,2,5].max
+    uniq_sym[0..100].each do |s|
       retries = 0
       begin
         response = agent.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=#{s}&apikey=#{ENV['AA_KEY']}")
         resp = JSON.parse(response.body)
         if !resp["Information"].nil?
           raise
-        end
         ohlc_hash[s] = resp
-        puts "Succeeded with #{s}"
       rescue
         if retries < 100
           puts "Failed #{s}, try ##{retries + 1}"
           retries += 1
-          sleep([retries * 0.3, 3].min)
+          sleep([retries * 0.1, 2].min)
           retry
-        else
           next
-        end
-      end
-    end
-
-    # create output workbook
+ohlc_hash.to_a.count { |o| !o[1]["Information"] }
+ohlc_hash.to_a.count { |o| o[1]["Information"] }
     output = Spreadsheet::Workbook.new
-    
     # name tab
     page = output.create_worksheet :name => "OHLC Log"
-
     # set header format
     header_format = Spreadsheet::Format.new :weight => :bold, :border => :thin, :horizontal_align => :center, :pattern_fg_color => :lime, :pattern => 1, :size => 9, :text_wrap => true, :vertical_align => :top
-
     # set headers
     page.row(0).push "Symbol", "Date", "Open", "High", "Low", "Close"
     6.times do |i|
       page.row(0).set_format(i, header_format)
-    end
     
-    puts "Populating output spreadsheet..."
     # populate output spreadsheet
     s_array.each_with_index do |s,i|
       puts s
@@ -66,7 +81,6 @@ class OhlcWorker
         # skip if problem pulling data
         if !ohlc_hash[s[0]]["Information"].nil?
           page.row(i+1).push s[0], s[1], "API called too fast", "API called too fast", "API called too fast", "API called too fast"
-        end
         if ohlc_hash[s[0]]['Time Series (Daily)'][s[1]].nil?
           page.row(i+1).push s[0], s[1], "N/A (no data)", "N/A (no data)", "N/A (no data)", "N/A (no data)"
         else
@@ -76,10 +90,11 @@ class OhlcWorker
         page.row(i+1).push s[0], s[1], s[2], s[3], s[4], s[5]
       end
     end
-    
-    puts "Writing out and mailing output spreadsheet..."
-    output.write ('temp_ohlc.xls')
-    UpdateMailer.ohlc_email(email).deliver_now
-    puts "Finished creating and sending OHLC update!"
-  end
-end
+s_array.find { |s| s[0] == "ASH" }
+s = _
+ohlc_hash[s[0]]
+ohlc_hash["ASH"]
+ohlc_hash
+uniq_sym
+uniq_sym[0..100]
+exit

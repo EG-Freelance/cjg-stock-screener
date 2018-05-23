@@ -21,7 +21,7 @@ class OhlcWorker
     
     # populate data
     uniq_sym.each do |s|
-      response = agent.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=#{s}&apikey=#{ENV['AA_KEY']}")
+      response = agent.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=#{s}&apikey=1DX7EJ1TG8NRQLB9")
       ohlc_hash[s] = JSON.parse(response.body)
     end
 
@@ -43,7 +43,11 @@ class OhlcWorker
     # populate output spreadsheet
     s_array.each_with_index do |s,i|
       if s[2].nil?
-        page.row(i+1).push s[0], s[1], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['1. open'], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['2. high'], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['3. low'], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['4. close']
+        if ohlc_hash[s[0]]['Time Series (Daily)'][s[1]].nil?
+          page.row(i+1).push s[0], s[1], "N/A (no data)", "N/A (no data)", "N/A (no data)", "N/A (no data)"
+        else
+          page.row(i+1).push s[0], s[1], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['1. open'], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['2. high'], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['3. low'], ohlc_hash[s[0]]['Time Series (Daily)'][s[1]]['4. close']
+        end
       else
         page.row(i+1).push s[0], s[1], s[2], s[3], s[4], s[5]
       end

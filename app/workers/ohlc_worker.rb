@@ -21,8 +21,10 @@ class OhlcWorker
     
     # populate data
     uniq_sym.each do |s|
-      response = agent.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=#{s}&apikey=1DX7EJ1TG8NRQLB9")
+      response = agent.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=#{s}&apikey=#{ENV['AA_KEY']}")
       ohlc_hash[s] = JSON.parse(response.body)
+      # sleep 1 second to ensure results
+      sleep(1)
     end
 
     # create output workbook
@@ -43,6 +45,10 @@ class OhlcWorker
     # populate output spreadsheet
     s_array.each_with_index do |s,i|
       if s[2].nil?
+        # skip if problem pulling data
+        if !ohlc_hash[s[0]]["Information"].nil?
+          page.row(i+1).push s[0], s[1], "API called too fast", "API called too fast", "API called too fast", "API called too fast"
+        end
         if ohlc_hash[s[0]]['Time Series (Daily)'][s[1]].nil?
           page.row(i+1).push s[0], s[1], "N/A (no data)", "N/A (no data)", "N/A (no data)", "N/A (no data)"
         else

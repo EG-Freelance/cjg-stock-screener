@@ -21,6 +21,9 @@ Rails.application.routes.draw do
     post 'pages/update_workers' => 'pages#update_workers', :as => 'update_workers'
   end
   
+  get 'ohlc' => 'pages#ohlc', :as => 'ohlc'
+  post 'ohlc_import' => 'pages#ohlc_import', :as => 'ohlc_import'
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

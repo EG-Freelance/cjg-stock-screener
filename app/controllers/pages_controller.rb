@@ -511,6 +511,22 @@ class PagesController < ApplicationController
     end
   end
   
+  def ohlc
+  end
+  
+  def ohlc_import
+    if !params[:email].match(/.+\@.+\..+/)
+      redirect_to :back, alert: "Please input a valid email address"
+    end
+    
+    if params[:file].nil?
+      redirect_to :back, alert: "Please select a compatible file to import."
+    else
+      Stock.get_ohlc(params[:file], params[:email])
+      redirect_to :back, notice: "OHLC data being processed; check your email momentarily."
+    end
+  end
+  
 
   private
   # Use callbacks to share common setup or constraints between actions.

@@ -31,6 +31,7 @@ class OhlcWorker
         end
         ohlc_hash[s] = resp
         puts "Succeeded with #{s}"
+        sleep(1)
       rescue
         if retries < 100
           puts "Failed #{s}, try ##{retries + 1}"

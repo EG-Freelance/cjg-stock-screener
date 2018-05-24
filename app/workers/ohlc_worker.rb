@@ -32,6 +32,7 @@ class OhlcWorker
     # uniq_sym = part[0].map { |s| s[0] }.uniq
     
     uniq_sym = s_array.map { |s| s[0] }.uniq
+    uniq_sym.delete_if { |s| s.match(/\./) }
     
     # create OHLC data container
     # ohlc_hash = {}

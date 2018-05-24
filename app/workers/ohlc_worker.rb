@@ -35,7 +35,7 @@ class OhlcWorker
         if retries < 100
           puts "Failed #{s}, try ##{retries + 1}"
           retries += 1
-          sleep([retries * 0.3, 3].min)
+          sleep(4)
           retry
         else
           next

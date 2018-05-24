@@ -16,5 +16,7 @@
 !/log/.keep
 /tmp
 
-# Ignore ETrade files
+# Ignore test files
 /test.xls
+/prices.xlsx
+

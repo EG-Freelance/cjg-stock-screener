@@ -52,7 +52,7 @@ class OhlcWorker
         # evaluate to make sure at least a second has passed since the last response request
         loop_end = Time.now
         loop_diff = loop_end - loop_start
-        if loop_diff > 1
+        if loop_diff < 1
           sleep(1-loop_diff)
         end
           

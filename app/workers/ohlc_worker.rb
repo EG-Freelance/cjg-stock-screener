@@ -21,7 +21,10 @@ class OhlcWorker
     
     puts "Populating data..."
     # populate data
-    uniq_sym.each do |s|
+    uniq_sym.each_with_index do |s,i|
+      if i % 250 == 0
+        agent.get("http://cjg-stock-screener.herokuapp.com/ohlc")
+      end
       retries = 0
       begin
         response = agent.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=#{s}&apikey=#{ENV['AA_KEY']}")

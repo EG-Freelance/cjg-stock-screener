@@ -65,7 +65,6 @@ class OhlcWorker
     puts "Populating output spreadsheet..."
     # populate output spreadsheet
     s_array.each_with_index do |s,i|
-      puts s
       if s[2].nil?
         # skip if problem pulling data
         if !ohlc_hash[s[0]]["Information"].nil?

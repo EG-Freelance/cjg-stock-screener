@@ -1,3 +1,15 @@
+GIT
+  remote: https://github.com/thoughtbot/paperclip
+  revision: 523bd46c768226893f23889079a7aa9c73b57d68
+  ref: 523bd46c768226893f23889079a7aa9c73b57d68
+  specs:
+    paperclip (4.3.1)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      cocaine (~> 0.5.5)
+      mime-types
+      mimemagic (= 0.3.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -39,19 +51,13 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.4)
-    aws-eventstream (1.0.0)
-    aws-partitions (1.87.0)
-    aws-sdk-core (3.21.2)
-      aws-eventstream (~> 1.0)
-      aws-partitions (~> 1.0)
+    aws-sdk (2.11.57)
+      aws-sdk-resources (= 2.11.57)
+    aws-sdk-core (2.11.57)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-rails (2.0.1)
-      aws-sdk-ses (~> 1)
-      railties (>= 3)
-    aws-sdk-ses (1.7.0)
-      aws-sdk-core (~> 3)
-      aws-sigv4 (~> 1.0)
+    aws-sdk-resources (2.11.57)
+      aws-sdk-core (= 2.11.57)
     aws-sigv4 (1.0.2)
     axlsx (2.1.0.pre)
       htmlentities (~> 4.3.1)
@@ -67,6 +73,9 @@ GEM
     byebug (9.0.6)
     childprocess (0.6.1)
       ffi (~> 1.0, >= 1.0.11)
+    climate_control (0.2.0)
+    cocaine (0.5.8)
+      climate_control (>= 0.0.3, < 1.0)
     coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.1.x)
@@ -126,6 +135,7 @@ GEM
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
+    mimemagic (0.3.0)
     mini_portile2 (2.1.0)
     minitest (5.10.1)
     multi_json (1.12.1)
@@ -269,7 +279,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
-  aws-sdk-rails
+  aws-sdk (~> 2.3)
   axlsx (= 2.1.0.pre)
   axlsx_rails
   byebug
@@ -280,6 +290,7 @@ DEPENDENCIES
   jquery-turbolinks
   jquery-ui-rails
   mechanize
+  paperclip!
   pg
   rails (= 4.2.5)
   rails_12factor

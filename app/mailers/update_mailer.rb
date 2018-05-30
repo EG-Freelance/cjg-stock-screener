@@ -9,8 +9,11 @@ class UpdateMailer < ApplicationMailer
     mail(to: "matt@syniksolutions.com", subject: "Screen Update")
   end
   
-  def ohlc_email(email)
-    attachments["OHLC output #{Date.today.strftime("%F")}.xls"] = File.open('temp_ohlc.xls', 'rb'){ |f| f.read }
+  def ohlc_email(email, url)
+    # attachments["OHLC output #{Date.today.strftime("%F")}.xls"] = File.open('temp_ohlc.xls', 'rb'){ |f| f.read }
+    
+    # make presigned url accessible
+    @body[:url] = url
     
     mail(to: email, subject: "OHLC Output")
   end

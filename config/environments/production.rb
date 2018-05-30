@@ -1,4 +1,14 @@
 Rails.application.configure do
+  # config.paperclip_defaults = {
+  #   storage: :s3,
+  #   s3_credentials: {
+  #     bucket: "EGibbs87",
+  #     access_key_id: ENV["AWS_ACCESS_KEY_ID"],
+  #     secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
+  #     s3_region: ENV["AWS_REGION"],
+  #   }
+  # }
+  
   config.action_mailer.delivery_method = :smtp
   
   config.action_mailer.smtp_settings = {

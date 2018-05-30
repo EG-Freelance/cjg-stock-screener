@@ -13,7 +13,7 @@ class UpdateMailer < ApplicationMailer
     # attachments["OHLC output #{Date.today.strftime("%F")}.xls"] = File.open('temp_ohlc.xls', 'rb'){ |f| f.read }
     
     # make presigned url accessible
-    @body[:url] = url
+    @url = url
     
     mail(to: email, subject: "OHLC Output")
   end

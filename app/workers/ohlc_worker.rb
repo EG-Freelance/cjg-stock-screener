@@ -4,6 +4,8 @@ class OhlcWorker
   sidekiq_options queue: 'high', unique: :until_executed
   
   def perform(s_array, email)
+    # instantiate json parser
+    parser = Yajl::Parser.new
     # create output workbook
     output = Spreadsheet::Workbook.new
     
@@ -59,7 +61,7 @@ class OhlcWorker
           
         response = agent.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=#{s}&apikey=#{ENV['AA_KEY']}")
         loop_start = Time.now
-        resp = JSON.parse(response.body)
+        resp = parser.parse(response.body)
         if !resp["Information"].nil?
           raise
         end

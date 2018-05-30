@@ -5,6 +5,8 @@ gem 'rails', '4.2.5'
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
+  # use derailed to see memory usage for each gem
+  gem 'derailed_benchmarks'
 end
 
 group :production do
@@ -18,6 +20,9 @@ end
 # use ransack/will_paginate to make listings searchable and paginated
 gem 'ransack'
 gem 'will_paginate'
+
+# use yajl-ruby to optimize JSON parsing
+gem 'yajl-ruby', require: 'yajl/json_gem'
 
 # use mechanize to get screen items
 gem 'mechanize'

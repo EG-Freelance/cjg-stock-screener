@@ -28,7 +28,7 @@ gem 'yajl-ruby', require: 'yajl/json_gem'
 gem 'mechanize'
 
 # use watir and phantomjs to drive the headless browser
-gem 'watir', "~> 6.0"
+# gem 'watir', "~> 6.0"
 
 # use activerecord-import for batch importing
 gem 'activerecord-import'
@@ -80,9 +80,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 
 # Use axlsx to write files to xlsx
-gem 'rubyzip', '~> 1.1.0'
-gem 'axlsx', '2.1.0.pre'
-gem 'axlsx_rails'
+# gem 'rubyzip', '~> 1.1.0'
+# gem 'axlsx', '2.1.0.pre'
+# gem 'axlsx_rails'
 
 # AWS SDK & Paperclip to handle OHLC files
 # gem 'paperclip', :git=> 'https://github.com/thoughtbot/paperclip', :ref => '523bd46c768226893f23889079a7aa9c73b57d68'

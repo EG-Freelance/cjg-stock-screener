@@ -11,7 +11,6 @@ class PortfolioItem < ActiveRecord::Base
 	  
 	  # header is in 11th row
 	  header = spreadsheet.row(7)
-	  
 	  last_row = spreadsheet.last_row
 	  
 	  # set marginable security amount

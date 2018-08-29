@@ -28,8 +28,8 @@ class PortfolioItem < ActiveRecord::Base
       end
       data[1] = data[1].to_s.strip
       data[2] = data[2].to_s.strip
-      # data[3] == 1 || data[3].try(:downcase) == "long" ? data[3] = "long" : data[3] = "short"
-      data[5] > 0 ? data[3] = "long" : data[3] = "short"
+      data[3] == 1 || data[3].try(:downcase) == "long" ? data[3] = "long" : data[3] = "short"
+      # data[5] > 0 ? data[3] = "long" : data[3] = "short"
       data[4] = data[4].to_s.strip
       RowDatum.create(data_set_id: data_set.id, data: data.to_s, row_number: i - 6, data_type: "portfolio")
     end

@@ -290,8 +290,5 @@ DEPENDENCIES
   will_paginate
   yajl-ruby
 
-RUBY VERSION
-   ruby 2.4.0p0
-
 BUNDLED WITH
    1.16.4

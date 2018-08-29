@@ -15,7 +15,7 @@ class PortfolioItem < ActiveRecord::Base
 	  last_row = spreadsheet.last_row
 	  
 	  # set marginable security amount
-	  MarginableSecurity.first.update(amount: spreadsheet.row(3)[7])
+	  MarginableSecurity.first.update(amount: spreadsheet.row(3)[spreadsheet.row(2).index("Marginable Securities")])
 	  
     RowDatum.create(data_set_id: data_set.id, data: header.to_s, row_number: 1, data_type: "portfolio")
 	  # data start on 13th row and end 3 before last row (last row is cash summary)
@@ -28,8 +28,8 @@ class PortfolioItem < ActiveRecord::Base
       end
       data[1] = data[1].to_s.strip
       data[2] = data[2].to_s.strip
-      data[3] == 1 || data[3].try(:downcase) == "long" ? data[3] = "long" : data[3] = "short"
-      # data[5] > 0 ? data[3] = "long" : data[3] = "short"
+      # data[3] == 1 ? data[3] = "long" : data[3] = "short"
+      data[5] > 0 ? data[3] = "long" : data[3] = "short"
       data[4] = data[4].to_s.strip
       RowDatum.create(data_set_id: data_set.id, data: data.to_s, row_number: i - 6, data_type: "portfolio")
     end

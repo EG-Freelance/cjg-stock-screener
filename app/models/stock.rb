@@ -41,7 +41,7 @@ class Stock < ActiveRecord::Base
     # set range to extend two weeks into future
     date_range = b_date..e_date
     date_range.each do |date|
-      UpdateEarningsDatesWorker.perform_async(date.strftime("%Y-%m-%d"))
+      UpdateEarningsDatesWorker.perform_async(date)
     end # end date array
   end
   

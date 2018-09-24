@@ -24,7 +24,7 @@ class UpdateEarningsDatesWorker
 
     begin
       response = agent.get(url)
-      results = response.search('span').find { |s| s.text.match(/d*\sresults/) }.text.match(/\d*\-\d*\sof\s(\d*)\sresults/)[1].to_i
+      results = response.search('span').find { |s| s.text.match(/\d+\sresults/) }.text.match(/\d*\-\d*\sof\s(\d*)\sresults/)[1].to_i
     rescue
       puts "No earnings or date error for #{date}"
       return true

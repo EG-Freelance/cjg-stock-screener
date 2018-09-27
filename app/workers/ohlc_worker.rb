@@ -113,7 +113,7 @@ class OhlcWorker
     # set target object
     obj = s3.bucket(ENV['S3_BUCKET']).object('Screener OHLC/ohlc output.xls')
     # upload file
-    obj.upload_file('temp_ohlc.xls')
+    obj.upload_file("temp_ohlc#{i}.xls")
     
     # get presigned link
     signer = Aws::S3::Presigner.new

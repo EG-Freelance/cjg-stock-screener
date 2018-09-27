@@ -3,7 +3,7 @@ class OhlcWorker
   include Sidekiq::Worker
   sidekiq_options queue: 'high', unique: :until_executed
   
-  def perform(s_array, email)
+  def perform(s_array, email, i = 0)
     # create output workbook
     output = Spreadsheet::Workbook.new
     
@@ -31,8 +31,12 @@ class OhlcWorker
     # get unique stock symbols (except where data are already provided)
     # uniq_sym = part[0].map { |s| s[0] }.uniq
     
+    # run unique symbols in batches of 100 to make sure there's no timeout
     uniq_sym = s_array.map { |s| s[0] }.uniq
     uniq_sym.delete_if { |s| s.match(/\./) }
+    # set end_index so we know where to stop calling for chained workers
+    end_index = (uniq_sym.count / 100.0).ceil
+    uniq_sym = uniq_sym[i*100..i*100+99]
     
     # create OHLC data container
     # ohlc_hash = {}
@@ -117,5 +121,9 @@ class OhlcWorker
     url = signer.presigned_url(:get_object, bucket: ENV["S3_BUCKET"], key: 'Screener OHLC/ohlc output.xls', expires_in: 43200)
     UpdateMailer.ohlc_email(email, url).deliver_now
     puts "Finished creating and sending OHLC update!"
+    if i < end_index
+      i += 1
+      OhlcWorker.perform_async(s_array, email, i)
+    end
   end
 end

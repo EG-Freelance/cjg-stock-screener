@@ -118,7 +118,7 @@ class OhlcWorker
     # get presigned link
     signer = Aws::S3::Presigner.new
     # url expires in 12 hours
-    url = signer.presigned_url(:get_object, bucket: ENV["S3_BUCKET"], key: 'Screener OHLC/ohlc output.xls', expires_in: 43200)
+    url = signer.presigned_url(:get_object, bucket: ENV["S3_BUCKET"], key: 'Screener OHLC/ohlc output.xls', expires_in: 86400)
     UpdateMailer.ohlc_email(email, url).deliver_now
     puts "Finished creating and sending OHLC update!"
     if i < end_index

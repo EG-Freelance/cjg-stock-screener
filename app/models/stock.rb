@@ -52,7 +52,7 @@ class Stock < ActiveRecord::Base
     # convert to array
     s_array = spreadsheet.to_a
     
-    OhlcWorker.perform_async(s_array, email, start)
+    OhlcWorker.perform_async(s_array, email, start.to_i)
   end
   
   def self.open_spreadsheet(file)

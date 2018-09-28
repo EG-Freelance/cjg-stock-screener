@@ -522,7 +522,7 @@ class PagesController < ApplicationController
     if params[:file].nil?
       redirect_to :back, alert: "Please select a compatible file to import."
     else
-      Stock.get_ohlc(params[:file], params[:email])
+      Stock.get_ohlc(params[:file], params[:email], params[:start])
       redirect_to :back, notice: "OHLC data being processed; check your email momentarily."
     end
   end

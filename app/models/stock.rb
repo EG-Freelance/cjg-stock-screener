@@ -45,14 +45,14 @@ class Stock < ActiveRecord::Base
     end # end date array
   end
   
-  def self.get_ohlc(file, email)
+  def self.get_ohlc(file, email, start = 0)
     # import spreadsheet data
     spreadsheet = open_spreadsheet(file)
     
     # convert to array
     s_array = spreadsheet.to_a
     
-    OhlcWorker.perform_async(s_array, email)
+    OhlcWorker.perform_async(s_array, email, start)
   end
   
   def self.open_spreadsheet(file)

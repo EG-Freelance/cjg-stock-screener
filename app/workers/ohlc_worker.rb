@@ -111,14 +111,14 @@ class OhlcWorker
     # connect to S3
     s3 = Aws::S3::Resource.new({region: ENV['AWS_REGION'], access_key_id: ENV["AWS_ACCESS_KEY_ID"], secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"]})
     # set target object
-    obj = s3.bucket(ENV['S3_BUCKET']).object('Screener OHLC/ohlc output.xls')
+    obj = s3.bucket(ENV['S3_BUCKET']).object("Screener OHLC/ohlc output#{i}.xls")
     # upload file
-    obj.upload_file("temp_ohlc#{i}.xls")
+    obj.upload_file("temp_ohlc.xls")
     
     # get presigned link
     signer = Aws::S3::Presigner.new
     # url expires in 12 hours
-    url = signer.presigned_url(:get_object, bucket: ENV["S3_BUCKET"], key: 'Screener OHLC/ohlc output.xls', expires_in: 86400)
+    url = signer.presigned_url(:get_object, bucket: ENV["S3_BUCKET"], key: "Screener OHLC/ohlc output#{i}.xls", expires_in: 86400)
     UpdateMailer.ohlc_email(email, url).deliver_now
     puts "Finished creating and sending OHLC update!"
     if i < end_index
